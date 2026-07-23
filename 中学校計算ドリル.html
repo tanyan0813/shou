@@ -1,0 +1,605 @@
+<!-- 中学校計算ドリル — Web版 (原典: VB5 main.bas / 平成9年) -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中学校計算ドリル Web版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --teal:#0f8a8a; --teal2:#0b6d6d;
+    --face:#c9ccd1; --face2:#dfe2e6;
+    --hi:#ffffff; --sh:#868a8e; --dk:#25282c;
+    --tbar1:#0a1a8c; --tbar2:#2f7ad6;
+    --paper:#fbfbf3; --ink:#1b2444;
+    --maru:#e0002a; --batsu:#1358c4; --ok:#0a7d34;
+    --disp:'DotGothic16',monospace;
+    --body:'Zen Kaku Gothic New',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--body);
+    background:
+      repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 2px,transparent 2px 4px),
+      radial-gradient(120% 120% at 50% 0%,#1aa3a3 0%,var(--teal) 45%,var(--teal2) 100%);
+    min-height:100vh;color:var(--dk);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px 12px 40px;
+  }
+  .win{
+    width:min(680px,100%); background:var(--face);
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi),
+                inset -2px -2px var(--sh), inset 2px 2px var(--face2),
+                6px 8px 0 rgba(0,0,0,.35);
+    padding:3px;
+  }
+  .titlebar{
+    background:linear-gradient(90deg,var(--tbar1),var(--tbar2));
+    color:#fff; font-family:var(--disp); font-size:15px;
+    padding:5px 6px; display:flex; align-items:center; gap:8px;
+    letter-spacing:.5px; user-select:none;
+  }
+  .titlebar .ico{
+    width:18px;height:18px;background:var(--face);
+    display:grid;place-items:center;color:var(--tbar1);font-size:12px;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi);
+  }
+  .titlebar .t{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .tbtn{
+    width:20px;height:18px;background:var(--face);color:#000;
+    font-family:var(--body);font-weight:700;font-size:11px;line-height:1;
+    display:grid;place-items:center;cursor:default;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi),
+                inset -2px -2px var(--sh), inset 2px 2px var(--face2);
+  }
+  .menubar{
+    display:flex;gap:2px;padding:3px 4px;font-size:13px;border-bottom:1px solid var(--sh);
+  }
+  .menubar span{padding:1px 8px;}
+  .menubar span u{text-decoration:underline;}
+  .body{padding:14px;}
+
+  /* bevels */
+  .out{box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi),
+        inset -2px -2px var(--sh), inset 2px 2px var(--face2);}
+  .in{box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+        inset -2px -2px var(--face2), inset 2px 2px var(--sh);}
+
+  button{font-family:var(--body);color:#000;cursor:pointer;}
+  .btn{
+    background:var(--face);border:none;padding:9px 14px;font-size:14px;font-weight:500;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi),
+                inset -2px -2px var(--sh), inset 2px 2px var(--face2);
+  }
+  .btn:active{box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh); padding:10px 13px 8px 15px;}
+  .btn:focus-visible{outline:2px dotted #000;outline-offset:-5px;}
+  .btn.big{font-family:var(--disp);font-size:18px;padding:12px 20px;}
+
+  h2.scr{font-family:var(--disp);font-size:19px;margin:0 0 4px;color:var(--tbar1);}
+  .sub{font-size:12px;color:#333;margin:0 0 14px;}
+
+  /* menu screen */
+  .group{background:var(--face);padding:12px;margin-bottom:12px;position:relative;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--sh);}
+  .group>.lg{position:absolute;top:-9px;left:10px;background:var(--face);padding:0 6px;
+    font-family:var(--disp);font-size:12px;color:var(--tbar1);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;}
+  .chip{
+    background:var(--face);border:none;padding:10px 8px;font-size:13px;text-align:center;
+    box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px var(--hi),
+                inset -2px -2px var(--sh), inset 2px 2px var(--face2);
+  }
+  .chip small{display:block;font-size:10px;color:#555;margin-top:2px;}
+  .chip[aria-pressed="true"]{
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh);
+    background:#fffbe0;
+  }
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .count .chip{min-width:56px;}
+
+  /* drill screen */
+  .statusbar{display:flex;gap:6px;margin-bottom:12px;font-size:12px;}
+  .status{flex:1;background:var(--paper);padding:6px 8px;text-align:center;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh);}
+  .status b{font-family:var(--disp);font-size:15px;color:var(--ink);}
+  .worksheet{
+    position:relative;background:var(--paper);
+    background-image:linear-gradient(var(--paper) 0 0),
+      repeating-linear-gradient(90deg,transparent 0 32px,rgba(27,36,68,.05) 32px 33px);
+    padding:34px 18px;text-align:center;margin-bottom:14px;min-height:150px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh);
+  }
+  .qno{position:absolute;top:8px;left:12px;font-family:var(--disp);font-size:12px;color:#b03;}
+  .prompt{font-size:14px;color:#334;}
+  .problem{font-family:var(--disp);font-size:clamp(26px,7vw,40px);color:var(--ink);line-height:1.15;}
+  .problem sup{font-size:.55em;vertical-align:super;}
+  .problem .eq{margin:0 .25em;}
+  .ansline{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .ansline .lbl{font-size:14px;color:#334;}
+  input.ans{
+    font-family:var(--disp);font-size:26px;width:min(220px,60vw);text-align:center;
+    background:#fff;border:none;padding:6px 8px;color:var(--ink);
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh);
+  }
+  input.ans:focus{outline:2px solid var(--tbar2);outline-offset:1px;}
+
+  .stamp{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.3);
+    font-size:120px;font-weight:700;opacity:0;pointer-events:none;
+    text-shadow:2px 2px 0 rgba(0,0,0,.15);}
+  .stamp.maru{color:var(--maru);}
+  .stamp.batsu{color:var(--batsu);}
+  .stamp.show{animation:stamp .5s cubic-bezier(.2,1.4,.4,1) forwards;}
+  @keyframes stamp{0%{opacity:0;transform:translate(-50%,-50%) scale(.3) rotate(-14deg);}
+    60%{opacity:1;transform:translate(-50%,-50%) scale(1.15) rotate(-8deg);}
+    100%{opacity:.92;transform:translate(-50%,-50%) scale(1) rotate(-8deg);}}
+  .feedback{min-height:22px;font-size:14px;font-weight:700;text-align:center;margin-bottom:10px;}
+  .feedback.ok{color:var(--ok);} .feedback.ng{color:var(--batsu);}
+
+  /* keypad */
+  .keypad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:340px;margin:0 auto;}
+  .keypad button{padding:12px 0;font-family:var(--disp);font-size:18px;}
+  .keypad .enter{grid-column:span 2;background:#dff0df;}
+  .drillfoot{display:flex;justify-content:space-between;margin-top:14px;gap:8px;flex-wrap:wrap;}
+
+  /* result */
+  .score{font-family:var(--disp);font-size:44px;color:var(--maru);text-align:center;line-height:1;}
+  .scorelbl{text-align:center;font-size:13px;margin-bottom:12px;}
+  .rlist{max-height:200px;overflow:auto;background:#fff;padding:6px;margin-bottom:12px;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px #0a0a0a,
+                inset -2px -2px var(--face2), inset 2px 2px var(--sh);}
+  table.rev{width:100%;border-collapse:collapse;font-size:13px;}
+  table.rev th,table.rev td{padding:4px 6px;border-bottom:1px dotted #bbb;text-align:left;}
+  table.rev td.mk{font-family:var(--disp);font-size:16px;width:28px;text-align:center;}
+  table.rev td.mk.o{color:var(--maru);} table.rev td.mk.x{color:var(--batsu);}
+  table.rev sup{font-size:.6em;vertical-align:super;}
+  .analysis{background:#fffbe0;padding:10px 12px;font-size:13px;margin-bottom:12px;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--sh);}
+  .analysis b{font-family:var(--disp);}
+
+  .hide{display:none !important;}
+  .statusline{margin-top:3px;background:var(--face);padding:3px 6px;font-size:11px;color:#333;
+    box-shadow: inset -1px -1px var(--hi), inset 1px 1px var(--sh);}
+</style>
+
+<div class="win" role="application" aria-label="中学校計算ドリル">
+  <div class="titlebar">
+    <span class="ico">計</span>
+    <span class="t" id="wintitle">中学校計算ドリル — メインメニュー</span>
+    <span class="tbtn">_</span><span class="tbtn">□</span><span class="tbtn">×</span>
+  </div>
+  <div class="menubar">
+    <span><u>Ｆ</u>ファイル</span><span><u>Ｈ</u>ヘルプ</span>
+  </div>
+
+  <div class="body">
+
+    <!-- ===== メニュー ===== -->
+    <section id="screen-menu">
+      <h2 class="scr">がくしゅう内ようを えらんでください</h2>
+      <p class="sub">正の数・負の数、文字の式、一次方程式から えらべます。（原典: VB5版 平成9年）</p>
+
+      <div class="group">
+        <span class="lg">たんげん</span>
+        <div class="grid" id="chapterGrid"></div>
+      </div>
+
+      <div class="group" id="sectionGroup">
+        <span class="lg">しゅるい</span>
+        <div class="grid" id="sectionGrid"></div>
+      </div>
+
+      <div class="group">
+        <span class="lg">もんだいすう</span>
+        <div class="row count" id="countRow"></div>
+      </div>
+
+      <div class="row" style="justify-content:flex-end;margin-top:6px;">
+        <button class="btn big" id="startBtn">スタート ▶</button>
+      </div>
+    </section>
+
+    <!-- ===== ドリル ===== -->
+    <section id="screen-drill" class="hide">
+      <div class="statusbar">
+        <div class="status">じかん<br><b id="clock">00:00</b></div>
+        <div class="status">せいかい<br><b id="okcount">0</b></div>
+        <div class="status">のこり<br><b id="remain">0</b></div>
+      </div>
+
+      <div class="worksheet">
+        <div class="qno" id="qno"></div>
+        <div class="prompt" id="prompt"></div>
+        <div class="problem" id="problem"></div>
+        <div class="ansline">
+          <span class="lbl">こたえ =</span>
+          <input class="ans" id="ansInput" type="text" inputmode="text" autocomplete="off"
+                 spellcheck="false" aria-label="こたえを入力">
+        </div>
+        <div class="stamp" id="stamp"></div>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+
+      <div class="keypad" id="keypad"></div>
+
+      <div class="drillfoot">
+        <button class="btn" id="quitBtn">◀ とちゅうでやめる</button>
+        <button class="btn" id="judgeBtn">はんてい ○×</button>
+      </div>
+    </section>
+
+    <!-- ===== 結果 ===== -->
+    <section id="screen-result" class="hide">
+      <h2 class="scr">せいせき はっぴょう</h2>
+      <div class="score" id="finalScore"></div>
+      <div class="scorelbl" id="scoreLbl"></div>
+
+      <div class="analysis" id="analysis"></div>
+
+      <div class="rlist">
+        <table class="rev" id="reviewTable"><tbody></tbody></table>
+      </div>
+
+      <div class="row" style="justify-content:space-between;">
+        <button class="btn" id="menuBtn">◀ メニューへ</button>
+        <button class="btn big" id="retryBtn">もういちど ↻</button>
+      </div>
+    </section>
+
+  </div>
+  <div class="statusline" id="statusline">じゅんびOK。たんげんを えらんでスタート！</div>
+</div>
+
+<script>
+"use strict";
+/* ============ ユーティリティ ============ */
+const $ = s => document.querySelector(s);
+const ri = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const rNon = (a,b)=>{let x;do{x=ri(a,b);}while(x===0);return x;};
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+// 符号つき数を (＋n)(−n) で表示（中学校の表記）
+const MINUS = '\u2212';
+const par = n => n<0 ? `(${MINUS}${Math.abs(n)})` : `(+${n})`;
+const bare = n => n<0 ? `${MINUS}${Math.abs(n)}` : `${n}`;
+// 一次式の正準表示
+function linToStr(cx,c){
+  let s='';
+  if(cx!==0){ s += cx===1?'x':cx===-1?`${MINUS}x`:`${bare(cx)}x`; }
+  if(c!==0 || cx===0){
+    if(s===''){ s = bare(c); }
+    else { s += c<0?`${MINUS}${Math.abs(c)}`:`+${c}`; }
+  }
+  return s;
+}
+
+/* ============ 問題ジェネレータ ============ */
+// 返り値: {html, plainProblem, ans, type, grade}
+//  ans は表示用正解, grade(user)->bool
+function numGrade(ans){
+  return u=>{ const v=parseNum(u); return v!==null && v===ans; };
+}
+function parseNum(s){
+  if(s==null) return null;
+  s = norm(s).replace(/^x=/,'');
+  if(s==='') return null;
+  if(s.includes('/')){ const [a,b]=s.split('/').map(Number); if(!b||isNaN(a)) return null; return a/b; }
+  const v=Number(s); return isNaN(v)?null:v;
+}
+function norm(s){
+  return String(s)
+    .replace(/[０-９]/g,d=>String.fromCharCode(d.charCodeAt(0)-0xFEE0))
+    .replace(/[＋]/g,'+').replace(/[－ー\u2212]/g,'-').replace(/[×✕]/g,'')
+    .replace(/[＝]/g,'=').replace(/[ｘＸX]/g,'x').replace(/[／]/g,'/')
+    .replace(/\s+/g,'').toLowerCase();
+}
+function parseLinear(s){
+  s=norm(s); if(s==='') return null;
+  if(!/^[+-]/.test(s)) s='+'+s;
+  const toks=s.match(/[+-][^+-]+/g); if(!toks) return null;
+  let cx=0,c=0;
+  for(const t of toks){
+    if(t.includes('x')){
+      let p=t.replace('x',''); let v;
+      if(p==='+'||p==='') v=1; else if(p==='-') v=-1; else v=Number(p);
+      if(isNaN(v)) return null; cx+=v;
+    } else { const v=Number(t); if(isNaN(v)) return null; c+=v; }
+  }
+  return {cx,c};
+}
+
+const GEN = {
+  // 正の数・負の数
+  kahou(){ const a=rNon(-15,15),b=rNon(-15,15);
+    return {html:`${par(a)}${MINUS==='x'?'':'＋'}${par(b)}`.replace('＋','<span class="eq">＋</span>'),
+      plain:`${par(a)}＋${par(b)}`, ans:a+b, type:'加法', grade:numGrade(a+b)}; },
+  genpou(){ const a=rNon(-15,15),b=rNon(-15,15);
+    return {html:`${par(a)}<span class="eq">${MINUS}</span>${par(b)}`,
+      plain:`${par(a)}${MINUS}${par(b)}`, ans:a-b, type:'減法', grade:numGrade(a-b)}; },
+  jouhou(){ const a=rNon(-9,9),b=rNon(-9,9);
+    return {html:`${par(a)}<span class="eq">×</span>${par(b)}`,
+      plain:`${par(a)}×${par(b)}`, ans:a*b, type:'乗法', grade:numGrade(a*b)}; },
+  johou(){ const b=rNon(-9,9),q=rNon(-9,9),a=b*q;
+    return {html:`${par(a)}<span class="eq">÷</span>${par(b)}`,
+      plain:`${par(a)}÷${par(b)}`, ans:q, type:'除法', grade:numGrade(q)}; },
+  ruijou(){ const base=rNon(-5,5),e=ri(2,3); const ans=Math.pow(base,e);
+    const baseTxt = base<0?`(${MINUS}${Math.abs(base)})`:`${base}`;
+    return {html:`${baseTxt}<sup>${e}</sup>`, plain:`${baseTxt}^${e}`,
+      ans, type:'累乗', grade:numGrade(ans)}; },
+  shisoku(){ // 四則混合（演算順序）
+    const a=rNon(-9,9),b=rNon(-6,6),c=rNon(-6,6);
+    const forms=[
+      ()=>({p:`${bare(a)}＋${bare(b)}×${bare(c)}`,v:a+b*c}),
+      ()=>({p:`${bare(a)}${MINUS}${bare(b)}×${bare(c)}`,v:a-b*c}),
+      ()=>({p:`${bare(a)}×${bare(b)}＋${bare(c)}`,v:a*b+c}),
+      ()=>{const q=rNon(-6,6),d=q*b; return {p:`${bare(d)}÷${bare(b)}＋${bare(c)}`,v:q+c};},
+    ];
+    const f=pick(forms)(); const html=f.p.replace(/×/g,'<span class="eq">×</span>')
+      .replace(/÷/g,'<span class="eq">÷</span>').replace(/＋/g,'<span class="eq">＋</span>')
+      .replace(new RegExp(MINUS,'g'),`<span class="eq">${MINUS}</span>`);
+    return {html, plain:f.p, ans:f.v, type:'四則混合', grade:numGrade(f.v)};
+  },
+  // 文字の式
+  douruikou(){
+    const withConst = Math.random()<0.5;
+    if(!withConst){
+      const c1=rNon(-9,9),c2=rNon(-9,9);
+      const p=`${c1===1?'':c1===-1?MINUS:bare(c1)}x${c2<0?MINUS:'＋'}${Math.abs(c2)===1?'':Math.abs(c2)}x`;
+      const cx=c1+c2;
+      return {html:p, plain:p, ans:linToStr(cx,0), type:'同類項をまとめる',
+        grade:u=>{const r=parseLinear(u);return r&&r.cx===cx&&r.c===0;}};
+    } else {
+      const c1=rNon(-6,6),d1=rNon(-9,9),c2=rNon(-6,6),d2=rNon(-9,9);
+      const t=[
+        `${c1===1?'':c1===-1?MINUS:bare(c1)}x`,
+        `${d1<0?MINUS:'＋'}${Math.abs(d1)}`,
+        `${c2<0?MINUS:'＋'}${Math.abs(c2)===1?'':Math.abs(c2)}x`,
+        `${d2<0?MINUS:'＋'}${Math.abs(d2)}`,
+      ].join('');
+      const cx=c1+c2, c=d1+d2;
+      return {html:t, plain:t, ans:linToStr(cx,c), type:'同類項をまとめる',
+        grade:u=>{const r=parseLinear(u);return r&&r.cx===cx&&r.c===c;}};
+    }
+  },
+  shikinoAtai(){
+    const x0=rNon(-5,5);
+    if(Math.random()<0.5){
+      const cx=rNon(-6,6),c=rNon(-9,9),v=cx*x0+c;
+      return {html:`x=${bare(x0)} のとき、${linToStr(cx,c)} の値`,
+        plain:`x=${bare(x0)}, ${linToStr(cx,c)}`, ans:v, type:'式の値', grade:numGrade(v)};
+    } else {
+      const b=rNon(-4,4),v=x0*x0+b*x0;
+      return {html:`x=${bare(x0)} のとき、x<sup>2</sup>${b<0?MINUS:'＋'}${Math.abs(b)}x の値`,
+        plain:`x=${bare(x0)}, x^2${b<0?MINUS:'+'}${Math.abs(b)}x`, ans:v, type:'式の値', grade:numGrade(v)};
+    }
+  },
+  // 一次方程式
+  houteishiki1(){
+    const s=rNon(-8,8),a=ri(2,9),b=rNon(-9,9),c=a*s+b;
+    const html=`${a}x${b<0?MINUS:'＋'}${Math.abs(b)}<span class="eq">＝</span>${bare(c)}`;
+    return {html, plain:`${a}x${b<0?MINUS:'+'}${Math.abs(b)}=${bare(c)}`, ans:`x=${s}`,
+      type:'一次方程式', grade:numGrade(s)};
+  },
+  houteishiki2(){
+    let a,d; do{a=ri(2,8);d=ri(1,7);}while(a===d);
+    const s=rNon(-7,7),b=rNon(-9,9),e=(a-d)*s+b;
+    const html=`${a}x${b<0?MINUS:'＋'}${Math.abs(b)}<span class="eq">＝</span>${d}x${e<0?MINUS:'＋'}${Math.abs(e)}`;
+    return {html, plain:`${a}x${b<0?MINUS:'+'}${Math.abs(b)}=${d}x${e<0?MINUS:'+'}${Math.abs(e)}`,
+      ans:`x=${s}`, type:'一次方程式（移項）', grade:numGrade(s)};
+  },
+};
+
+/* ============ カリキュラム定義 ============ */
+const CHAPTERS = [
+  {id:'seifu', name:'正の数・負の数', desc:'加減乗除・累乗',
+    sections:[
+      {name:'加法',       gens:['kahou']},
+      {name:'減法',       gens:['genpou']},
+      {name:'乗法',       gens:['jouhou']},
+      {name:'除法',       gens:['johou']},
+      {name:'累乗',       gens:['ruijou']},
+      {name:'四則混合',   gens:['shisoku']},
+      {name:'ランダム',   gens:['kahou','genpou','jouhou','johou','ruijou','shisoku']},
+    ]},
+  {id:'moji', name:'文字の式', desc:'同類項・式の値',
+    sections:[
+      {name:'同類項をまとめる', gens:['douruikou']},
+      {name:'式の値',           gens:['shikinoAtai']},
+      {name:'ランダム',         gens:['douruikou','shikinoAtai']},
+    ]},
+  {id:'houtei', name:'一次方程式', desc:'x を求める',
+    sections:[
+      {name:'ax+b=c',      gens:['houteishiki1']},
+      {name:'ax+b=cx+d',   gens:['houteishiki2']},
+      {name:'ランダム',    gens:['houteishiki1','houteishiki2']},
+    ]},
+];
+const COUNTS=[5,10,20];
+
+/* ============ 状態 ============ */
+let sel = {ch:0, sec:0, count:10};
+let game = null;
+
+/* ============ メニュー描画 ============ */
+function renderMenu(){
+  const cg=$('#chapterGrid'); cg.innerHTML='';
+  CHAPTERS.forEach((c,i)=>{
+    const b=document.createElement('button');
+    b.className='chip'; b.setAttribute('aria-pressed', i===sel.ch);
+    b.innerHTML=`${c.name}<small>${c.desc}</small>`;
+    b.onclick=()=>{sel.ch=i; sel.sec=0; renderMenu();};
+    cg.appendChild(b);
+  });
+  const sg=$('#sectionGrid'); sg.innerHTML='';
+  CHAPTERS[sel.ch].sections.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.className='chip'; b.setAttribute('aria-pressed', i===sel.sec);
+    b.textContent=s.name;
+    b.onclick=()=>{sel.sec=i; renderMenu();};
+    sg.appendChild(b);
+  });
+  const cr=$('#countRow'); cr.innerHTML='';
+  COUNTS.forEach(n=>{
+    const b=document.createElement('button');
+    b.className='chip'; b.setAttribute('aria-pressed', n===sel.count);
+    b.textContent=`${n}問`;
+    b.onclick=()=>{sel.count=n; renderMenu();};
+    cr.appendChild(b);
+  });
+  status(`「${CHAPTERS[sel.ch].name} / ${CHAPTERS[sel.ch].sections[sel.sec].name}」を ${sel.count}問`);
+}
+
+/* ============ ドリル ============ */
+function startGame(){
+  const gens = CHAPTERS[sel.ch].sections[sel.sec].gens;
+  const probs=[];
+  for(let k=0;k<sel.count;k++){ probs.push(GEN[pick(gens)]()); }
+  game = {probs, idx:0, ok:0, records:[], start:Date.now(), locked:false,
+          chName:CHAPTERS[sel.ch].name, secName:CHAPTERS[sel.ch].sections[sel.sec].name};
+  showScreen('drill');
+  $('#wintitle').textContent=`中学校計算ドリル — ${game.chName} / ${game.secName}`;
+  tick();
+  loadProblem();
+  clearInterval(window._t); window._t=setInterval(tick,500);
+}
+function tick(){
+  if(!game) return;
+  const s=Math.floor((Date.now()-game.start)/1000);
+  $('#clock').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+function loadProblem(){
+  const p=game.probs[game.idx];
+  $('#qno').textContent=`第${game.idx+1}問 / 全${game.probs.length}問`;
+  $('#problem').innerHTML=p.html;
+  // 「式の値」「一次方程式」はプロンプトを分ける
+  if(p.type==='式の値'){ $('#prompt').textContent='次の式の値を求めなさい'; }
+  else if(p.type.startsWith('一次方程式')){ $('#prompt').textContent='方程式を解きなさい'; $('#problem').innerHTML=p.html; }
+  else if(p.type==='同類項をまとめる'){ $('#prompt').textContent='計算しなさい（同類項をまとめる）'; }
+  else { $('#prompt').textContent='次の計算をしなさい'; }
+  $('#ansInput').value=''; $('#ansInput').disabled=false;
+  $('#feedback').textContent=''; $('#feedback').className='feedback';
+  $('#okcount').textContent=game.ok;
+  $('#remain').textContent=game.probs.length-game.idx;
+  game.locked=false;
+  setTimeout(()=>$('#ansInput').focus(),30);
+}
+function judge(){
+  if(!game || game.locked) return;
+  const p=game.probs[game.idx];
+  const user=$('#ansInput').value.trim();
+  if(user==='') { flash(); return; }
+  const correct = p.grade(user);
+  game.locked=true; $('#ansInput').disabled=true;
+  if(correct) game.ok++;
+  game.records.push({html:p.html, type:p.type, user, ans:p.ans, correct});
+  // スタンプ
+  const st=$('#stamp');
+  st.textContent = correct?'○':'×';
+  st.className='stamp '+(correct?'maru':'batsu');
+  void st.offsetWidth; st.classList.add('show');
+  const fb=$('#feedback');
+  if(correct){ fb.textContent='せいかい！'; fb.className='feedback ok'; }
+  else { fb.innerHTML=`ざんねん… 正解は <b>${String(p.ans).replace('x=','x = ')}</b>`; fb.className='feedback ng'; }
+  $('#okcount').textContent=game.ok;
+  setTimeout(()=>{
+    st.classList.remove('show');
+    game.idx++;
+    if(game.idx>=game.probs.length){ finish(); }
+    else loadProblem();
+  }, correct?800:1500);
+}
+function flash(){ const w=$('.worksheet'); w.animate(
+  [{transform:'translateX(0)'},{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'translateX(0)'}],
+  {duration:180}); $('#ansInput').focus(); }
+
+/* ============ 結果 ============ */
+function finish(){
+  clearInterval(window._t);
+  const total=game.probs.length, ok=game.ok;
+  const secs=Math.floor((Date.now()-game.start)/1000);
+  const pct=Math.round(ok/total*100);
+  $('#finalScore').textContent=`${ok} / ${total}`;
+  $('#scoreLbl').textContent=`正答率 ${pct}％ ・ タイム ${Math.floor(secs/60)}分${secs%60}秒`;
+  // 誤答分析
+  const miss={};
+  game.records.forEach(r=>{ if(!r.correct){ miss[r.type]=(miss[r.type]||0)+1; } });
+  const an=$('#analysis');
+  const keys=Object.keys(miss);
+  if(keys.length===0){
+    an.innerHTML = pct===100 ? '<b>全問正解！</b> すばらしい。この調子で次の単元へ進みましょう。'
+                             : 'まちがいはありませんでした。';
+  } else {
+    let msg='<b>誤答分析</b><br>つまずきやすいポイント：<br>';
+    msg += keys.sort((a,b)=>miss[b]-miss[a])
+      .map(k=>`・${k} … ${miss[k]}問まちがい`).join('<br>');
+    msg += '<br><small>この種類をもう一度練習すると効果的です。</small>';
+    an.innerHTML=msg;
+  }
+  // レビュー表
+  const tb=$('#reviewTable').querySelector('tbody');
+  tb.innerHTML='<tr><th>#</th><th>問題</th><th>あなた</th><th>正解</th><th>判定</th></tr>';
+  game.records.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td>${r.html}</td>
+      <td>${escapeHtml(r.user)}</td>
+      <td>${String(r.ans).replace('x=','x=')}</td>
+      <td class="mk ${r.correct?'o':'x'}">${r.correct?'○':'×'}</td>`;
+    tb.appendChild(tr);
+  });
+  showScreen('result');
+  $('#wintitle').textContent='中学校計算ドリル — せいせき';
+  status(`終了：${ok}/${total} 問正解`);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+/* ============ 画面切替 ============ */
+function showScreen(name){
+  ['menu','drill','result'].forEach(n=>$('#screen-'+n).classList.toggle('hide', n!==name));
+  window.scrollTo(0,0);
+}
+function status(t){ $('#statusline').textContent=t; }
+
+/* ============ テンキー ============ */
+function buildKeypad(){
+  const keys=['7','8','9','⌫','4','5','6','x','1','2','3','/','0',MINUS,'C','はんてい'];
+  const kp=$('#keypad'); kp.innerHTML='';
+  keys.forEach(k=>{
+    const b=document.createElement('button');
+    b.className='btn'+(k==='はんてい'?' enter':'');
+    b.textContent=k;
+    b.onclick=()=>keyIn(k);
+    kp.appendChild(b);
+  });
+}
+function keyIn(k){
+  const inp=$('#ansInput');
+  if(game && game.locked) return;
+  if(k==='はんてい'){ judge(); return; }
+  if(k==='C'){ inp.value=''; }
+  else if(k==='⌫'){ inp.value=inp.value.slice(0,-1); }
+  else { inp.value += k; }
+  inp.focus();
+}
+
+/* ============ イベント ============ */
+$('#startBtn').onclick=startGame;
+$('#judgeBtn').onclick=judge;
+$('#quitBtn').onclick=()=>{ clearInterval(window._t); game=null; showScreen('menu');
+  $('#wintitle').textContent='中学校計算ドリル — メインメニュー'; renderMenu(); };
+$('#menuBtn').onclick=()=>{ showScreen('menu');
+  $('#wintitle').textContent='中学校計算ドリル — メインメニュー'; renderMenu(); };
+$('#retryBtn').onclick=startGame;
+$('#ansInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); judge(); }});
+
+/* ============ 起動（原典 Form_Load 相当） ============ */
+buildKeypad();
+renderMenu();
+showScreen('menu');
+</script>

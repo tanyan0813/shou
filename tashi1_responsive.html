@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563eb" />
+  <title>TASHI1 たしざんれんしゅう</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --sub: #5a6475;
+      --line: #d7dfeb;
+      --blue: #2563eb;
+      --blue2: #dbeafe;
+      --green: #16a34a;
+      --red: #dc2626;
+      --yellow: #f59e0b;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif; }
+    body { min-height: 100vh; }
+    .wrap { width: min(960px, 100%); margin: 0 auto; padding: 16px; }
+    .hero, .panel, .mode, .footer-note { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .hero { padding: 20px; margin-bottom: 16px; }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 40px); }
+    .hero p { margin: 0; color: var(--sub); line-height: 1.7; font-size: 15px; }
+    .chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .chip { background: var(--blue2); color: var(--blue); padding: 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+    .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .mode { padding: 16px; cursor: pointer; transition: .15s ease; }
+    .mode:hover, .mode:active { transform: translateY(-2px); border-color: var(--blue); }
+    .mode .no { color: var(--sub); font-size: 12px; margin-bottom: 6px; }
+    .mode h3 { margin: 0 0 8px; font-size: 18px; }
+    .mode p { margin: 0; color: var(--sub); font-size: 13px; line-height: 1.6; }
+    .panel { padding: 18px; }
+    .topline { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge { padding: 8px 12px; border-radius: 999px; background: #f3f4f6; border: 1px solid var(--line); color: var(--sub); font-size: 13px; }
+    .question { font-size: clamp(34px, 6vw, 56px); font-weight: 800; text-align: center; letter-spacing: .04em; padding: 24px 14px; background: #f8fafc; border: 2px dashed var(--line); border-radius: 16px; }
+    .answer-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    input[type=number] { flex: 1 1 180px; min-height: 52px; border-radius: 14px; border: 1px solid var(--line); padding: 0 16px; font-size: 22px; }
+    button { appearance: none; border: 0; cursor: pointer; min-height: 52px; padding: 0 18px; border-radius: 14px; font-weight: 800; font-size: 15px; }
+    .primary { background: var(--blue); color: #fff; }
+    .secondary { background: #fff; color: var(--text); border: 1px solid var(--line); }
+    .feedback { margin-top: 14px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); background: #fafafa; line-height: 1.7; font-weight: 700; }
+    .ok { color: var(--green); border-color: #b7e4c7; background: #f0fdf4; }
+    .ng { color: var(--red); border-color: #fecaca; background: #fef2f2; }
+    .hint { margin-top: 16px; border: 1px dashed var(--line); border-radius: 16px; padding: 16px; background: #fff; }
+    .hint-title { font-weight: 800; margin-bottom: 10px; }
+    .bead-groups { display: flex; gap: 22px; flex-wrap: wrap; }
+    .group-label { font-size: 13px; color: var(--sub); margin-bottom: 8px; }
+    .beads { display: grid; grid-template-columns: repeat(5, 26px); gap: 10px; }
+    .bead { width: 26px; height: 26px; border-radius: 50%; background: #60a5fa; border: 2px solid var(--blue); }
+    .progress { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 16px; }
+    .cell { min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--line); background: #fff; font-weight: 800; }
+    .cell.ok { background: #f0fdf4; color: var(--green); }
+    .cell.ng { background: #fef2f2; color: var(--red); }
+    .score { font-size: clamp(54px, 9vw, 74px); font-weight: 900; line-height: 1; margin: 12px 0 6px; }
+    .message { font-size: clamp(20px, 4vw, 28px); font-weight: 800; margin-bottom: 12px; }
+    .details { margin-top: 14px; display: grid; gap: 8px; color: var(--sub); font-size: 14px; }
+    .footer-note { margin-top: 16px; padding: 14px 16px; color: var(--sub); font-size: 13px; line-height: 1.7; }
+    .install { margin-top: 10px; font-weight: 700; color: var(--blue); }
+    @media (max-width: 840px) { .mode-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) {
+      .wrap { padding: 12px; }
+      .mode-grid { grid-template-columns: 1fr; }
+      .panel, .hero, .mode, .footer-note { border-radius: 16px; }
+      button, input[type=number] { width: 100%; }
+      .progress { grid-template-columns: repeat(5, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>TASHI1 たしざんれんしゅう</h1>
+      <p>昔のBASIC教材を、Windows・iPad・iPhone・Android で使えるレスポンシブなWebアプリに作り直した版です。ブラウザがあれば使えます。1回5問、3回まちがえると答え表示、必要なモードではおはじきヒントも出ます。</p>
+      <div class="chips">
+        <div class="chip">Windows対応</div>
+        <div class="chip">iPad対応</div>
+        <div class="chip">iPhone対応</div>
+        <div class="chip">Android対応</div>
+      </div>
+    </div>
+    <div id="app"></div>
+    <div class="footer-note">
+      このHTMLファイルは、Chrome / Edge / Safari / Firefox などの最新ブラウザで利用できます。<br>
+      <span class="install">ホーム画面に追加 / お気に入り登録すると、アプリのように使いやすくなります。</span>
+    </div>
+  </div>
+  <script>
+    const modes = [
+      {id:1,title:'1けた＋1けた', desc:'くりあがりなし', sample:'5 + 3', hint:true, build(used){ return unique(used,()=>{const a=rand(1,7), b=rand(1,8-a); return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[a,b]};});}},
+      {id:2,title:'いくつといくつ', desc:'数の分解', sample:'8 は 3 と □', hint:true, build(used){ return unique(used,()=>{const total=rand(2,10), shown=rand(1,total-1), ans=total-shown; return {key:`${total}-${shown}`, prompt:`${total} は ${shown} と □`, correct:ans, beads:[shown,ans], total};});}},
+      {id:3,title:'2けた＋1けた', desc:'くりあがりなし', sample:'12 + 4', hint:false, build(used){ return unique(used,()=>{const ones=rand(1,7), b=rand(1,8-ones), tens=rand(1,8), a=tens*10+ones; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[ones,b]};});}},
+      {id:4,title:'1けた＋1けた', desc:'くりあがりあり', sample:'8 + 3', hint:true, build(used){ return unique(used,()=>{const a=rand(1,9), b=rand(1,9); if(a+b<=10) return null; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[a,b]};});}},
+      {id:5,title:'10のまとまり＋1けた', desc:'30 + 2 のような計算', sample:'30 + 2', hint:false, build(used){ return unique(used,()=>{const a=rand(1,9)*10, b=rand(1,9); return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[a/10,b]};});}},
+      {id:6,title:'10のまとまり＋10のまとまり', desc:'40 + 50 のような計算', sample:'40 + 50', hint:false, build(used){ return unique(used,()=>{const a=rand(1,7)*10, b=rand(1,8-a/10)*10; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[a/10,b/10]};});}},
+      {id:7,title:'2けた＋1けた', desc:'23 + 5 のような計算', sample:'23 + 5', hint:false, build(used){ return unique(used,()=>{const tens=rand(1,9), ones=rand(1,7), b=rand(1,8-ones), a=tens*10+ones; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[ones,b]};});}},
+      {id:8,title:'2けた＋10のまとまり', desc:'27 + 30 のような計算', sample:'27 + 30', hint:false, build(used){ return unique(used,()=>{const ones=rand(1,9), tens=rand(1,7), bt=rand(1,8-tens), a=tens*10+ones, b=bt*10; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:a+b, beads:[tens,bt]};});}},
+      {id:9,title:'0があるたしざん', desc:'3 + 0 のような計算', sample:'3 + 0', hint:true, build(used){ return unique(used,()=>{const n=rand(1,9), left=Math.random()<0.5; const a=left?0:n, b=left?n:0; return {key:`${a}-${b}`, prompt:`${a} ＋ ${b} ＝ □`, correct:n, beads:[a,b]};});}},
+    ];
+
+    const state = {
+      screen: 'menu',
+      modeId: 1,
+      runs: Object.fromEntries(modes.map(m => [m.id, 0])),
+      qs: [],
+      idx: 0,
+      attempts: 0,
+      results: [],
+      feedback: null,
+      reveal: false,
+      hint: false,
+    };
+
+    function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+    function unique(used, maker){ for(let i=0;i<100;i++){ const q=maker(); if(!q) continue; if(!used.has(q.key)){ used.add(q.key); return q; } } return maker(); }
+    function $(sel){ return document.querySelector(sel); }
+    function h(tag, attrs={}, children=[]){ const e=document.createElement(tag); for(const [k,v] of Object.entries(attrs)){ if(k==='class') e.className=v; else if(k==='html') e.innerHTML=v; else e.setAttribute(k,v);} (Array.isArray(children)?children:[children]).forEach(c=>{ if(c==null) return; e.append(c.nodeType?c:document.createTextNode(c)); }); return e; }
+    function mode(){ return modes.find(m=>m.id===state.modeId); }
+
+    function startMode(id){
+      state.modeId = id;
+      state.runs[id] += 1;
+      state.screen = 'quiz';
+      state.idx = 0;
+      state.attempts = 0;
+      state.results = [];
+      state.feedback = null;
+      state.reveal = false;
+      state.hint = false;
+      const used = new Set();
+      state.qs = Array.from({length:5}, () => mode().build(used));
+      render();
+      setTimeout(()=>$('#answer')?.focus(),50);
+    }
+
+    function submit(){
+      const box = $('#answer');
+      if(!box) return;
+      const raw = box.value.trim();
+      if(raw==='') return;
+      const num = Number(raw);
+      if(Number.isNaN(num)) return;
+      const q = state.qs[state.idx];
+      if(num === q.correct){
+        state.results[state.idx] = {correct:true, answer:num, expected:q.correct};
+        state.feedback = {type:'ok', text:'よくできました！ 正解です。'};
+        state.reveal = true;
+        state.hint = false;
+      } else {
+        state.attempts += 1;
+        if(state.attempts === 1){
+          state.feedback = {type:'ng', text:'もういちど　かんがえよう！'};
+          state.hint = false;
+        } else if(state.attempts === 2){
+          const useHint = [1,2,4,9].includes(state.modeId);
+          state.feedback = {type:'ng', text: useHint ? 'おはじきをみて、かんがえよう！' : 'もういちど　かんがえよう！'};
+          state.hint = useHint;
+        } else {
+          state.results[state.idx] = {correct:false, answer:num, expected:q.correct};
+          state.feedback = {type:'ng', text:`まちがっていますよ！ こたえは ${q.correct} です。`};
+          state.reveal = true;
+          state.hint = [1,2,4,9].includes(state.modeId);
+        }
+      }
+      render();
+      if(!state.reveal) setTimeout(()=>$('#answer')?.focus(),50);
+    }
+
+    function next(){
+      state.feedback = null;
+      state.attempts = 0;
+      state.reveal = false;
+      state.hint = false;
+      if(state.idx < state.qs.length - 1){
+        state.idx += 1;
+        render();
+        setTimeout(()=>$('#answer')?.focus(),50);
+      } else {
+        state.screen = 'summary';
+        render();
+      }
+    }
+
+    function backToMenu(){ state.screen = 'menu'; render(); }
+
+    function beadGroup(label, count){
+      const wrap = h('div');
+      wrap.append(h('div', {class:'group-label'}, `${label}（${count}）`));
+      const beads = h('div', {class:'beads'});
+      for(let i=0;i<count;i++) beads.append(h('div', {class:'bead'}));
+      wrap.append(beads);
+      return wrap;
+    }
+
+    function renderMenu(root){
+      const panel = h('div', {class:'panel'});
+      const grid = h('div', {class:'mode-grid'});
+      modes.forEach(m => {
+        const card = h('button', {class:'mode', type:'button'});
+        card.innerHTML = `<div class="no">モード ${m.id}</div><h3>${m.title}</h3><p>${m.desc}<br>例: ${m.sample}<br>${state.runs[m.id]} 回め</p>`;
+        card.addEventListener('click', ()=>startMode(m.id));
+        grid.append(card);
+      });
+      panel.append(grid);
+      root.append(panel);
+    }
+
+    function renderQuiz(root){
+      const q = state.qs[state.idx];
+      const m = mode();
+      const panel = h('div', {class:'panel'});
+      const top = h('div', {class:'topline'});
+      [
+        `モード ${m.id}`,
+        `${m.title}`,
+        `${m.desc}`,
+        `${state.idx + 1} / ${state.qs.length} 問目`,
+        `${state.runs[m.id]} 回め`
+      ].forEach(t => top.append(h('div', {class:'badge'}, t)));
+      panel.append(top);
+      panel.append(h('div', {class:'question'}, q.prompt));
+      const row = h('div', {class:'answer-row'});
+      const input = h('input', {id:'answer', type:'number', inputmode:'numeric', placeholder:'こたえを入力'});
+      input.addEventListener('keydown', e => { if(e.key === 'Enter') state.reveal ? next() : submit(); });
+      row.append(input);
+      const b1 = h('button', {class:'primary', type:'button'}, state.reveal ? 'つぎへ' : 'こたえあわせ');
+      b1.addEventListener('click', ()=> state.reveal ? next() : submit());
+      const b2 = h('button', {class:'secondary', type:'button'}, 'メニュー');
+      b2.addEventListener('click', backToMenu);
+      row.append(b1, b2);
+      panel.append(row);
+      if(state.feedback) panel.append(h('div', {class:`feedback ${state.feedback.type}`}, state.feedback.text));
+      if(state.hint){
+        const hint = h('div', {class:'hint'});
+        hint.append(h('div', {class:'hint-title'}, 'ヒント'));
+        const groups = h('div', {class:'bead-groups'});
+        if(state.modeId === 2){
+          groups.append(beadGroup(`${q.total} は`, q.total));
+          groups.append(beadGroup('見えている数', q.beads[0]));
+          groups.append(beadGroup('答えの数', q.beads[1]));
+        } else {
+          groups.append(beadGroup('1つめ', q.beads[0]));
+          groups.append(beadGroup('2つめ', q.beads[1]));
+        }
+        hint.append(groups);
+        panel.append(hint);
+      }
+      const prog = h('div', {class:'progress'});
+      for(let i=0;i<5;i++){
+        const r = state.results[i];
+        prog.append(h('div', {class:`cell ${!r?'':(r.correct?'ok':'ng')}`}, r ? (r.correct ? '○' : '×') : String(i+1)));
+      }
+      panel.append(prog);
+      root.append(panel);
+    }
+
+    function renderSummary(root){
+      const score = state.results.filter(r=>r.correct).length * 20;
+      const msg = score === 100 ? 'よくできました！' : (score >= 80 ? 'あともうすこし！' : 'もっとがんばろう！');
+      const panel = h('div', {class:'panel'});
+      panel.append(h('div', {class:'badge'}, `${mode().title} / ${mode().desc}`));
+      panel.append(h('div', {class:'score'}, `${score}点`));
+      panel.append(h('div', {class:'message'}, msg));
+      const prog = h('div', {class:'progress'});
+      state.results.forEach((r, i) => prog.append(h('div', {class:`cell ${r.correct?'ok':'ng'}`}, `${i+1}:${r.correct?'○':'×'}`)));
+      panel.append(prog);
+      const details = h('div', {class:'details'});
+      state.qs.forEach((q, i) => {
+        const r = state.results[i];
+        details.append(h('div', {}, `${i+1}. ${q.prompt.replace('□', r.answer)} / 正解: ${q.correct}`));
+      });
+      panel.append(details);
+      const row = h('div', {class:'answer-row'});
+      const b1 = h('button', {class:'primary', type:'button'}, 'もっとれんしゅうする');
+      b1.addEventListener('click', ()=>startMode(state.modeId));
+      const b2 = h('button', {class:'secondary', type:'button'}, 'べつのもんだい');
+      b2.addEventListener('click', backToMenu);
+      row.append(b1, b2);
+      panel.append(row);
+      root.append(panel);
+    }
+
+    function render(){
+      const root = document.getElementById('app');
+      root.innerHTML = '';
+      if(state.screen === 'menu') renderMenu(root);
+      else if(state.screen === 'quiz') renderQuiz(root);
+      else renderSummary(root);
+    }
+
+    render();
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

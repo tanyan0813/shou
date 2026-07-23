@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>小数の ひきざん の れんしゅう</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FCFBF4; --grid:#DDE7E3; --grid2:#EDF2EF;
+    --ink:#37424A; --ink-soft:#6A757C;
+    --red:#EA5040; --blue:#2E9BD6; --yellow:#F6B93B; --green:#34B37A;
+    --teal:#0EA5B0; --teal-deep:#0A8390;
+    --card:#FFFFFF; --shadow:0 6px 0 rgba(55,66,74,.10), 0 12px 28px rgba(55,66,74,.12);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; font-family:"Zen Maru Gothic", system-ui, sans-serif; color:var(--ink);
+    background:
+      linear-gradient(var(--grid2) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(90deg, var(--grid2) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(var(--grid) 1px, transparent 1px) 0 0/120px 120px,
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/120px 120px,
+      var(--paper);
+    display:flex; align-items:flex-start; justify-content:center; min-height:100%; -webkit-font-smoothing:antialiased;
+  }
+  .app{width:100%; max-width:760px; padding:18px 16px 40px;}
+  .num{font-family:"M PLUS Rounded 1c", sans-serif;}
+
+  header.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo .pin{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;font-weight:900;display:grid;place-items:center;font-size:18px;box-shadow:0 3px 0 var(--teal-deep);transform:rotate(-8deg);}
+  .logo b{font-size:18px;font-weight:900;letter-spacing:.02em;}
+  .tools{display:flex;gap:8px;}
+  .icon-btn{
+    border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;
+    color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;
+    display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+  }
+  .icon-btn.text-btn{
+    width:auto;
+    padding:0 12px;
+    font-size:13px;
+    font-weight:700;
+  }
+  .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
+
+  .screen{display:none;animation:pop .3s ease;}
+  .screen.active{display:block;}
+  @keyframes pop{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  .title-card{background:var(--card);border-radius:26px;padding:30px 24px 26px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;}
+  .title-card::before{content:"";position:absolute;inset:8px;border:3px dashed #B7E4E8;border-radius:20px;pointer-events:none;}
+  .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--teal);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #BEE7EA;}
+  .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:16px;position:relative;}
+  .demo{display:inline-flex;align-items:center;gap:.12em;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:30px;color:var(--ink);position:relative;}
+  .demo .op{color:var(--red);}
+  .demo .eq{color:var(--ink-soft);}
+  .demo .ans{color:var(--teal);}
+  .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
+
+  .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--teal);box-shadow:0 5px 0 var(--teal-deep);transition:transform .08s, box-shadow .08s;}
+  .big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--teal-deep);}
+  .big-btn.blue{background:var(--blue);box-shadow:0 5px 0 #1F7CAE;}
+  .big-btn.blue:active{box-shadow:0 1px 0 #1F7CAE;}
+  .big-btn.green{background:var(--green);box-shadow:0 5px 0 #279862;}
+  .big-btn.green:active{box-shadow:0 1px 0 #279862;}
+
+  .menu-head{display:flex;align-items:baseline;gap:10px;margin:4px 2px 14px;}
+  .menu-head h2{font-size:20px;font-weight:900;margin:0;}
+  .menu-head p{margin:0;color:var(--ink-soft);font-weight:700;font-size:13px;}
+  .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+  @media(min-width:640px){.menu-grid{grid-template-columns:repeat(4,1fr);}}
+  .mode-card{background:var(--card);border-radius:18px;padding:18px 12px 14px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
+  .mode-card:hover{transform:translateY(-3px);}
+  .mode-card:active{transform:translateY(1px);box-shadow:0 3px 0 rgba(55,66,74,.10);}
+  .mode-card .no{position:absolute;top:-9px;left:-9px;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#7A5410;font-weight:900;display:grid;place-items:center;font-size:15px;box-shadow:0 3px 0 #D89A2C;transform:rotate(-6deg);}
+  .mode-card .ex{font-size:22px;font-weight:900;color:var(--ink);line-height:1.1;margin:6px 0 6px;}
+  .mode-card .ex .op{color:var(--red);}
+  .mode-card .lbl{font-size:12px;color:var(--ink-soft);font-weight:700;line-height:1.35;}
+
+  .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .chip{background:var(--card);border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;box-shadow:0 3px 0 rgba(55,66,74,.10);display:inline-flex;align-items:center;gap:6px;}
+  .chip.mode{color:var(--teal);}
+  .back-btn{border:none;background:var(--card);border-radius:12px;padding:8px 14px;font-family:inherit;font-weight:700;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-size:14px;}
+  .back-btn:active{transform:translateY(2px);}
+  .dots{display:flex;gap:6px;margin-left:auto;}
+  .dot{width:16px;height:16px;border-radius:50%;background:#E4EAE8;display:grid;place-items:center;font-size:11px;color:#fff;font-weight:900;box-shadow:inset 0 -2px 3px rgba(0,0,0,.08);}
+  .dot.ok{background:var(--green);}
+  .dot.ng{background:var(--red);}
+  .dot.now{background:var(--yellow);box-shadow:0 0 0 3px rgba(246,185,59,.35);}
+
+  .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:26px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .board .bracket{color:var(--ink-soft);font-weight:700;font-size:13px;min-height:18px;margin-bottom:6px;}
+  .equation{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(34px,11vw,60px);line-height:1;display:flex;align-items:center;justify-content:center;gap:.14em;flex-wrap:wrap;color:var(--ink);}
+  .equation .op{color:var(--red);}
+  .equation .eq{color:var(--ink-soft);}
+  .ansbox{min-width:1.6em;min-height:1.05em;padding:0 .12em;border-bottom:6px solid var(--teal);color:var(--teal);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;}
+  .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--blue);min-height:20px;}
+
+  .stamp{position:absolute;top:50%;left:50%;pointer-events:none;z-index:3;}
+  .stamp svg{display:block;width:150px;height:150px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
+  .stamp.maru{animation:stampin .45s cubic-bezier(.2,1.5,.4,1) both;}
+  .stamp.batsu{animation:shake .5s ease both;}
+  @keyframes stampin{0%{transform:translate(-50%,-50%) scale(2.4) rotate(-25deg);opacity:0;}60%{opacity:1;}100%{transform:translate(-50%,-50%) scale(1) rotate(-8deg);opacity:1;}}
+  @keyframes shake{0%{transform:translate(-50%,-50%) scale(1.4);opacity:0;}20%{opacity:1;}30%{transform:translate(-53%,-50%) rotate(-6deg);}45%{transform:translate(-47%,-50%) rotate(6deg);}60%{transform:translate(-52%,-50%) rotate(-4deg);}75%{transform:translate(-48%,-50%) rotate(3deg);}100%{transform:translate(-50%,-50%) rotate(0);opacity:1;}}
+
+  .msg{margin-top:8px;font-weight:900;font-size:18px;min-height:26px;}
+  .msg.good{color:var(--green);}
+  .msg.bad{color:var(--red);}
+  .reveal{display:none;margin-top:10px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:24px;color:var(--ink);}
+  .reveal.show{display:block;animation:pop .3s ease;}
+  .reveal b{color:var(--red);}
+
+  .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px;}
+  .key{border:none;background:var(--card);border-radius:16px;width:100%;height:62px;padding:0;display:flex;align-items:center;justify-content:center;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:28px;color:var(--ink);cursor:pointer;box-shadow:0 5px 0 rgba(55,66,74,.14);transition:transform .06s, box-shadow .06s;}
+  .key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.14);}
+  .key.dot{color:var(--teal);}
+  .key.dot .dotmark{display:block;width:18px;height:18px;border-radius:50%;background:currentColor;}
+  .key.del{background:#FDECE9;color:var(--red);box-shadow:0 5px 0 #F3C4BC;font-size:24px;}
+  .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
+  .key.enter{grid-column:span 3;background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:22px;}
+  .key.enter:active{box-shadow:0 1px 0 #279862;}
+  .key[disabled]{opacity:.4;pointer-events:none;}
+
+  .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
+  .score-line{font-weight:900;font-size:22px;margin:8px 0 4px;}
+  .score-line .big{font-family:"M PLUS Rounded 1c";font-size:56px;color:var(--red);vertical-align:-6px;margin:0 4px;}
+  .result-msg{font-weight:900;font-size:24px;margin:6px 0 8px;color:var(--green);}
+  .hanamaru-wrap{height:130px;display:grid;place-items:center;margin:2px 0 6px;}
+  .time-line{color:var(--ink-soft);font-weight:700;font-size:14px;margin-bottom:16px;}
+  .review{display:flex;flex-direction:column;gap:8px;text-align:left;margin:0 auto 22px;max-width:440px;}
+  .review-row{display:flex;align-items:center;gap:12px;background:#F7FAF9;border-radius:14px;padding:10px 14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:20px;}
+  .review-row .rmark{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;font-size:18px;color:#fff;}
+  .review-row .rmark.ok{background:var(--green);}
+  .review-row .rmark.ng{background:var(--red);}
+  .review-row .rq{flex:1;color:var(--ink);}
+  .review-row .rq .op{color:var(--red);}
+  .review-row .ra.wrong{color:var(--red);text-decoration:line-through;margin-right:6px;}
+  .review-row .rc{color:var(--green);}
+  .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="logo"><span class="pin">0.1</span><b>小数の ひきざん</b></div>
+    <div class="tools">
+      <a href="hsmenu.html" class="icon-btn text-btn" title="はじめのメニュー">🏠 メニュー</a>
+      <button class="icon-btn" id="soundBtn" title="おと">🔊</button>
+    </div>
+  </header>
+
+  <!-- TITLE -->
+  <section class="screen active" id="titleScreen">
+    <div class="title-card">
+      <h1>小数の ひきざん</h1>
+      <div class="sub">しょうすう の れんしゅう を しましょう</div>
+      <div class="demo num"><span>4</span><span class="op">−</span><span>0.3</span><span class="eq">＝</span><span class="ans">3.7</span></div>
+      <br>
+      <button class="big-btn" id="startBtn">はじめる ▶</button>
+      <div class="credit">
+        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="screen" id="menuScreen">
+    <div class="menu-head"><h2>メニュー</h2><p>べんきょうすることを えらびましょう</p></div>
+    <div class="menu-grid" id="menuGrid"></div>
+  </section>
+
+  <!-- PLAY -->
+  <section class="screen" id="playScreen">
+    <div class="play-top">
+      <button class="back-btn" id="menuBackBtn">← メニュー</button>
+      <span class="chip mode" id="modeChip"></span>
+      <span class="chip"><span id="timerText" class="num">0びょう</span></span>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="board" id="board">
+      <div class="bracket" id="bracket"></div>
+      <div class="equation num" id="equation"></div>
+      <div class="prompt" id="prompt"></div>
+      <div class="msg" id="msg"></div>
+      <div class="reveal" id="reveal"></div>
+      <div class="stamp" id="stamp"></div>
+    </div>
+    <div class="keypad" id="keypad">
+      <button class="key" data-k="1">1</button>
+      <button class="key" data-k="2">2</button>
+      <button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button>
+      <button class="key" data-k="5">5</button>
+      <button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button>
+      <button class="key" data-k="8">8</button>
+      <button class="key" data-k="9">9</button>
+      <button class="key dot" data-k="."><span class="dotmark"></span></button>
+      <button class="key" data-k="0">0</button>
+      <button class="key del" data-k="del">⌫</button>
+      <button class="key enter" data-k="enter">こたえ</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="screen" id="resultScreen">
+    <div class="result-card">
+      <div class="hanamaru-wrap" id="hanamaruWrap"></div>
+      <div class="score-line">てんすう は <span class="big num" id="scoreNum">0</span> てん です。</div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="time-line" id="resultTime"></div>
+      <div class="review" id="review"></div>
+      <div class="result-actions">
+        <button class="big-btn green" id="againBtn">もっと れんしゅうする</button>
+        <button class="big-btn blue" id="toMenuBtn">べつの もんだい</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* =========================================================
+   小数の ひきざん の れんしゅう  —  Web版
+   原作: N88-BASIC "HSHOU1.BAS" Ver 3.02 のロジックを移植
+   （0.8−0.5 ／ 1−0.3 ／ 5.9−0.6 ／ 4−0.3）
+   ========================================================= */
+
+const MODES = [
+  { ex:"0.8 − 0.5", bracket:"小数どうしの ひきざん",   menu:1 },
+  { ex:"1 − 0.3",   bracket:"1 から ひく",             menu:2 },
+  { ex:"5.9 − 0.6", bracket:"1より 大きい 小数から",   menu:3 },
+  { ex:"4 − 0.3",   bracket:"せいすう から ひく",      menu:4 },
+];
+
+const PROBLEMS_PER_ROUND = 5;
+const MAX_TRIES = 3;
+const rnd = () => Math.random();
+const fix = (x) => Math.trunc(x);
+
+// --- 原作の乱数生成を忠実に移植（HSHOU1 の D.SET.1〜4）---
+function generatePair(menu){
+  if(menu===1){                      // 0.a − 0.b （a>b）
+    let a,b; do{ a=fix(7.9*rnd()+2); b=fix((a-0.1)*rnd()+1); }while(a<=b);
+    return { dispA:`0.${a}`, dispB:`0.${b}`, canonical:"0."+(a-b) };
+  }
+  if(menu===2){                      // 1 − 0.b
+    const b=fix(8.9*rnd()+1);
+    return { dispA:"1", dispB:`0.${b}`, canonical:"0."+(10-b) };
+  }
+  if(menu===3){                      // a.c − 0.d （c≠d）
+    let a,c,d; do{ a=fix(8.9*rnd()+1); d=fix(8.9*rnd()+1); c=fix(8.9*rnd()+1); }while(d===c);
+    const S=10*a+c-d; let s=String(S); if(S<=10) s="0"+s;
+    return { dispA:`${a}.${c}`, dispB:`0.${d}`, canonical:s.slice(0,-1)+"."+s.slice(-1) };
+  }
+  const a=fix(8.9*rnd()+1), b=fix(8.9*rnd()+1);   // a − 0.b
+  return { dispA:`${a}`, dispB:`0.${b}`, canonical:(a-1)+"."+(10-b) };
+}
+
+function buildRound(modeIndex){
+  const menu=MODES[modeIndex].menu;
+  const seen=new Set(); const list=[];
+  for(let i=0;i<PROBLEMS_PER_ROUND;i++){
+    let p, guard=0;
+    do{ p=generatePair(menu); guard++; }while(seen.has(p.dispA+"_"+p.dispB) && guard<200);
+    seen.add(p.dispA+"_"+p.dispB);
+    list.push({ ...p, tries:0, correct:false, userAns:"" });
+  }
+  return list;
+}
+
+const MSG = {
+  perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
+  miss0:"まちがってますよ！", miss1:"もういちど かんがえよう！",
+  miss2:"０ が よぶんです！", miss3:"小数点の いちが ちがいます！",
+  prompt:"ただしい こたえを いれましょう。",
+};
+
+let state = { modeIndex:0, problems:[], current:0, input:"", locked:false, startTime:0, soundOn:true };
+const $ = (id)=>document.getElementById(id);
+const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen") };
+function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
+
+let audioCtx=null;
+function beep(type){
+  if(!state.soundOn) return;
+  try{
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
+    const now=audioCtx.currentTime;
+    const play=(f,s,d,v=0.18)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(0,now+s);g.gain.linearRampToValueAtTime(v,now+s+0.02);g.gain.exponentialRampToValueAtTime(0.0001,now+s+d);o.start(now+s);o.stop(now+s+d+0.02);};
+    if(type==="correct"){play(660,0,.14);play(880,.12,.2);}
+    else if(type==="wrong"){play(200,0,.18,.2);}
+    else if(type==="tap"){play(520,0,.05,.08);}
+    else if(type==="fanfare"){play(523,0,.13);play(659,.13,.13);play(784,.26,.13);play(1046,.39,.3);}
+  }catch(e){}
+}
+
+function buildMenu(){
+  const grid=$("menuGrid"); grid.innerHTML="";
+  MODES.forEach((m,i)=>{
+    const btn=document.createElement("button"); btn.className="mode-card";
+    const exHtml=m.ex.replace(/−/g,'<span class="op">−</span>');
+    btn.innerHTML=`<span class="no num">${i+1}</span><div class="ex num">${exHtml}</div><div class="lbl">${m.bracket}</div>`;
+    btn.addEventListener("click",()=>{ beep("tap"); startRound(i); });
+    grid.appendChild(btn);
+  });
+}
+
+function startRound(modeIndex){
+  state.modeIndex=modeIndex;
+  state.problems=buildRound(modeIndex);
+  state.current=0; state.startTime=Date.now();
+  $("modeChip").textContent="＜"+(modeIndex+1)+"＞ "+MODES[modeIndex].ex;
+  buildDots(); startTimer(); show("play"); renderProblem();
+}
+function buildDots(){
+  const dots=$("dots"); dots.innerHTML="";
+  for(let i=0;i<PROBLEMS_PER_ROUND;i++){const d=document.createElement("div");d.className="dot";d.id="dot"+i;dots.appendChild(d);}
+  updateDots();
+}
+function updateDots(){
+  state.problems.forEach((p,i)=>{
+    const d=$("dot"+i); d.className="dot";
+    if(i<state.current){d.classList.add(p.correct?"ok":"ng");d.textContent=p.correct?"○":"✕";}
+    else if(i===state.current){d.classList.add("now");d.textContent="";}
+    else d.textContent="";
+  });
+}
+
+function renderProblem(){
+  const p=state.problems[state.current];
+  const m=MODES[state.modeIndex];
+  state.input=""; state.locked=false;
+  $("bracket").textContent="［"+m.bracket+"］";
+  $("equation").innerHTML=`<span>${p.dispA}</span><span class="op">−</span><span>${p.dispB}</span><span class="eq">＝</span><span class="ansbox" id="ansbox"></span>`;
+  $("prompt").textContent=MSG.prompt;
+  $("msg").textContent=""; $("msg").className="msg";
+  $("reveal").className="reveal"; $("reveal").innerHTML="";
+  $("stamp").innerHTML="";
+  setKeypad(true); updateDots(); updateAnsbox();
+}
+function updateAnsbox(){ const box=$("ansbox"); if(box) box.textContent=state.input; }
+function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
+
+function pressKey(k){
+  if(state.locked) return;
+  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); updateAnsbox(); beep("tap"); } return; }
+  if(k==="enter"){ submit(); return; }
+  if(k==="."){ if(state.input.includes(".")||state.input==="") { beep("wrong"); return; } state.input+="."; beep("tap"); updateAnsbox(); return; }
+  if(state.input.length>=5) return;
+  state.input+=k; beep("tap"); updateAnsbox();
+}
+function submit(){
+  if(state.locked) return;
+  if(state.input==="") { beep("wrong"); return; }
+  const p=state.problems[state.current];
+  state.locked=true; setKeypad(false);
+  if(state.input===p.canonical) onCorrect(p);
+  else onWrong(p, classify(state.input, p.canonical));
+}
+
+// 原作 MISS.TYPE を移植：小数点・0 のまちがいを こまかく はんてい
+function classify(typed, canonical){
+  let r=typed;
+  while(r.length && (r[r.length-1]==="0" || r[r.length-1]===".")){   // 2: 0が よぶん
+    r=r.slice(0,-1);
+    if(r===canonical) return 2;
+  }
+  const nzc=parseInt((canonical.replace(".","").replace(/^0+/,"").replace(/0+$/,"")||"0"),10);
+  const nza=parseInt((typed.replace(".","").replace(/^0+/,"").replace(/0+$/,"")||"0"),10);
+  if(nzc===nza) return 3;                                            // 3: 小数点の いちが ちがう
+  return 1;
+}
+
+function onCorrect(p){
+  p.correct=true; p.userAns=p.canonical;
+  const box=$("ansbox"); if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
+  showStamp("maru");
+  const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
+  beep("correct"); setTimeout(nextProblem,1100);
+}
+function onWrong(p, missType){
+  p.tries+=1; showStamp("batsu"); beep("wrong");
+  const msg=$("msg");
+  const MISS={0:MSG.miss0,1:MSG.miss1,2:MSG.miss2,3:MSG.miss3};
+  if(p.tries>=MAX_TRIES){
+    let mt=(missType===1)?0:missType;
+    msg.textContent=MISS[mt]; msg.className="msg bad";
+    p.correct=false; p.userAns=state.input;
+    $("reveal").innerHTML=`こたえは ${p.dispA}−${p.dispB}＝ <b>${p.canonical}</b>`;
+    $("reveal").classList.add("show");
+    setTimeout(nextProblem,2300);
+  }else{
+    msg.textContent=MISS[missType]; msg.className="msg bad";
+    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); updateAnsbox(); $("msg").textContent=""; $("msg").className="msg"; },1100);
+  }
+}
+function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }
+
+function showStamp(type){
+  const el=$("stamp");
+  if(type==="maru"){ el.className="stamp maru"; el.innerHTML=`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#EA5040" stroke-width="9"/><circle cx="50" cy="50" r="27" fill="none" stroke="#EA5040" stroke-width="7"/></svg>`; }
+  else{ el.className="stamp batsu"; el.innerHTML=`<svg viewBox="0 0 100 100"><line x1="22" y1="22" x2="78" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/><line x1="78" y1="22" x2="22" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/></svg>`; }
+}
+
+let timerId=null;
+function startTimer(){ clearInterval(timerId); timerId=setInterval(()=>{ $("timerText").textContent=fmtTime(Math.floor((Date.now()-state.startTime)/1000)); },500); }
+function fmtTime(s){ const m=Math.floor(s/60), sec=s%60; return m===0?sec+"びょう":m+"ふん"+sec+"びょう"; }
+
+function finishRound(){
+  clearInterval(timerId);
+  const correct=state.problems.filter(p=>p.correct).length;
+  const score=fix(correct/PROBLEMS_PER_ROUND*100);
+  const elapsed=Math.floor((Date.now()-state.startTime)/1000);
+  $("scoreNum").textContent=score;
+  const msgEl=$("resultMsg"), wrap=$("hanamaruWrap"); wrap.innerHTML="";
+  if(score===100){ msgEl.textContent=MSG.perfect; msgEl.style.color="var(--red)"; wrap.innerHTML=hanamaruSVG(); beep("fanfare"); }
+  else if(score>=80){ msgEl.textContent=MSG.good; msgEl.style.color="var(--yellow)"; wrap.innerHTML=starSVG(); beep("correct"); }
+  else{ msgEl.textContent=MSG.more; msgEl.style.color="var(--green)"; wrap.innerHTML=ganbaruSVG(); }
+  $("resultTime").textContent="じかん： "+fmtTime(elapsed);
+  const rv=$("review"); rv.innerHTML="";
+  state.problems.forEach((p)=>{
+    const row=document.createElement("div"); row.className="review-row";
+    let ansHtml=p.correct?`<span class="rc">${p.canonical}</span>`:`<span class="ra wrong">${p.userAns!==""?p.userAns:"―"}</span><span class="rc">${p.canonical}</span>`;
+    row.innerHTML=`<span class="rmark ${p.correct?'ok':'ng'}">${p.correct?'○':'✕'}</span>`+
+      `<span class="rq num">${p.dispA}<span class="op">−</span>${p.dispB}<span class="op">＝</span></span>`+
+      `<span class="num">${ansHtml}</span>`;
+    rv.appendChild(row);
+  });
+  show("result");
+}
+
+function hanamaruSVG(){
+  let petals=""; for(let i=0;i<8;i++){const ang=(i/8)*Math.PI*2;const x=60+30*Math.cos(ang),y=60+30*Math.sin(ang);petals+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="17" fill="#F6B93B"/>`;}
+  return `<svg width="120" height="120" viewBox="0 0 120 120">${petals}<circle cx="60" cy="60" r="30" fill="#FDE9BE"/><circle cx="60" cy="60" r="24" fill="none" stroke="#EA5040" stroke-width="6"/><circle cx="60" cy="60" r="15" fill="none" stroke="#EA5040" stroke-width="5"/></svg>`;
+}
+function starSVG(){
+  let pts=""; for(let i=0;i<10;i++){const r=i%2===0?42:18;const ang=(-90+i*36)*Math.PI/180;pts+=`${(60+r*Math.cos(ang)).toFixed(1)},${(60+r*Math.sin(ang)).toFixed(1)} `;}
+  return `<svg width="120" height="120" viewBox="0 0 120 120"><polygon points="${pts}" fill="#F6B93B" stroke="#D89A2C" stroke-width="4" stroke-linejoin="round"/></svg>`;
+}
+function ganbaruSVG(){
+  return `<svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="42" fill="#EAF6F0" stroke="#34B37A" stroke-width="5"/><circle cx="46" cy="52" r="5" fill="#34B37A"/><circle cx="74" cy="52" r="5" fill="#34B37A"/><path d="M42 74 Q60 90 78 74" fill="none" stroke="#34B37A" stroke-width="5" stroke-linecap="round"/></svg>`;
+}
+
+$("startBtn").addEventListener("click",()=>{ beep("tap"); buildMenu(); show("menu"); });
+$("menuBackBtn").addEventListener("click",()=>{ clearInterval(timerId); show("menu"); });
+$("againBtn").addEventListener("click",()=>{ beep("tap"); startRound(state.modeIndex); });
+$("toMenuBtn").addEventListener("click",()=>{ beep("tap"); show("menu"); });
+$("keypad").addEventListener("click",(e)=>{ const b=e.target.closest(".key"); if(b) pressKey(b.dataset.k); });
+$("soundBtn").addEventListener("click",()=>{ state.soundOn=!state.soundOn; $("soundBtn").textContent=state.soundOn?"🔊":"🔇"; });
+document.addEventListener("keydown",(e)=>{
+  if(!screens.play.classList.contains("active")) return;
+  if(e.key>="0"&&e.key<="9"){ pressKey(e.key); e.preventDefault(); }
+  else if(e.key==="."){ pressKey("."); e.preventDefault(); }
+  else if(e.key==="Backspace"){ pressKey("del"); e.preventDefault(); }
+  else if(e.key==="Enter"){ pressKey("enter"); e.preventDefault(); }
+});
+
+buildMenu();
+</script>
+</body>
+</html>

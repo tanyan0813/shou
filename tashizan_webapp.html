@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TASHI1 Web App</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --panel-soft: #eef5ff;
+      --text: #1f2a44;
+      --muted: #60708f;
+      --line: #d8e3f4;
+      --primary: #356dff;
+      --primary-2: #2f56c8;
+      --success: #15a56b;
+      --warning: #ff9f1c;
+      --danger: #e5484d;
+      --shadow: 0 16px 40px rgba(30, 60, 120, 0.12);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, #f9fbff 45%, #f4f7fb 100%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #3d78ff, #7e6dff);
+      color: #fff;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+    }
+    .hero p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.75;
+      opacity: 0.95;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .menu {
+      padding: 18px;
+      position: sticky;
+      top: 20px;
+    }
+    .menu h2,
+    .practice h2 {
+      margin: 4px 0 14px;
+      font-size: 20px;
+    }
+    .menu-list {
+      display: grid;
+      gap: 10px;
+    }
+    .menu-item {
+      width: 100%;
+      text-align: left;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 14px 14px 16px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .menu-item:hover,
+    .menu-item.active {
+      transform: translateY(-1px);
+      border-color: #a8c4ff;
+      background: var(--panel-soft);
+    }
+    .menu-item strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .menu-item small {
+      color: var(--muted);
+      display: block;
+      line-height: 1.5;
+    }
+    .menu-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #e8efff;
+      color: var(--primary-2);
+      font-weight: 700;
+      margin-right: 10px;
+    }
+    .menu-row {
+      display: flex;
+      align-items: start;
+    }
+    .practice {
+      padding: 20px;
+      min-height: 760px;
+    }
+    .placeholder {
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      border: 2px dashed #d7e4ff;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fafcff, #f3f7ff);
+      padding: 20px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .stat {
+      background: #f8fbff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px 14px;
+    }
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .stat strong {
+      font-size: 20px;
+    }
+    .question-card {
+      background: linear-gradient(180deg, #fcfdff, #f6f9ff);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .eyebrow {
+      color: var(--primary-2);
+      font-weight: 700;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .question-title {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    .question-sub {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .problem {
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-align: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px 16px;
+      margin-bottom: 18px;
+    }
+    .answer-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+    input[type="number"] {
+      width: min(240px, 100%);
+      font-size: 28px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      border: 2px solid #cdddff;
+      outline: none;
+      text-align: center;
+      color: var(--text);
+    }
+    input[type="number"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(53,109,255,0.12);
+    }
+    button {
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    button.primary { background: var(--primary); color: #fff; }
+    button.secondary { background: #edf3ff; color: var(--primary-2); }
+    button.ghost { background: #fff; color: var(--text); border: 1px solid var(--line); }
+    .feedback {
+      margin-top: 16px;
+      min-height: 58px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 700;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.info { background: #edf4ff; color: #254eb7; }
+    .feedback.success { background: #eafaf2; color: #0c7d50; }
+    .feedback.warning { background: #fff5e8; color: #b86a00; }
+    .feedback.error { background: #ffeff0; color: #b4232a; }
+    .hint {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid #ffe3b0;
+      background: #fffaf1;
+      display: none;
+    }
+    .hint.show { display: block; }
+    .hint h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      color: #9a5a00;
+    }
+    .dot-groups {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .group {
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid #f2d59d;
+      min-width: 120px;
+    }
+    .group strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #8e5909;
+    }
+    .dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 24px;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #ffb647;
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,0.12);
+    }
+    .dot.alt { background: #69a7ff; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .history {
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    .history-list {
+      display: grid;
+      gap: 10px;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: #fff;
+    }
+    .history-item small { color: var(--muted); display: block; margin-top: 4px; }
+    .pill {
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .pill.ok { background: #eafaf2; color: #0c7d50; }
+    .pill.ng { background: #ffeff0; color: #b4232a; }
+    .result {
+      text-align: center;
+      padding: 24px 10px 10px;
+    }
+    .score {
+      font-size: clamp(56px, 10vw, 88px);
+      margin: 12px 0 6px;
+      font-weight: 800;
+      color: var(--primary-2);
+    }
+    .result-message {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 10px 0 18px;
+    }
+    .result-message.good { color: var(--success); }
+    .result-message.mid { color: var(--warning); }
+    .result-message.low { color: var(--danger); }
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    @media (max-width: 940px) {
+      .layout { grid-template-columns: 1fr; }
+      .menu { position: static; }
+      .practice { min-height: auto; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>たしざん れんしゅう</h1>
+      <p>元の <strong>TASHI1.bas</strong> の出題ロジックをもとに、ブラウザでそのまま使える学習用 Web アプリとして再実装しました。9つの練習モード、5問ずつの出題、3回までの再挑戦、得点表示、ヒント表示に対応しています。</p>
+    </section>
+
+    <div class="layout">
+      <aside class="panel menu">
+        <h2>メニュー</h2>
+        <div id="menuList" class="menu-list"></div>
+        <div class="footer-note">
+          それぞれのメニューは 5問ずつ出題されます。2回まちがえると、一部のモードではおはじき風ヒントが表示されます。
+        </div>
+      </aside>
+
+      <main class="panel practice">
+        <div id="app"></div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const MODE_DEFS = [
+      {
+        id: 1,
+        title: '１けた ＋ １けた',
+        subtitle: 'くりあがりなし',
+        description: '5 + 3 のような、くりあがりのない たしざん',
+        hint: 'counters',
+        generate() {
+          const a = randInt(1, 8);
+          const b = randInt(1, 9 - a);
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 2,
+        title: 'いくつ と いくつ',
+        subtitle: '数の分けかた',
+        description: '8 は 3 と □ のような 数のわけかた',
+        hint: 'bond',
+        generate() {
+          const total = randInt(2, 10);
+          const part = randInt(1, total - 1);
+          return { key: `${total}:${part}`, prompt: `${fullNum(total)} は ${fullNum(part)} と □`, answer: total - part, total, part, type: 'bond' };
+        }
+      },
+      {
+        id: 3,
+        title: '２けた ＋ １けた',
+        subtitle: 'くりあがりなし',
+        description: '12 + 4 のような、くりあがりのない たしざん',
+        hint: null,
+        generate() {
+          const ones = randInt(1, 8);
+          const add = randInt(1, 9 - ones);
+          const a = 10 + ones;
+          const b = add;
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 4,
+        title: '１けた ＋ １けた',
+        subtitle: 'くりあがりあり',
+        description: '8 + 3 のような、くりあがりのある たしざん',
+        hint: 'counters',
+        generate() {
+          let a, b;
+          do {
+            a = randInt(1, 9);
+            b = randInt(1, 9);
+          } while (a + b <= 10);
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 5,
+        title: '１０のまとまり ＋ １けた',
+        subtitle: '30 + 2 のような たしざん',
+        description: '十のまとまりと 1けたの数を たす れんしゅう',
+        hint: null,
+        generate() {
+          const a = randInt(1, 9) * 10;
+          const b = randInt(1, 9);
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 6,
+        title: '１０のまとまり ＋ １０のまとまり',
+        subtitle: 'くりあがりなし',
+        description: '40 + 50 のような、十のまとまりどうしの たしざん',
+        hint: null,
+        generate() {
+          const d1 = randInt(1, 8);
+          const d2 = randInt(1, 9 - d1);
+          const a = d1 * 10;
+          const b = d2 * 10;
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 7,
+        title: '２けた ＋ １けた',
+        subtitle: '23 + 5 のような たしざん',
+        description: '23 + 5 のような、2けたに1けたをたす れんしゅう',
+        hint: null,
+        generate() {
+          const tens = randInt(1, 9);
+          const ones = randInt(1, 8);
+          const add = randInt(1, 9 - ones);
+          const a = tens * 10 + ones;
+          const b = add;
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 8,
+        title: '２けた ＋ １０のまとまり',
+        subtitle: '27 + 30 のような たしざん',
+        description: '2けたの数に 十のまとまりを たす れんしゅう',
+        hint: null,
+        generate() {
+          const ones = randInt(1, 9);
+          const tens1 = randInt(1, 8);
+          const tens2 = randInt(1, 9 - tens1);
+          const a = tens1 * 10 + ones;
+          const b = tens2 * 10;
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      },
+      {
+        id: 9,
+        title: '０ がある たしざん',
+        subtitle: '3 + 0 / 0 + 3',
+        description: '0 が入る たしざんの れんしゅう',
+        hint: 'counters',
+        generate() {
+          const n = randInt(1, 9);
+          const flip = Math.random() < 0.5;
+          const a = flip ? 0 : n;
+          const b = flip ? n : 0;
+          return { key: `${a}+${b}`, prompt: `${fullNum(a)} ＋ ${fullNum(b)}`, answer: a + b, a, b, type: 'add' };
+        }
+      }
+    ];
+
+    const app = document.getElementById('app');
+    const menuList = document.getElementById('menuList');
+    const practiceCounts = Object.fromEntries(MODE_DEFS.map(m => [m.id, 0]));
+    let state = {
+      modeId: null,
+      questions: [],
+      current: 0,
+      misses: 0,
+      correct: 0,
+      startTime: null,
+      finished: false,
+      history: [],
+      awaitingNext: false
+    };
+
+    function init() {
+      renderMenu();
+      renderHome();
+    }
+
+    function renderMenu() {
+      menuList.innerHTML = MODE_DEFS.map(mode => `
+        <button class="menu-item ${state.modeId === mode.id ? 'active' : ''}" onclick="startMode(${mode.id})">
+          <div class="menu-row">
+            <span class="menu-badge">${mode.id}</span>
+            <div>
+              <strong>${escapeHtml(mode.title)} <span style="color:#60708f;font-weight:600">${escapeHtml(mode.subtitle)}</span></strong>
+              <small>${escapeHtml(mode.description)}</small>
+              <small>れんしゅう回数: ${practiceCounts[mode.id]} 回</small>
+            </div>
+          </div>
+        </button>
+      `).join('');
+    }
+
+    function renderHome() {
+      app.innerHTML = `
+        <div class="placeholder">
+          <div>
+            <h2 style="margin-top:0">メニューをえらんで スタート</h2>
+            <p style="line-height:1.9; margin:0 auto; max-width:620px;">
+              左のメニューから学習内容をえらぶと、5問のれんしゅうが始まります。<br>
+              まちがえた問題は3回までチャレンジでき、最後に得点とメッセージが表示されます。
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function startMode(modeId) {
+      const mode = getMode(modeId);
+      practiceCounts[modeId] += 1;
+      state = {
+        modeId,
+        questions: generateQuestionSet(mode),
+        current: 0,
+        misses: 0,
+        correct: 0,
+        startTime: Date.now(),
+        finished: false,
+        history: [],
+        awaitingNext: false
+      };
+      renderMenu();
+      renderPractice();
+      focusAnswer();
+    }
+
+    function generateQuestionSet(mode) {
+      const set = new Set();
+      const questions = [];
+      while (questions.length < 5) {
+        const q = mode.generate();
+        if (set.has(q.key)) continue;
+        set.add(q.key);
+        questions.push(q);
+      }
+      return questions;
+    }
+
+    function renderPractice() {
+      const mode = getMode(state.modeId);
+      if (!mode) return renderHome();
+
+      if (state.finished) {
+        return renderResult();
+      }
+
+      const q = state.questions[state.current];
+      app.innerHTML = `
+        <div class="stats">
+          <div class="stat"><span>メニュー</span><strong>${escapeHtml(mode.title)}</strong></div>
+          <div class="stat"><span>もんだい</span><strong>${state.current + 1} / 5</strong></div>
+          <div class="stat"><span>せいかい</span><strong>${state.correct} 問</strong></div>
+          <div class="stat"><span>のこり ちょうせん</span><strong>${Math.max(0, 3 - state.misses)} 回</strong></div>
+        </div>
+
+        <div class="question-card">
+          <div class="eyebrow">${escapeHtml(mode.subtitle)}</div>
+          <h2 class="question-title">${escapeHtml(mode.title)}</h2>
+          <p class="question-sub">${escapeHtml(mode.description)}</p>
+          <div class="problem">${escapeHtml(q.prompt)}</div>
+
+          <div class="answer-row">
+            <input id="answerInput" type="number" inputmode="numeric" placeholder="こたえ" />
+            <button class="primary" onclick="submitAnswer()">こたえあわせ</button>
+            <button class="ghost" onclick="skipToMenu()">メニューにもどる</button>
+          </div>
+
+          <div id="feedback" class="feedback"></div>
+          <div id="hintBox" class="hint"></div>
+          <div class="actions" id="extraActions"></div>
+        </div>
+
+        <div class="history">
+          <h2>これまでの けっか</h2>
+          <div class="history-list">${renderHistoryItems()}</div>
+        </div>
+      `;
+
+      const input = document.getElementById('answerInput');
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          if (state.awaitingNext) {
+            nextQuestion();
+          } else {
+            submitAnswer();
+          }
+        }
+      });
+    }
+
+    function submitAnswer() {
+      if (state.finished || state.awaitingNext) return;
+      const input = document.getElementById('answerInput');
+      const raw = input.value.trim();
+      if (raw === '') {
+        showFeedback('数字を入力してください。', 'info');
+        input.focus();
+        return;
+      }
+      const value = Number(raw);
+      const q = state.questions[state.current];
+      if (value === q.answer) {
+        state.correct += 1;
+        state.history.push({ prompt: q.prompt, answer: raw, correct: true, solution: q.answer });
+        showFeedback('せいかいです！', 'success');
+        showExtraActions('<button class="secondary" onclick="nextQuestion()">つぎへ</button>');
+        state.awaitingNext = true;
+      } else {
+        state.misses += 1;
+        if (state.misses === 1) {
+          showFeedback('まちがっています。もういちど かんがえよう！', 'warning');
+          showHintMaybe(q);
+        } else if (state.misses === 2) {
+          showFeedback('もういちど かんがえよう！ ヒントをみてみよう。', 'warning');
+          showHintMaybe(q, true);
+        } else {
+          showFeedback(`ざんねん。こたえは ${fullNum(q.answer)} です。`, 'error');
+          state.history.push({ prompt: q.prompt, answer: raw, correct: false, solution: q.answer });
+          state.awaitingNext = true;
+          showExtraActions('<button class="secondary" onclick="nextQuestion()">つぎへ</button>');
+        }
+      }
+      renderMenu();
+    }
+
+    function showHintMaybe(q, force = false) {
+      const mode = getMode(state.modeId);
+      const box = document.getElementById('hintBox');
+      if (!box) return;
+      if (!mode.hint || (!force && state.misses < 2)) {
+        box.className = 'hint';
+        box.innerHTML = '';
+        return;
+      }
+      if (mode.hint === 'bond') {
+        const totalDots = Array.from({ length: q.total }, (_, i) => `<span class="dot ${i < q.part ? 'alt' : ''}"></span>`).join('');
+        box.innerHTML = `
+          <h3>ヒント</h3>
+          <div>${fullNum(q.total)} は ${fullNum(q.part)} と のこり に わけられます。</div>
+          <div class="group" style="margin-top:10px">
+            <strong>おはじき</strong>
+            <div class="dots">${totalDots}</div>
+          </div>
+        `;
+      } else {
+        const leftDots = renderDots(q.a, 'alt');
+        const rightDots = renderDots(q.b, '');
+        box.innerHTML = `
+          <h3>ヒント</h3>
+          <div>おはじきをみて、かんがえよう！</div>
+          <div class="dot-groups">
+            <div class="group"><strong>${fullNum(q.a)}</strong><div class="dots">${leftDots}</div></div>
+            <div class="group"><strong>${fullNum(q.b)}</strong><div class="dots">${rightDots}</div></div>
+          </div>
+        `;
+      }
+      box.className = 'hint show';
+    }
+
+    function nextQuestion() {
+      state.awaitingNext = false;
+      state.misses = 0;
+      if (state.current >= state.questions.length - 1) {
+        state.finished = true;
+        renderResult();
+      } else {
+        state.current += 1;
+        renderPractice();
+        focusAnswer();
+      }
+    }
+
+    function renderResult() {
+      const score = Math.floor((state.correct / 5) * 100);
+      const seconds = Math.floor((Date.now() - state.startTime) / 1000);
+      let message = 'もっとがんばろう！';
+      let cls = 'low';
+      if (score === 100) {
+        message = 'よくできました！';
+        cls = 'good';
+      } else if (score >= 80) {
+        message = 'あともうすこし！';
+        cls = 'mid';
+      }
+      const mode = getMode(state.modeId);
+      app.innerHTML = `
+        <div class="result">
+          <div class="eyebrow">れんしゅう しゅうりょう</div>
+          <h2 style="margin:0">${escapeHtml(mode.title)} の けっか</h2>
+          <div class="score">${score}</div>
+          <div>てん</div>
+          <div class="result-message ${cls}">${message}</div>
+          <p style="color:var(--muted);line-height:1.8;">せいかい ${state.correct} / 5 問 ・ かかった時間 ${formatTime(seconds)}</p>
+          <div class="actions" style="justify-content:center;">
+            <button class="primary" onclick="startMode(${mode.id})">もういちど</button>
+            <button class="secondary" onclick="renderHome(); state.modeId=null; renderMenu();">メニューにもどる</button>
+          </div>
+        </div>
+        <div class="history">
+          <h2>もんだい と こたえ</h2>
+          <div class="history-list">${renderHistoryItems(true)}</div>
+        </div>
+      `;
+      renderMenu();
+    }
+
+    function renderHistoryItems(showSolution = false) {
+      if (state.history.length === 0) {
+        return '<div class="history-item"><div>まだ回答がありません。</div></div>';
+      }
+      return state.history.map(item => `
+        <div class="history-item">
+          <div>
+            <strong>${escapeHtml(item.prompt)}</strong>
+            <small>入力: ${escapeHtml(fullNum(item.answer))}${showSolution ? ` ／ 正解: ${escapeHtml(fullNum(item.solution))}` : ''}</small>
+          </div>
+          <span class="pill ${item.correct ? 'ok' : 'ng'}">${item.correct ? 'せいかい' : 'みなおし'}</span>
+        </div>
+      `).join('');
+    }
+
+    function showFeedback(text, type) {
+      const box = document.getElementById('feedback');
+      if (!box) return;
+      box.className = `feedback show ${type}`;
+      box.textContent = text;
+    }
+
+    function showExtraActions(html) {
+      const area = document.getElementById('extraActions');
+      if (area) area.innerHTML = html;
+    }
+
+    function skipToMenu() {
+      state.modeId = null;
+      state.finished = false;
+      renderMenu();
+      renderHome();
+    }
+
+    function focusAnswer() {
+      const input = document.getElementById('answerInput');
+      if (input) input.focus();
+    }
+
+    function getMode(modeId) {
+      return MODE_DEFS.find(m => m.id === modeId);
+    }
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function renderDots(n, className = '') {
+      return Array.from({ length: n }, () => `<span class="dot ${className}"></span>`).join('');
+    }
+
+    function fullNum(value) {
+      return String(value).replace(/[0-9]/g, d => '０１２３４５６７８９'[Number(d)]);
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return m > 0 ? `${fullNum(m)}分 ${fullNum(s)}秒` : `${fullNum(s)}秒`;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    init();
+    window.startMode = startMode;
+    window.submitAnswer = submitAnswer;
+    window.nextQuestion = nextQuestion;
+    window.skipToMenu = skipToMenu;
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

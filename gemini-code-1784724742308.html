@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>たしざんのれんしゅう</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: "Courier New", Courier, monospace, "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        #game-container {
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,255,255,0.2);
+            border: 4px solid #333;
+            background-color: #000000;
+        }
+        canvas {
+            display: block;
+            background-color: #000000;
+            image-rendering: pixelated;
+        }
+        /* モバイル用テンキー */
+        #virtual-keypad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 640px;
+        }
+        .key-btn {
+            background-color: #2a2a2a;
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 12px 0;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .key-btn:active {
+            background-color: #00ffcc;
+            color: #000;
+        }
+        .key-btn.enter {
+            background-color: #d32f2f;
+            color: #fff;
+            border-color: #ff6666;
+            grid-column: span 2;
+        }
+        .key-btn.backspace {
+            background-color: #f57c00;
+            color: #fff;
+            border-color: #ffb74d;
+        }
+        footer {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <canvas id="screen" width="640" height="400"></canvas>
+</div>
+
+<div id="virtual-keypad">
+    <div class="key-btn" onclick="handleInput('1')">1</div>
+    <div class="key-btn" onclick="handleInput('2')">2</div>
+    <div class="key-btn" onclick="handleInput('3')">3</div>
+    <div class="key-btn" onclick="handleInput('4')">4</div>
+    <div class="key-btn" onclick="handleInput('5')">5</div>
+    <div class="key-btn" onclick="handleInput('6')">6</div>
+    <div class="key-btn" onclick="handleInput('7')">7</div>
+    <div class="key-btn" onclick="handleInput('8')">8</div>
+    <div class="key-btn" onclick="handleInput('9')">9</div>
+    <div class="key-btn" onclick="handleInput('0')">0</div>
+    <div class="key-btn backspace" onclick="handleInput('Backspace')">けす</div>
+    <div class="key-btn enter" onclick="handleInput('Enter')">けってい (Enter)</div>
+</div>
+
+<footer>
+    岐阜県中学校数学教育研究会・小学校算数教育研究会(安藤忠展) 2019.08.17. Ver 3.02 移植Web版
+</footer>
+
+<script>
+const canvas = document.getElementById('screen');
+const ctx = canvas.getContext('2d');
+
+// --- グローバル状態管理 ---
+let gameState = 'MENU'; // MENU, PROBLEM, WAIT_ENTER, FINISH, NEXT_SELECT
+let selectedMenu = 1;
+let currentProblemIndex = 0; // 0..4 (計5問)
+const PRMSU = 5;
+
+// データ構造
+let prm = Array.from({length: 6}, () => [0, 0]);
+let prmStr = Array(6).fill("");
+let answerStr = Array(6).fill("");
+let seigo = Array(6).fill(0);
+let missCount = Array(6).fill(0);
+let kaisuu = Array(11).fill(0);
+
+let startTime = 0;
+let endTime = 0;
+let currentInput = "";
+let showHint = false;
+let messageOverlay = null; // { text, color, x, y, size }
+
+// メニューテキスト定義
+const msgData = [
+    "",
+    "  ５  ＋    ３  のような  けいさん",
+    " いくつ と いくつ",
+    "１２  ＋    ４ のような  けいさん",
+    "  ８  ＋    ３ のような  けいさん",
+    "３０  ＋    ２  のような  けいさん",
+    "４０  ＋  ５０  のような  けいさん",
+    "２３  ＋    ５  のような  けいさん",
+    "２７  ＋  ３０  のような  けいさん",
+    "  ３  ＋    ０  のような  けいさん",
+    "たしざん の メニュー"
+];
+
+const msgSubData = [
+    "",
+    "[１けた ＋ １けた くりあがりなし]",
+    "",
+    "[２けた ＋ １けた くりあがりなし]",
+    "[１けた ＋1けた くりあがりあり]",
+    "[２けた ＋ １けた くりあがりなし]",
+    "[２けた ＋ ２けた くりあがりなし]",
+    "[２けた ＋ １けた くりあがりなし]",
+    "[２けた ＋ ２けた くりあがりなし]",
+    "              [０ がある たしざん]"
+];
+
+// 数字の全角変換ユーティリティ
+function toZenkaku(str) {
+    return str.replace(/[0-9]/g, (s) => String.fromCharCode(s.charCodeAt(0) + 0xfee0));
+}
+
+// 描画ヘルパー関数
+function clearScreen() {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, 640, 400);
+}
+
+function drawText(text, x, y, color = "#ffffff", fontSize = 16, align = "left") {
+    ctx.fillStyle = color;
+    ctx.font = `bold ${fontSize}px "Courier New", monospace`;
+    ctx.textAlign = align;
+    ctx.textBaseline = "top";
+    ctx.fillText(text, x, y);
+}
+
+// --- メニュー画面 ---
+function renderMenu() {
+    clearScreen();
+    
+    // 枠線
+    drawText("*".repeat(40), 0, 0, "#ff0000", 16);
+    drawText("たしざんのれんしゅうをしましょう", 80, 20, "#ffff00", 24);
+    drawText("*".repeat(40), 0, 50, "#ff0000", 16);
+    
+    drawText("つぎのなかから、べんきょうすることを ばんごうでえらびましょう。", 10, 80, "#ff00ff", 14);
+
+    for (let i = 1; i <= 10; i++) {
+        let y = 110 + (i - 1) * 22;
+        let numStr = i < 10 ? `＜ ${i} ＞` : `＜${i}＞`;
+        let isSelected = (i === selectedMenu);
+
+        ctx.fillStyle = isSelected ? "#00ffff" : "#000000";
+        if (isSelected) {
+            ctx.fillRect(100, y - 2, 440, 20);
+        }
+
+        drawText(numStr, 100, y, isSelected ? "#ff0000" : "#ff0000", 14);
+        drawText(msgData[i], 180, y, isSelected ? "#000000" : "#ffff00", 14);
+    }
+
+    drawText("岐阜県中学校数学教育研究会・小学校算数教育研究会(安藤忠展)", 10, 375, "#ff0000", 12);
+}
+
+// --- 問題生成ロジック (BASICの乱数アルゴリズムを再現) ---
+function generateProblem(menu, idx) {
+    let p1 = 0, p2 = 0, pStr = "";
+    
+    while (true) {
+        if (menu === 1) { // 1桁+1桁 繰り上がりなし
+            p1 = Math.floor(7.9 * Math.random() + 1);
+            let amari = 8.9 - p1;
+            p2 = Math.floor(amari * Math.random() + 1);
+            pStr = `${toZenkaku(String(p1))} ＋ ${toZenkaku(String(p2))} ＝`;
+        } else if (menu === 2) { // いくつといくつ (分解)
+            p1 = Math.floor(8.9 * Math.random() + 2);
+            p2 = Math.floor(p1 * Math.random() + 1);
+            if (p2 > p1 - 1) continue;
+            pStr = `${toZenkaku(String(p1))}は ${toZenkaku(String(p2))}と`;
+        } else if (menu === 3) { // 2桁+1桁 繰り上がりなし (12+4)
+            p1 = Math.floor(7.9 * Math.random() + 1);
+            let amari = 8.9 - p1;
+            p2 = Math.floor(amari * Math.random() + 1);
+            p1 = 10 + p1;
+            pStr = `${toZenkaku(String(p1))}＋ ${toZenkaku(String(p2))}＝`;
+        } else if (menu === 4) { // 1桁+1桁 繰り上がりあり (8+3)
+            p1 = Math.floor(8.9 * Math.random()) + 1;
+            p2 = Math.floor(8.9 * Math.random()) + 1;
+            if (p1 + p2 <= 10) continue;
+            pStr = `${toZenkaku(String(p1))} ＋ ${toZenkaku(String(p2))}＝`;
+        } else if (menu === 5) { // 30+2
+            p1 = Math.floor(8.9 * Math.random()) + 1;
+            p2 = Math.floor(8.9 * Math.random()) + 1;
+            p1 = 10 * p1;
+            pStr = `${toZenkaku(String(p1))}＋ ${toZenkaku(String(p2))}＝`;
+        } else if (menu === 6) { // 40+50
+            p1 = Math.floor(7.9 * Math.random() + 1);
+            let amari = 8.9 - p1;
+            p2 = Math.floor(amari * Math.random() + 1);
+            p1 = 10 * p1;
+            p2 = 10 * p2;
+            pStr = `${toZenkaku(String(p1))}＋${toZenkaku(String(p2))}＝`;
+        } else if (menu === 7) { // 23+5
+            p1 = Math.floor(7.9 * Math.random()) + 1;
+            let amari = 8.9 - p1;
+            p2 = Math.floor(amari * Math.random()) + 1;
+            let p11 = Math.floor(8.9 * Math.random()) + 1;
+            p1 = 10 * p11 + p1;
+            pStr = `${toZenkaku(String(p1))}＋ ${toZenkaku(String(p2))}＝`;
+        } else if (menu === 8) { // 27+30
+            p1 = Math.floor(8.9 * Math.random()) + 1;
+            let p11 = Math.floor(7.9 * Math.random()) + 1;
+            let amari = 8.9 - p11;
+            let p12 = Math.floor(amari * Math.random() + 1);
+            p1 = 10 * p11 + p1;
+            p2 = 10 * p12;
+            pStr = `${toZenkaku(String(p1))}＋${toZenkaku(String(p2))}＝`;
+        } else if (menu === 9) { // 0があるたしざん
+            let pprm1 = Math.floor(8.9 * Math.random()) + 1;
+            let sentaku = Math.floor(1.9 * Math.random() + 1);
+            if (sentaku === 1) { p1 = 0; p2 = pprm1; }
+            else { p1 = pprm1; p2 = 0; }
+            pStr = `${toZenkaku(String(p1))}  ＋  ${toZenkaku(String(p2))}＝`;
+        } else {
+            p1 = 1; p2 = 1; pStr = "１ ＋ １ ＝";
+        }
+
+        // 重複チェック
+        let duplicate = false;
+        for (let k = 1; k < idx; k++) {
+            if (prm[k][0] === p1 && prm[k][1] === p2) {
+                duplicate = true;
+                break;
+            }
+        }
+        if (!duplicate) break;
+    }
+
+    prm[idx] = [p1, p2];
+    prmStr[idx] = pStr;
+}
+
+function startPractice() {
+    for (let i = 1; i <= PRMSU; i++) {
+        generateProblem(selectedMenu, i);
+        missCount[i] = 0;
+        seigo[i] = 0;
+        answerStr[i] = "";
+    }
+    kaisuu[selectedMenu]++;
+    currentProblemIndex = 1;
+    currentInput = "";
+    showHint = false;
+    messageOverlay = null;
+    startTime = Date.now();
+    gameState = 'PROBLEM';
+    renderProblemScreen();
+}
+
+// --- 演習画面描画 ---
+function renderProblemScreen() {
+    clearScreen();
+
+    // ヘッダーバー
+    ctx.fillStyle = "#aa0000";
+    ctx.fillRect(0, 0, 640, 40);
+    ctx.fillStyle = "#0000aa";
+    ctx.fillRect(4, 4, 632, 32);
+    
+    drawText(msgData[selectedMenu].trim(), 20, 10, "#ffffff", 18);
+    drawText(msgSubData[selectedMenu], 320, 10, "#ffff00", 14);
+
+    // 履歴表示 (過去問と正解判定のリスト)
+    for (let i = 1; i <= currentProblemIndex; i++) {
+        let iiX = (i - 1) % 3;
+        let iiY = Math.floor((i - 1) / 3);
+        let ix = iiX * 210 + 10;
+        let iy = 50 + iiY * 25;
+
+        drawText(`<${i}>`, ix, iy, "#ff0000", 14);
+        
+        let color = "#ffff00";
+        if (i < currentProblemIndex) {
+            color = (seigo[i] === 1) ? "#00ff00" : "#ff00ff";
+        }
+        
+        let dispText = prmStr[i];
+        if (i < currentProblemIndex) {
+            dispText += toZenkaku(answerStr[i]);
+        }
+        drawText(dispText, ix + 35, iy, color, 14);
+    }
+
+    // 現在のメイン問題表示
+    if (gameState === 'PROBLEM') {
+        let mainY = 220;
+        drawText(prmStr[currentProblemIndex], 100, mainY, "#ffff00", 32);
+
+        // 入力アンダーライン & 入力文字
+        let inputX = 100 + prmStr[currentProblemIndex].length * 18;
+        drawText(toZenkaku(currentInput), inputX, mainY, "#ffff00", 32);
+        drawText("_____", inputX, mainY + 20, "#ffff00", 24);
+
+        // ガイドメッセージ
+        drawText("ただしい  こたえを", 440, 320, "#00ffff", 16);
+        drawText("  いれましょう。", 440, 345, "#00ffff", 16);
+    }
+
+    // おはじきヒント (誤答時)
+    if (showHint) {
+        drawOhajikiHint();
+    }
+
+    // 回数表示
+    let kCount = kaisuu[selectedMenu];
+    ctx.fillStyle = "#aa00aa";
+    ctx.fillRect(0, 370, 90, 30);
+    ctx.strokeStyle = "#ffff00";
+    ctx.strokeRect(0, 370, 90, 30);
+    drawText(`${toZenkaku(String(kCount))}かいめ`, 5, 375, "#00ff00", 14);
+
+    // メッセージオーバーレイ (「よくできました！」「まちがっていますよ！」など)
+    if (messageOverlay) {
+        drawText(messageOverlay.text, messageOverlay.x, messageOverlay.y, messageOverlay.color, messageOverlay.size || 24);
+    }
+
+    // 次へ進むエンターキー記号表示
+    if (gameState === 'WAIT_ENTER') {
+        drawReturnMark(600, 350);
+    }
+}
+
+// おはじき描画ロジック
+function drawOhajikiHint() {
+    let p1 = prm[currentProblemIndex][0];
+    let p2 = prm[currentProblemIndex][1];
+
+    for (let i = 1; i <= 2; i++) {
+        let val = (i === 1) ? p1 : p2;
+        if (val === 0) continue;
+
+        for (let j = 0; j < val; j++) {
+            let ohX = 40 + (j % 5) * 35 + (i - 1) * 200;
+            let ohY = 300 + Math.floor(j / 5) * 35;
+
+            // おはじき本体
+            ctx.beginPath();
+            ctx.arc(ohX, ohY, 14, 0, Math.PI * 2);
+            ctx.fillStyle = "#ff0000";
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff";
+            ctx.stroke();
+
+            // 模様
+            ctx.beginPath();
+            ctx.arc(ohX, ohY, 6, 0, Math.PI * 2);
+            ctx.fillStyle = "#000000";
+            ctx.fill();
+        }
+    }
+}
+
+// Enterマーク描画
+function drawReturnMark(x, y) {
+    ctx.strokeStyle = "#ffff00";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, 20, 20);
+    ctx.fillStyle = "#ffff00";
+    ctx.beginPath();
+    ctx.moveTo(x + 14, y + 4);
+    ctx.lineTo(x + 14, y + 14);
+    ctx.lineTo(x + 4, y + 14);
+    ctx.lineTo(x + 8, y + 10);
+    ctx.fill();
+}
+
+// --- 正誤判定ロジック ---
+function checkAnswer() {
+    let p1 = prm[currentProblemIndex][0];
+    let p2 = prm[currentProblemIndex][1];
+    let correct = (selectedMenu === 2) ? (p1 - p2) : (p1 + p2);
+
+    answerStr[currentProblemIndex] = currentInput;
+
+    if (parseInt(currentInput, 10) === correct) {
+        // 正解
+        seigo[currentProblemIndex] = 1;
+        messageOverlay = { text: "〇", color: "#00ff00", x: 380, y: 220, size: 50 };
+        gameState = 'WAIT_ENTER';
+    } else {
+        // 不正解
+        missCount[currentProblemIndex]++;
+        let mCount = missCount[currentProblemIndex];
+
+        messageOverlay = { text: "×", color: "#ff0000", x: 380, y: 220, size: 50 };
+
+        if (mCount === 1) {
+            setTimeout(() => {
+                messageOverlay = { text: "もういちど かんがえよう！", color: "#ff0000", x: 60, y: 310, size: 22 };
+                gameState = 'WAIT_ENTER';
+                renderProblemScreen();
+            }, 500);
+        } else if (mCount === 2) {
+            setTimeout(() => {
+                if ([1, 2, 4, 9].includes(selectedMenu)) {
+                    showHint = true;
+                    messageOverlay = { text: "おはじきをみて、かんがえよう！", color: "#ff0000", x: 20, y: 270, size: 20 };
+                } else {
+                    messageOverlay = { text: "もういちど かんがえよう！", color: "#ff0000", x: 60, y: 310, size: 22 };
+                }
+                gameState = 'WAIT_ENTER';
+                renderProblemScreen();
+            }, 500);
+        } else {
+            // 3回ミス：正解表示
+            setTimeout(() => {
+                showCorrectAnswer(correct);
+            }, 500);
+        }
+    }
+    renderProblemScreen();
+}
+
+function showCorrectAnswer(correct) {
+    clearScreen();
+    drawText("こたえは", 50, 120, "#ff0000", 28);
+    drawText(`${prmStr[currentProblemIndex]} ${toZenkaku(String(correct))}`, 80, 200, "#ffff00", 32);
+    answerStr[currentProblemIndex] = String(correct);
+    seigo[currentProblemIndex] = 0;
+    gameState = 'WAIT_ENTER_FOR_NEXT_PROBLEM';
+    drawReturnMark(600, 350);
+}
+
+// --- 最終結果画面 ---
+function renderFinishScreen() {
+    clearScreen();
+    endTime = Date.now();
+    let elapsedSec = Math.floor((endTime - startTime) / 1000);
+    let min = Math.floor(elapsedSec / 60);
+    let sec = elapsedSec % 60;
+
+    let timeText = (min === 0) ? `${toZenkaku(String(sec))}びょう` : `${toZenkaku(String(min))}ふん${toZenkaku(String(sec))}びょう`;
+
+    let correctNum = seigo.reduce((a, b) => a + b, 0);
+    let score = Math.floor((correctNum / PRMSU) * 100);
+
+    drawText(timeText, 50, 100, "#00ffff", 24);
+    drawText(`${toZenkaku(String(score))}てん  です。`, 50, 150, "#ffff00", 28);
+
+    let evalMsg = "もっとがんばろう！";
+    if (score === 100) evalMsg = "よくできました！";
+    else if (score >= 80) evalMsg = "あともうすこし！";
+
+    drawText(evalMsg, 50, 220, "#ff0000", 28);
+
+    // 次の選択肢
+    gameState = 'NEXT_SELECT';
+    selectedNextMenu = 1;
+    renderNextSelectMenu();
+}
+
+let selectedNextMenu = 1;
+function renderNextSelectMenu() {
+    ctx.fillStyle = "#000";
+    ctx.fillRect(50, 280, 500, 100);
+
+    let opt1 = "＜１＞  もっとれんしゅうする";
+    let opt2 = "＜２＞  べつのもんだい";
+
+    drawText(opt1, 80, 300, selectedNextMenu === 1 ? "#00ffff" : "#ffff00", 20);
+    drawText(opt2, 80, 340, selectedNextMenu === 2 ? "#00ffff" : "#ffff00", 20);
+}
+
+// --- 入力・キーボード処理 ---
+function handleInput(key) {
+    if (gameState === 'MENU') {
+        if (key === 'ArrowUp') {
+            selectedMenu = selectedMenu > 1 ? selectedMenu - 1 : 10;
+            renderMenu();
+        } else if (key === 'ArrowDown') {
+            selectedMenu = selectedMenu < 10 ? selectedMenu + 1 : 1;
+            renderMenu();
+        } else if (key >= '1' && key <= '9') {
+            selectedMenu = parseInt(key, 10);
+            renderMenu();
+        } else if (key === '0') {
+            selectedMenu = 10;
+            renderMenu();
+        } else if (key === 'Enter') {
+            if (selectedMenu === 10) {
+                alert("メニュー10が選択されました。");
+            } else {
+                startPractice();
+            }
+        }
+    } else if (gameState === 'PROBLEM') {
+        if (key >= '0' && key <= '9') {
+            if (currentInput.length < 3) {
+                currentInput += key;
+                renderProblemScreen();
+            }
+        } else if (key === 'Backspace') {
+            currentInput = currentInput.slice(0, -1);
+            renderProblemScreen();
+        } else if (key === 'Enter') {
+            if (currentInput !== "") {
+                checkAnswer();
+            }
+        }
+    } else if (gameState === 'WAIT_ENTER') {
+        if (key === 'Enter') {
+            messageOverlay = null;
+            if (seigo[currentProblemIndex] === 1 || missCount[currentProblemIndex] >= 3) {
+                currentProblemIndex++;
+                currentInput = "";
+                showHint = false;
+                if (currentProblemIndex > PRMSU) {
+                    renderFinishScreen();
+                } else {
+                    gameState = 'PROBLEM';
+                    renderProblemScreen();
+                }
+            } else {
+                // 解き直し
+                currentInput = "";
+                gameState = 'PROBLEM';
+                renderProblemScreen();
+            }
+        }
+    } else if (gameState === 'WAIT_ENTER_FOR_NEXT_PROBLEM') {
+        if (key === 'Enter') {
+            currentProblemIndex++;
+            currentInput = "";
+            showHint = false;
+            if (currentProblemIndex > PRMSU) {
+                renderFinishScreen();
+            } else {
+                gameState = 'PROBLEM';
+                renderProblemScreen();
+            }
+        }
+    } else if (gameState === 'NEXT_SELECT') {
+        if (key === 'ArrowUp' || key === 'ArrowDown') {
+            selectedNextMenu = selectedNextMenu === 1 ? 2 : 1;
+            renderNextSelectMenu();
+        } else if (key === '1') {
+            selectedNextMenu = 1;
+            renderNextSelectMenu();
+        } else if (key === '2') {
+            selectedNextMenu = 2;
+            renderNextSelectMenu();
+        } else if (key === 'Enter') {
+            if (selectedNextMenu === 1) {
+                startPractice();
+            } else {
+                gameState = 'MENU';
+                renderMenu();
+            }
+        }
+    }
+}
+
+// PC物理キーボードのイベントリスナー
+window.addEventListener('keydown', (e) => {
+    if (["ArrowUp", "ArrowDown", "Enter", "Backspace"].includes(e.key)) {
+        e.preventDefault();
+    }
+    handleInput(e.key);
+});
+
+// 初期描画
+renderMenu();
+</script>
+</body>
+</html>
