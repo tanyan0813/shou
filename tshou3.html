@@ -143,8 +143,8 @@
   .key{border:none;background:var(--card);border-radius:16px;padding:16px 0;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);cursor:pointer;box-shadow:0 5px 0 rgba(55,66,74,.14);transition:transform .06s, box-shadow .06s;}
   .key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.14);}
   .key.del{background:#FDECE9;color:var(--red);box-shadow:0 5px 0 #F3C4BC;font-size:22px;}
-  .key.dot{color:var(--blue);}
-  .key.dot .dotmark{display:block;width:18px;height:18px;border-radius:50%;background:currentColor;}
+  .key.dec{color:var(--blue);display:flex;align-items:center;justify-content:center;}
+  .key.dec .dotmark{display:block;width:20px;height:20px;border-radius:50%;background:currentColor;}
   .enter-btn{width:100%;margin-top:11px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:16px;color:#fff;padding:15px 0;font-size:20px;background:var(--green);box-shadow:0 5px 0 var(--green-deep);transition:transform .07s, box-shadow .07s;}
   .enter-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-deep);}
   .drow{display:flex;gap:8px;justify-content:center;margin-top:10px;}
@@ -196,7 +196,7 @@
       <a href="tsmenu.html" id="backLink">← 小数のたしざん メニュー</a>
     </div>
     <div class="hint-line">ノートで ひっさんを して、こたえを いれましょう。</div>
-    <div class="credit">岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版</div>
+    <div class="credit">岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版</div>
   </section>
 
   <!-- ===== プレイ ===== -->
@@ -221,7 +221,7 @@
       <button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button>
       <button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button>
       <button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button>
-      <button class="key dot" data-k="."><span class="dotmark"></span></button>
+      <button class="key dec" data-k="."><span class="dotmark"></span></button>
       <button class="key" data-k="0">0</button><button class="key del" data-k="del">⌫</button>
     </div>
     <button class="enter-btn" id="enterBtn">こたえあわせ</button>

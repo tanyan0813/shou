@@ -101,8 +101,13 @@
   .dfig{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(26px,8vw,44px);line-height:1;color:var(--ink);}
   .drow{display:flex;align-items:flex-end;justify-content:flex-end;}
   .dop{width:.9em;text-align:center;color:var(--red);flex:none;}
+  .dgrid{display:inline-flex;justify-content:flex-end;align-items:flex-end;flex:none;}
+  .dcell{flex:none;text-align:center;}
+  .dcell.dig{width:.60em;}
+  .dcell.sep{width:.40em;display:inline-flex;align-items:flex-end;justify-content:center;}
+  .ddot{width:.17em;height:.17em;border-radius:50%;background:currentColor;margin-bottom:.11em;}
   .dline{height:5px;background:var(--ink);border-radius:3px;margin:5px 0;}
-  .ansbox2{display:inline-flex;justify-content:flex-end;align-items:flex-end;color:var(--teal);border-bottom:6px solid var(--teal);border-radius:4px;padding:0 .06em;min-height:1.1em;}
+  .ansbox2{display:inline-flex;justify-content:flex-end;align-items:flex-end;color:var(--teal);border-bottom:6px solid var(--teal);border-radius:4px;min-height:1.1em;}
   .ansbox2.reveal{color:var(--red);}
 
   .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--green);min-height:20px;}
@@ -175,7 +180,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）　Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）　Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -381,17 +386,40 @@ function renderProblem(){
   setKeypad(true); updateDots();
 }
 
+// 数字を「1けた＝1マス」「小数点＝すきまマス」の等幅グリッドに並べる。
+// これで 小数点の いちが ちがっても、たての けたが そろう。
+const CW_DIG=0.60, CW_DOT=0.40;   // em（マスのはば）
+function figTokens(str){
+  const toks=[];
+  for(const ch of String(str)){
+    if(ch==="."){ toks.push({t:"dot",v:"."}); }
+    else{
+      if(toks.length && toks[toks.length-1].t==="dig") toks.push({t:"dot",v:""}); // けたと けたの すきま
+      toks.push({t:"dig",v:ch});
+    }
+  }
+  return toks;
+}
+function tokW(str){ return figTokens(str).reduce((w,tk)=>w+(tk.t==="dig"?CW_DIG:CW_DOT),0); }
+function figCells(str){
+  return figTokens(str).map(tk=>{
+    if(tk.t==="dig") return `<span class="dcell dig">${tk.v}</span>`;
+    return `<span class="dcell sep">${tk.v==="." ? '<span class="ddot"></span>' : ''}</span>`;
+  }).join("");
+}
+
 function renderFigure(revealAll){
   const p=state.problems[state.current];
   const ansStr = revealAll ? p.canonical : (state.input||"");
-  const w = Math.max(p.dispA.length, p.dispB.length+1, p.canonical.length) + 0.4;
-  const lineW = (w*0.62)+"em";
+  const opW   = Math.max(tokW(p.dispA), tokW(p.dispB));       // かけられる数・かける数の グリッドはば
+  const fullW = Math.max(opW + 0.9, tokW(p.canonical));       // 線・こたえの はば
+  const opEm=opW.toFixed(3)+"em", fullEm=fullW.toFixed(3)+"em";
   $("problemArea").innerHTML =
     `<div class="dfig num">`+
-      `<div class="drow"><span class="dop">&nbsp;</span><span>${p.dispA}</span></div>`+
-      `<div class="drow"><span class="dop">×</span><span>${p.dispB}</span></div>`+
-      `<div class="drow"><span class="dline" style="width:${lineW}"></span></div>`+
-      `<div class="drow"><span class="ansbox2 ${revealAll?'reveal':''}" style="min-width:${lineW}">${ansStr}</span></div>`+
+      `<div class="drow"><span class="dop">&nbsp;</span><span class="dgrid" style="width:${opEm}">${figCells(p.dispA)}</span></div>`+
+      `<div class="drow"><span class="dop">×</span><span class="dgrid" style="width:${opEm}">${figCells(p.dispB)}</span></div>`+
+      `<div class="drow"><span class="dline" style="width:${fullEm}"></span></div>`+
+      `<div class="drow"><span class="ansbox2 ${revealAll?'reveal':''}" style="min-width:${fullEm}">${figCells(ansStr)}</span></div>`+
     `</div>`;
 }
 

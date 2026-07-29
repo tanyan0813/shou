@@ -59,9 +59,14 @@
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
   .title-card .tag{color:var(--rose-deep);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
   .mini-wari{display:inline-block;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;text-align:left;}
-  .mini-wari .q{color:var(--rose);padding-left:2.1em;}
-  .mini-wari .d{border-top:3px solid var(--ink);padding-top:2px;}
-  .mini-wari .d .op{color:var(--red);}
+  .mini-wari .mrow{display:flex;align-items:flex-end;}
+  .mini-wari .mleft{display:flex;align-items:center;justify-content:flex-end;color:var(--red);}
+  .mini-wari .mbr{font-size:1.15em;margin-left:.06em;transform:scaleY(1.25);}
+  .mini-wari .mdigits{display:flex;}
+  .mini-wari .mcell{width:.82em;text-align:center;}
+  .mini-wari .mcell.blank{color:transparent;}
+  .mini-wari .mq .mcell{color:var(--rose);}
+  .mini-wari .mtop{border-top:3px solid var(--ink);padding-top:2px;}
   .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
   .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--rose);box-shadow:0 5px 0 var(--rose-deep);transition:transform .08s, box-shadow .08s;}
@@ -120,6 +125,7 @@
   .wcell.blank{color:transparent;}
   .qdigits{padding-bottom:4px;}
   .qdigits .wcell{color:var(--rose);}
+  .qdigits .wcell.blank{color:transparent;}
   .qdigits.active{background:rgba(219,90,139,.10);border-radius:6px;box-shadow:inset 0 -4px 0 var(--rose);}
   .qdigits.reveal .wcell{color:var(--red);}
   .topline{border-top:5px solid var(--ink);padding-top:4px;}
@@ -195,13 +201,19 @@
       <div class="sub">2〜3けたで わる ひっさん の れんしゅう</div>
       <div class="tag">むずかしい わり算に ちょうせん！</div>
       <div class="mini-wari num">
-        <div class="q">&nbsp;&nbsp;371</div>
-        <div class="d"><span class="op">26 )</span>9646</div>
+        <div class="mrow">
+          <span class="mleft" style="visibility:hidden" aria-hidden="true"><span class="op">26</span><span class="mbr">)</span></span>
+          <span class="mdigits mq"><span class="mcell blank">0</span><span class="mcell">3</span><span class="mcell">7</span><span class="mcell">1</span></span>
+        </div>
+        <div class="mrow">
+          <span class="mleft"><span class="op">26</span><span class="mbr">)</span></span>
+          <span class="mdigits mtop"><span class="mcell">9</span><span class="mcell">6</span><span class="mcell">4</span><span class="mcell">6</span></span>
+        </div>
       </div>
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -445,7 +457,7 @@ function renderHissan(revealAll){
   const dCell=(ch)=> `<span class="wcell">${ch}</span>`;
   const qActive=(!revealAll && state.activeField===1)?"active":"";
   const qReveal=revealAll?"reveal":"";
-  const qRow=`<div class="wrow"><span class="wleft"></span><span class="wdigits qdigits ${qActive} ${qReveal}">${qPad.map(qCell).join("")}</span></div>`;
+  const qRow=`<div class="wrow"><span class="wleft" style="visibility:hidden" aria-hidden="true"><span class="divisor">${p.b}</span><span class="rbr">)</span></span><span class="wdigits qdigits ${qActive} ${qReveal}">${qPad.map(qCell).join("")}</span></div>`;
   const dRow=`<div class="wrow"><span class="wleft"><span class="divisor">${p.b}</span><span class="rbr">)</span></span><span class="wdigits topline">${aStr.split("").map(dCell).join("")}</span></div>`;
   let html=`<div class="wari num">${qRow}${dRow}</div>`;
   if(p.rem){
