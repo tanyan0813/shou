@@ -186,7 +186,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）　Ver 5.01 ／ Web版
+        岐阜女子大学（安藤忠展）　Ver 5.02 ／ Web版
       </div>
     </div>
   </section>
@@ -318,8 +318,36 @@ const MSG = {
   promptInt:"こたえが せいすうの ときは、左の ますに かきましょう。",
 };
 
-let state = { modeIndex:0, problems:[], current:0, field:"num", inInt:"", inNum:"", inDen:"", locked:false, startTime:0, soundOn:true };
+let state = { modeIndex:0, problems:[], current:0, shape:"frac", boxes:"frac", order:["den","num"], field:"den", inInt:"", inNum:"", inDen:"", locked:false, startTime:0, soundOn:true };
 const $ = (id)=>document.getElementById(id);
+
+/* こたえの かたち（整数／真分数／帯分数）を しらべる */
+function answerShape(p){
+  const w=p.ans.w||0, n=p.ans.n||0, den=p.ans.den||0;
+  if(n===0 || den===0) return "int";   // せいすう（例：1）
+  if(w>0)              return "mixed"; // 帯分数（整数＋真分数）
+  return "frac";                       // 真分数
+}
+/* にゅうりょくの じゅんばん
+   真分数 … 分母 → 分子 ／ 帯分数 … 整数 → 分母 → 分子 ／ 整数 … 整数だけ */
+const FIELD_ORDER = { int:["int"], frac:["den","num"], mixed:["int","den","num"] };
+const PROMPT_BY_SHAPE = {
+  int:  "こたえは せいすう。ますに かきましょう。",
+  frac: "分母（した）から、つぎに 分子（うえ）を いれましょう。",
+  mixed:"整数 → 分母（した）→ 分子（うえ）の じゅんに いれましょう。",
+};
+const PROMPT_MENU2 = "せいすうなら 整数ます、分数なら 分母（した）→分子（うえ）に いれましょう。";
+
+/* ますの だしかたと 入力順を きめる
+   ・メニュー2 … つねに 整数・分母・分子を ぜんぶ 表示（入力順 整数→分母→分子）
+   ・メニュー1 … こたえの かたちで きりかえ */
+function layout(p){
+  if(state.modeIndex===1) return { boxes:"all", order:["int","den","num"] };
+  const sh=answerShape(p);
+  if(sh==="int")   return { boxes:"int",   order:FIELD_ORDER.int };
+  if(sh==="mixed") return { boxes:"all",   order:FIELD_ORDER.mixed };
+  return { boxes:"frac", order:FIELD_ORDER.frac };
+}
 const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen") };
 function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
 
@@ -378,9 +406,10 @@ function updateDots(){
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  state.inInt=""; state.inNum=""; state.inDen=""; state.field="num"; state.locked=false;
+  const lay=layout(p);
+  state.inInt=""; state.inNum=""; state.inDen=""; state.shape=answerShape(p); state.boxes=lay.boxes; state.order=lay.order; state.field=lay.order[0]; state.locked=false;
   $("bracket").textContent="［"+m.bracket+"］";
-  $("prompt").textContent = (state.modeIndex===1) ? MSG.promptInt : MSG.prompt;
+  $("prompt").textContent = (state.modeIndex===1) ? PROMPT_MENU2 : PROMPT_BY_SHAPE[state.shape];
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal num"; $("reveal").innerHTML="";
   $("stamp").innerHTML="";
@@ -390,17 +419,24 @@ function renderProblem(){
 
 function renderEquation(revealAll){
   const p=state.problems[state.current];
+  const sh=answerShape(p);
   let html=`${fracHTML(p.a.n,p.a.den)}<span class="op">＋</span>${fracHTML(p.b.n,p.b.den)}<span class="eq">＝</span>`;
-  const iv = revealAll ? (p.type===1?String(p.ans.w):"") : state.inInt;
-  const nv = revealAll ? (p.type===2?String(p.ans.n):"") : state.inNum;
-  const dv = revealAll ? (p.type===2?String(p.ans.den):"") : state.inDen;
-  html+=`<span class="ansarea ${revealAll?'reveal':''}">`+
-    `<span class="intbox ${(!revealAll&&state.field==='int')?'active':''}" data-f="int">${iv}</span>`+
-    `<span class="fracbox">`+
-      `<span class="fbox ${(!revealAll&&state.field==='num')?'active':''}" data-f="num">${nv}</span>`+
+  // せいかいを だすとき、その こたえの かたちに あわない ますは からっぽにする
+  const iv = revealAll ? (sh==="frac" ? "" : String(p.ans.w))   : state.inInt;
+  const nv = revealAll ? (sh==="int"  ? "" : String(p.ans.n))   : state.inNum;
+  const dv = revealAll ? (sh==="int"  ? "" : String(p.ans.den)) : state.inDen;
+  const act = (f)=> (!revealAll && state.field===f) ? "active" : "";
+  const intBox = `<span class="intbox ${act('int')}" data-f="int">${iv}</span>`;
+  const fracBox = `<span class="fracbox">`+
+      `<span class="fbox ${act('num')}" data-f="num">${nv}</span>`+
       `<span class="line"></span>`+
-      `<span class="fbox ${(!revealAll&&state.field==='den')?'active':''}" data-f="den">${dv}</span>`+
-    `</span></span>`;
+      `<span class="fbox ${act('den')}" data-f="den">${dv}</span>`+
+    `</span>`;
+  html+=`<span class="ansarea ${revealAll?'reveal':''}">`;
+  if(state.boxes==="int")       html+=intBox;          // せいすう だけ
+  else if(state.boxes==="frac") html+=fracBox;         // 真分数（整数ますは なし）
+  else                          html+=intBox+fracBox;  // 整数＋分数（メニュー2 / 帯分数）
+  html+=`</span>`;
   $("equation").innerHTML=html;
   $("equation").querySelectorAll("[data-f]").forEach(el=>{
     el.addEventListener("click",()=>{ if(state.locked)return; state.field=el.dataset.f; renderEquation(); });
@@ -415,7 +451,7 @@ function setVal(v){ if(state.field==="int") state.inInt=v; else if(state.field==
 function pressKey(k){
   if(state.locked) return;
   if(k==="del"){ const c=curVal(); if(c.length){ setVal(c.slice(0,-1)); renderEquation(); beep("tap"); } return; }
-  if(k==="next"){ state.field = state.field==="int" ? "num" : state.field==="num" ? "den" : "int"; renderEquation(); beep("tap"); return; }
+  if(k==="next"){ const order=state.order; const idx=order.indexOf(state.field); state.field=order[(idx+1)%order.length]; renderEquation(); beep("tap"); return; }
   if(k==="enter"){ submit(); return; }
   const c=curVal();
   if(c.length>=2) return;
@@ -481,7 +517,7 @@ function onWrong(p,res){
     msg.textContent=MAP[res]; msg.className="msg bad";
     setTimeout(()=>{
       $("stamp").innerHTML="";
-      state.inInt=""; state.inNum=""; state.inDen=""; state.field="num"; state.locked=false;
+      state.inInt=""; state.inNum=""; state.inDen=""; state.field=state.order[0]; state.locked=false;
       setKeypad(true); renderEquation();
       $("msg").textContent=""; $("msg").className="msg";
     },1200);

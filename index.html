@@ -84,7 +84,7 @@
   .div{--accent:var(--pink);--accent-deep:var(--pink-deep);}
 
   /* ---- owari ---- */
-  .foot{display:flex;justify-content:center;margin-top:8px;}
+  .foot{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px;}
   .owari-btn{
     display:inline-flex;align-items:center;gap:10px;border:none;cursor:pointer;font-family:inherit;font-weight:900;
     border-radius:16px;padding:13px 30px;font-size:16px;color:var(--ink);background:#fff;box-shadow:0 5px 0 rgba(55,66,74,.15);
@@ -93,6 +93,9 @@
   .owari-btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.15);}
   .owari-btn.sel{box-shadow:0 0 0 4px rgba(246,185,59,.35), 0 5px 0 rgba(55,66,74,.15);}
   .owari-btn .n{font-family:"M PLUS Rounded 1c";background:var(--ink-soft);color:#fff;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-size:13px;}
+  .owari-btn.youbo{color:var(--blue-deep);text-decoration:none;}
+  .owari-btn.youbo .n{background:var(--blue);}
+  .owari-btn.youbo.sel{box-shadow:0 0 0 4px rgba(46,155,214,.35), 0 5px 0 rgba(55,66,74,.15);}
 
   .hint{text-align:center;color:var(--ink-soft);font-weight:700;font-size:12px;margin-top:18px;}
   .credit{text-align:center;margin-top:12px;font-size:11px;color:#9AA4A9;line-height:1.7;}
@@ -162,11 +165,12 @@
 
   <div class="foot">
     <button class="owari-btn" id="owariBtn" data-i="12"><span class="n">13</span>おわり</button>
+    <a class="owari-btn youbo" id="youboBtn" data-i="13" href="https://forms.gle/4Xn2iEos2LuAUATo9" target="_blank" rel="noopener"><span class="n">14</span>📝 要望など</a>
   </div>
 
   <div class="hint">タップ で えらべます　／　キーボードは 1〜9・矢印キー＋Enter で えらべます</div>
   <div class="credit">
-    岐阜女子大学（安藤忠展） Ver  5.00 ／ Web版
+    岐阜女子大学（安藤忠展） Ver  5.01 ／ Web版
   </div>
 </div>
 
@@ -192,8 +196,9 @@
    13:おわり
    ========================================================= */
 const $ = s => document.querySelector(s);
-const cards = [...document.querySelectorAll('.op-card'), $('#owariBtn')];
-const OP_COUNT = cards.length - 1; // おわり を のぞく（=12）
+const cards = [...document.querySelectorAll('.op-card'), $('#owariBtn'), $('#youboBtn')];
+const OP_COUNT = document.querySelectorAll('.op-card').length; // ドリルの かず（=12）
+const FORM_URL = 'https://forms.gle/4Xn2iEos2LuAUATo9';
 let sel = 0;
 let soundOn = true, actx = null;
 
@@ -217,15 +222,20 @@ function setSel(i){
   cards[sel].focus({preventScroll:true});
 }
 function activate(i){
-  if(i===OP_COUNT){ showBye(); return; }         // おわり
+  const el=cards[i];
+  if(el.id==='owariBtn'){ showBye(); return; }                               // おわり
+  if(el.id==='youboBtn'){ sGo(); window.open(FORM_URL,'_blank','noopener'); return; } // 要望など
   sGo();
-  const href=cards[i].getAttribute('href');
+  const href=el.getAttribute('href');
   setTimeout(()=>{ window.location.href=href; }, 160);
 }
 
 cards.forEach((c,i)=>{
   c.addEventListener('mouseenter',()=>setSel(i));
-  c.addEventListener('click',(e)=>{ e.preventDefault(); activate(i); });
+  c.addEventListener('click',(e)=>{
+    if(c.id==='youboBtn'){ sGo(); return; }   // リンクを そのまま ひらく
+    e.preventDefault(); activate(i);
+  });
 });
 
 document.addEventListener('keydown', e=>{
