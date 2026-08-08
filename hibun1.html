@@ -312,10 +312,19 @@ const MSG = {
   missDen:"分母が ちがいます！", missNum:"分子が ちがいます！",
   missYaku:"約分が してありません！", missBoth:"分子、分母が ちがいます！",
   missInt:"整数が ちがいます！",
-  prompt:"分子と 分母を いれましょう。",
+  prompt:"分母（した）から、つぎに 分子（うえ）を いれましょう。",
 };
 
-let state = { modeIndex:0, problems:[], current:0, field:"num", inInt:"", inNum:"", inDen:"", locked:false, startTime:0, soundOn:true };
+let state = { modeIndex:0, problems:[], current:0, boxes:"frac", order:["den","num"], field:"den", inInt:"", inNum:"", inDen:"", locked:false, startTime:0, soundOn:true };
+
+/* こたえの型で 入力ますと じゅんばんを きめる
+   type 2（真分数・仮分数）… 整数ますなし・分母→分子
+   type 1（整数）/ type 3（帯分数）… 整数→分母→分子 */
+const FIELD_ORDER = { all:["int","den","num"], frac:["den","num"] };
+function layoutFor(p){
+  return (p.type===2) ? { boxes:"frac", order:FIELD_ORDER.frac }
+                      : { boxes:"all",  order:FIELD_ORDER.all };
+}
 const $ = (id)=>document.getElementById(id);
 const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen") };
 function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -380,7 +389,8 @@ function updateDots(){
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  state.inInt=""; state.inNum=""; state.inDen=""; state.field="num"; state.locked=false;
+  const lay=layoutFor(p);
+  state.inInt=""; state.inNum=""; state.inDen=""; state.boxes=lay.boxes; state.order=lay.order; state.field=lay.order[0]; state.locked=false;
   $("bracket").textContent="［"+m.bracket+"］";
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
@@ -399,13 +409,16 @@ function renderEquation(revealAll){
     nv = (p.type===1) ? "" : String(p.ans.n);
     dv = (p.type===1) ? "" : String(p.ans.den);
   }else{ iv=state.inInt; nv=state.inNum; dv=state.inDen; }
-  html+=`<span class="ansarea ${revealAll?'reveal':''}">`+
-    `<span class="intbox ${(!revealAll&&state.field==='int')?'active':''}" data-f="int">${iv}</span>`+
-    `<span class="fracbox">`+
-      `<span class="fbox ${(!revealAll&&state.field==='num')?'active':''}" data-f="num">${nv}</span>`+
+  const act=(f)=> (!revealAll && state.field===f) ? "active" : "";
+  const intBox = `<span class="intbox ${act('int')}" data-f="int">${iv}</span>`;
+  const fracBox = `<span class="fracbox">`+
+      `<span class="fbox ${act('num')}" data-f="num">${nv}</span>`+
       `<span class="line"></span>`+
-      `<span class="fbox ${(!revealAll&&state.field==='den')?'active':''}" data-f="den">${dv}</span>`+
-    `</span></span>`;
+      `<span class="fbox ${act('den')}" data-f="den">${dv}</span>`+
+    `</span>`;
+  html+=`<span class="ansarea ${revealAll?'reveal':''}">`;
+  html+= (state.boxes==="frac") ? fracBox : (intBox+fracBox);  // frac=分数だけ ／ all=整数＋分数
+  html+=`</span>`;
   $("equation").innerHTML=html;
   $("equation").querySelectorAll("[data-f]").forEach(el=>{
     el.addEventListener("click",()=>{ if(state.locked)return; state.field=el.dataset.f; renderEquation(); });
@@ -419,7 +432,7 @@ function setVal(v){ if(state.field==="int") state.inInt=v; else if(state.field==
 function pressKey(k){
   if(state.locked) return;
   if(k==="del"){ const c=curVal(); if(c.length){ setVal(c.slice(0,-1)); renderEquation(); beep("tap"); } return; }
-  if(k==="next"){ state.field = state.field==="int" ? "num" : state.field==="num" ? "den" : "int"; renderEquation(); beep("tap"); return; }
+  if(k==="next"){ const o=state.order; const idx=o.indexOf(state.field); state.field=o[(idx+1)%o.length]; renderEquation(); beep("tap"); return; }
   if(k==="enter"){ submit(); return; }
   const c=curVal();
   if(c.length>=2) return;
@@ -476,7 +489,7 @@ function onWrong(p,res){
     msg.textContent=MAP[res]; msg.className="msg bad";
     setTimeout(()=>{
       $("stamp").innerHTML="";
-      state.inInt=""; state.inNum=""; state.inDen=""; state.field="num"; state.locked=false;
+      state.inInt=""; state.inNum=""; state.inDen=""; state.field=state.order[0]; state.locked=false;
       setKeypad(true); renderEquation();
       $("msg").textContent=""; $("msg").className="msg";
     },1200);

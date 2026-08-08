@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ひきざん の れんしゅう ②</title>
+<title>かけざん の れんしゅう ②</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
     --paper:#FCFBF4; --grid:#DDE7E3; --grid2:#EDF2EF;
     --ink:#37424A; --ink-soft:#6A757C;
     --red:#EA5040; --blue:#2E9BD6; --yellow:#F6B93B; --green:#34B37A; --pink:#F27B9D;
-    --orange:#F0902F; --orange-deep:#D4741A;
+    --violet:#6E56CF; --violet-deep:#533FB0;
     --card:#FFFFFF; --shadow:0 6px 0 rgba(55,66,74,.10), 0 12px 28px rgba(55,66,74,.12);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -32,7 +32,7 @@
 
   header.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;}
   .logo{display:flex;align-items:center;gap:10px;}
-  .logo .pin{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;font-weight:900;display:grid;place-items:center;font-size:22px;box-shadow:0 3px 0 var(--orange-deep);transform:rotate(-8deg);}
+  .logo .pin{width:34px;height:34px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900;display:grid;place-items:center;font-size:20px;box-shadow:0 3px 0 var(--violet-deep);transform:rotate(-8deg);}
   .logo b{font-size:18px;font-weight:900;letter-spacing:.02em;}
   .logo .step{font-size:12px;font-weight:700;color:var(--ink-soft);}
   .tools{display:flex;gap:8px;}
@@ -44,24 +44,24 @@
   @keyframes pop{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
   .title-card{background:var(--card);border-radius:26px;padding:30px 24px 26px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;}
-  .title-card::before{content:"";position:absolute;inset:8px;border:3px dashed #F7D9B4;border-radius:20px;pointer-events:none;}
-  .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--orange);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #F8CE9F;}
+  .title-card::before{content:"";position:absolute;inset:8px;border:3px dashed #CFC6F0;border-radius:20px;pointer-events:none;}
+  .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--violet);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #D4CCF2;}
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
-  .title-card .tag{color:var(--orange-deep);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
+  .title-card .tag{color:var(--violet);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
   .mini-hissan{display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px;margin:6px auto 20px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;}
   .mini-hissan .ln{height:4px;width:100%;background:var(--ink);border-radius:2px;}
   .mini-hissan .op{color:var(--red);}
-  .mini-hissan .ans{color:var(--orange-deep);}
+  .mini-hissan .ans{color:var(--violet);}
   .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
   /* メニュー戻るボタン用の追加スタイル */
-  .hnmenu-nav{margin-top:20px;position:relative;z-index:1;}
-  .hnmenu-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:var(--card);color:var(--ink-soft);text-decoration:none;font-weight:700;font-size:14px;border-radius:12px;box-shadow:0 3px 0 rgba(55,66,74,.12);transition:transform .08s, background-color .08s, color .08s;}
-  .hnmenu-btn:hover{color:var(--ink);background:#F7FAF9;}
-  .hnmenu-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
+  .knmenu-nav{margin-top:20px;position:relative;z-index:1;}
+  .knmenu-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 18px;background:var(--card);color:var(--ink-soft);text-decoration:none;font-weight:700;font-size:14px;border-radius:12px;box-shadow:0 3px 0 rgba(55,66,74,.12);transition:transform .08s, background-color .08s, color .08s;}
+  .knmenu-btn:hover{color:var(--ink);background:#F7FAF9;}
+  .knmenu-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
 
-  .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--orange);box-shadow:0 5px 0 var(--orange-deep);transition:transform .08s, box-shadow .08s;}
-  .big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--orange-deep);}
+  .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--violet);box-shadow:0 5px 0 var(--violet-deep);transition:transform .08s, box-shadow .08s;}
+  .big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--violet-deep);}
   .big-btn.blue{background:var(--blue);box-shadow:0 5px 0 #1F7CAE;}
   .big-btn.blue:active{box-shadow:0 1px 0 #1F7CAE;}
   .big-btn.green{background:var(--green);box-shadow:0 5px 0 #279862;}
@@ -76,18 +76,18 @@
     .menu-grid{grid-template-columns:repeat(2,1fr);}
     .menu-head{flex-direction:column;align-items:flex-start;gap:10px;}
   }
-  .mode-card{background:var(--card);border-radius:18px;padding:16px 12px 14px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
+  .mode-card{background:var(--card);border-radius:18px;padding:16px 10px 12px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
   .mode-card:hover{transform:translateY(-3px);}
   .mode-card:active{transform:translateY(1px);box-shadow:0 3px 0 rgba(55,66,74,.10);}
-  .mode-card .no{position:absolute;top:-9px;left:-9px;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#7A5410;font-weight:900;display:grid;place-items:center;font-size:15px;box-shadow:0 3px 0 #D89A2C;transform:rotate(-6deg);}
-  .mode-card .tagh{position:absolute;top:-9px;right:-6px;background:var(--orange-deep);color:#fff;font-weight:900;font-size:11px;padding:3px 8px;border-radius:999px;box-shadow:0 2px 0 #A85B12;transform:rotate(4deg);}
-  .mode-card .ex{font-size:21px;font-weight:900;color:var(--ink);line-height:1.1;margin:8px 0 6px;min-height:26px;}
-  .mode-card .ex .op{color:var(--orange-deep);}
-  .mode-card .lbl{font-size:11.5px;color:var(--ink-soft);font-weight:700;line-height:1.4;}
+  .mode-card .no{position:absolute;top:-9px;left:-9px;width:28px;height:28px;border-radius:50%;background:var(--yellow);color:#7A5410;font-weight:900;display:grid;place-items:center;font-size:14px;box-shadow:0 3px 0 #D89A2C;transform:rotate(-6deg);}
+  .mode-card .tagh{position:absolute;top:-9px;right:-6px;background:var(--violet);color:#fff;font-weight:900;font-size:10px;padding:3px 7px;border-radius:999px;box-shadow:0 2px 0 var(--violet-deep);transform:rotate(4deg);}
+  .mode-card .ex{font-size:20px;font-weight:900;color:var(--ink);line-height:1.1;margin:6px 0 5px;min-height:24px;}
+  .mode-card .ex .op{color:var(--red);}
+  .mode-card .lbl{font-size:11px;color:var(--ink-soft);font-weight:700;line-height:1.35;}
 
   .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
   .chip{background:var(--card);border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;box-shadow:0 3px 0 rgba(55,66,74,.10);display:inline-flex;align-items:center;gap:6px;}
-  .chip.mode{color:var(--orange-deep);}
+  .chip.mode{color:var(--violet);}
   .back-btn{border:none;background:var(--card);border-radius:12px;padding:8px 14px;font-family:inherit;font-weight:700;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-size:14px;}
   .back-btn:active{transform:translateY(2px);}
   .dots{display:flex;gap:6px;margin-left:auto;}
@@ -99,23 +99,25 @@
   .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
   .board .bracket{color:var(--ink-soft);font-weight:700;font-size:13px;min-height:18px;margin-bottom:4px;}
 
-  .equation{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(34px,10vw,60px);line-height:1;display:flex;align-items:center;justify-content:center;gap:.16em;flex-wrap:wrap;color:var(--ink);}
-  .equation .op{color:var(--orange-deep);}
+  .equation{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(30px,9vw,56px);line-height:1;display:flex;align-items:center;justify-content:center;gap:.14em;flex-wrap:wrap;color:var(--ink);}
+  .equation .op{color:var(--red);}
   .equation .eq{color:var(--ink-soft);}
-  .ansbox{min-width:1.5em;min-height:1.05em;padding:0 .1em;border-bottom:6px solid var(--orange);color:var(--orange-deep);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;}
+  .ansbox{min-width:1.3em;min-height:1.05em;padding:0 .1em;border-bottom:6px solid var(--violet);color:var(--violet);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;}
+  .ansbox.boxstyle{border:4px dashed var(--violet);border-radius:10px;min-width:1.2em;min-height:1.2em;align-items:center;padding:.05em .18em;}
+  .ansbox.boxblank{color:#C9BEF0;}
 
-  .hissan{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(34px,11vw,58px);line-height:1;color:var(--ink);background:repeating-linear-gradient(0deg, transparent, transparent 1.5em, rgba(240,144,47,.10) 1.5em, rgba(240,144,47,.10) calc(1.5em + 1px));padding:6px 4px 2px;border-radius:8px;}
+  .hissan{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(30px,10vw,52px);line-height:1;color:var(--ink);background:repeating-linear-gradient(0deg, transparent, transparent 1.5em, rgba(110,86,207,.10) 1.5em, rgba(110,86,207,.10) calc(1.5em + 1px));padding:6px 4px 2px;border-radius:8px;}
   .hrow{display:flex;justify-content:flex-end;align-items:center;}
-  .hcell{width:.78em;text-align:center;}
-  .hop{color:var(--red);width:.78em;text-align:center;}
+  .hcell{width:.8em;text-align:center;}
+  .hop{color:var(--red);width:.8em;text-align:center;}
   .hline{height:6px;background:var(--ink);border-radius:3px;margin:3px 0;}
-  .hrow.hanswer .hcell{color:var(--orange-deep);}
+  .hrow.hanswer .hcell{color:var(--violet);}
   .hcell.blank{color:#D8DEDC;}
-  .hrow.hanswer .hcell.blank{color:#F6DCC1;}
+  .hrow.hanswer .hcell.blank{color:#DED6F5;}
   .hrow.reveal-row .hcell{color:var(--red);}
   /* いま入力する くらい（教科書どおり 一のくらいから 順に）を ハイライト */
   @keyframes hblink{50%{opacity:.4;}}
-  .hrow.hanswer .hcell.active{background:rgba(246,185,59,.45);border-radius:5px;box-shadow:0 0 0 2px rgba(246,185,59,.55);animation:hblink 1s steps(2) infinite;}
+  .hrow.hanswer .hcell.active{background:rgba(246,185,59,.5);border-radius:5px;box-shadow:0 0 0 2px rgba(246,185,59,.6);animation:hblink 1s steps(2) infinite;}
 
   .stamp{position:absolute;top:50%;left:50%;pointer-events:none;z-index:3;}
   .stamp svg{display:block;width:150px;height:150px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
@@ -154,7 +156,7 @@
   .review-row .rmark.ok{background:var(--green);}
   .review-row .rmark.ng{background:var(--red);}
   .review-row .rq{flex:1;color:var(--ink);}
-  .review-row .rq .op{color:var(--orange-deep);}
+  .review-row .rq .op{color:var(--red);}
   .review-row .ra.wrong{color:var(--red);text-decoration:line-through;margin-right:6px;}
   .review-row .rc{color:var(--green);}
   .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
@@ -165,8 +167,8 @@
 <div class="app">
   <header class="bar">
     <div class="logo">
-      <span class="pin">−</span>
-      <div><b>ひきざん れんしゅう</b><br><span class="step">ステップ２・ひっさん</span></div>
+      <span class="pin">×</span>
+      <div><b>かけざん れんしゅう</b><br><span class="step">ステップ２・ひっさん</span></div>
     </div>
     <div class="tools"><button class="icon-btn" id="soundBtn" title="おと">🔊</button></div>
   </header>
@@ -174,22 +176,22 @@
   <!-- TITLE -->
   <section class="screen active" id="titleScreen">
     <div class="title-card">
-      <h1>ひきざん ②</h1>
-      <div class="sub">2けた・3けた・4けた・ひっさん の れんしゅう</div>
-      <div class="tag">くりさがりや ひっさん に ちょうせん！</div>
+      <h1>かけざん ②</h1>
+      <div class="sub">×10・×100・2けた・3けた・ひっさん</div>
+      <div class="tag">いろいろな かけざんに ちょうせん！</div>
       <div class="mini-hissan num">
-        <div>５８</div>
-        <div><span class="op">−</span>２３</div>
+        <div>２４</div>
+        <div><span class="op">×</span>３８</div>
         <div class="ln"></div>
-        <div class="ans">３５</div>
+        <div class="ans">912</div>
       </div>
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展） Ver 5.01 ／ Web版
+        岐阜女子大学（安藤忠展） Ver 5.00 ／ Web版
       </div>
-      <div class="hnmenu-nav">
-        <a href="hnmenu.html" class="hnmenu-btn">🏠 はじめのメニューに戻る</a>
+      <div class="knmenu-nav">
+        <a href="knmenu.html" class="knmenu-btn">🏠 はじめのメニューに戻る</a>
       </div>
     </div>
   </section>
@@ -201,7 +203,7 @@
         <h2>メニュー</h2>
         <p>べんきょうすることを えらびましょう</p>
       </div>
-      <a href="hnmenu.html" class="hnmenu-btn">🏠 はじめのメニューに戻る</a>
+      <a href="knmenu.html" class="knmenu-btn">🏠 はじめのメニューに戻る</a>
     </div>
     <div class="menu-grid" id="menuGrid"></div>
   </section>
@@ -256,18 +258,24 @@
 
 <script>
 /* =========================================================
-   ひきざん の れんしゅう ②  —  Web版
-   原作: N88-BASIC "HIKI2.BAS" Ver 3.02 のロジックを移植
-   （2けた・3けた・4けた／くりさがり／ひっさん）
+   かけざん の れんしゅう ②  —  Web版
+   原作: N88-BASIC "KAKE2.BAS" Ver 3.02 のロジックを移植
+   （□あなうめ／×10・×100／2けた・3けた／ひっさん）
    ========================================================= */
 
 const MODES = [
-  { ex:"23 − 7",    bracket:"2けた − 1けた・くりさがりあり", hissan:false }, //1 D.SET.1
-  { ex:"35 − 23",   bracket:"2けた − 2けた・くりさがりなし", hissan:false }, //2 D.SET.2
-  { ex:"120 − 70",  bracket:"3けた − 2けた・くりさがりあり", hissan:false }, //3 D.SET.3
-  { ex:"58 − 23",   bracket:"2けた − 2けた・ひっさん",       hissan:true  }, //4 D.SET.4
-  { ex:"235 − 112", bracket:"3けた − 3けた・ひっさん",       hissan:true  }, //5 D.SET.5
-  { ex:"1480 − 490",bracket:"4けた − 3けた・ひっさん",       hissan:true  }, //6 D.SET.6
+  { ex:"9 × □ ＝ 36",bracket:"□に あてはまる かず",           menu:1,  box:true,  hissan:false },
+  { ex:"3 × 10",     bracket:"1けた × 10",                     menu:2,  box:false, hissan:false },
+  { ex:"25 × 10",    bracket:"×10 の けいさん",                menu:3,  box:false, hissan:false },
+  { ex:"5 × 100",    bracket:"×100 の けいさん",               menu:4,  box:false, hissan:false },
+  { ex:"50 × 3",     bracket:"何十・何百 × 1けた",             menu:5,  box:false, hissan:false },
+  { ex:"23 × 3",     bracket:"2けた × 1けた・くり上がりなし",  menu:6,  box:false, hissan:false },
+  { ex:"25 × 3",     bracket:"2けた × 1けた・くり上がりあり",  menu:7,  box:false, hissan:false },
+  { ex:"59 × 7",     bracket:"2けた × 1けた・ひっさん",        menu:8,  box:false, hissan:true  },
+  { ex:"182 × 2",    bracket:"3けた × 1けた・ひっさん",        menu:9,  box:false, hissan:true  },
+  { ex:"5 × 30",     bracket:"× 何十 の けいさん",             menu:10, box:false, hissan:false },
+  { ex:"24 × 38",    bracket:"2けた × 2けた・ひっさん",        menu:11, box:false, hissan:true  },
+  { ex:"132 × 67",   bracket:"3けた × 2けた・ひっさん",        menu:12, box:false, hissan:true  },
 ];
 
 const PROBLEMS_PER_ROUND = 5;
@@ -275,45 +283,57 @@ const MAX_TRIES = 3;
 const rnd = () => Math.random();
 const fix = (x) => Math.trunc(x);
 
-// --- 原作の乱数生成を忠実に移植（HIKI2 の D.SET.1〜6）---
-function generatePair(mode){
-  let a,b;
-  switch(mode){
-    case 1:{ // 2桁−1桁 くりさがりあり (23−7)
-      let u,bb; do{ u=fix(8.9*rnd()+1); bb=fix(8.9*rnd()+1); }while(u>=bb);
-      const t=fix(8.9*rnd()+1); a=10*t+u; b=bb; break; }
-    case 2:{ // 2桁−2桁 くりさがりなし (35−23)
-      let u1,u2; do{ u1=fix(8.9*rnd())+1; u2=fix(8.9*rnd())+1; }while(u1<=u2);
-      let t1,t2; do{ t1=fix(8.9*rnd())+1; t2=fix(8.9*rnd())+1; }while(t1<=t2);
-      a=10*t1+u1; b=10*t2+u2; break; }
-    case 3:{ // 3桁−2桁 くりさがりあり (120−70)
-      let u,bb; do{ u=fix(8.9*rnd()+1); bb=fix(8.9*rnd()+1); }while(u>=bb);
-      const t=fix(8.9*rnd()+1); a=10*(10*t+u); b=10*bb; break; }
-    case 4:{ // 2桁−2桁 ひっさん (58−23)
-      let g=0;
-      do{ let t1,t2; do{ t1=fix(8.9*rnd()+1); t2=fix(8.9*rnd()+1); }while(t1===t2);
-          const u1=fix(8.9*rnd()+1), u2=fix(8.9*rnd()+1); a=10*t1+u1; b=10*t2+u2; g++;
-      }while(a-b<10 && g<400); break; }
-    case 5:{ // 3桁−3桁 ひっさん (235−112)
-      const u1=fix(8.9*rnd())+1,u2=fix(8.9*rnd())+1,t1=fix(8.9*rnd())+1,t2=fix(8.9*rnd())+1;
-      let h1,h2,g=0; do{ h1=fix(8.9*rnd())+1; h2=fix(8.9*rnd())+1; a=100*h1+10*t1+u1; b=100*h2+10*t2+u2; g++;
-      }while((h1===h2 || a-b<100) && g<400); break; }
-    case 6:{ // 4桁−3桁 ひっさん (1480−490)
-      const u1=fix(8.9*rnd())+1,u2=fix(8.9*rnd())+1,t1=fix(8.9*rnd())+1,t2=fix(8.9*rnd()+1);
-      let h1,h2,g=0; do{ h1=fix(8.9*rnd())+1; h2=fix(8.9*rnd())+1; a=1000+100*h1+10*t1+u1; b=100*h2+10*t2+u2; g++;
-      }while(a-b<100 && g<400); break; }
+// --- 原作の乱数生成を忠実に移植（KAKE2 の D.SET.1〜9）---
+function generatePair(menu){
+  let a,b,c=0;
+  switch(menu){
+    case 1:{ a=fix(8.9*rnd()+1); c=fix(8.9*rnd()+1); return { a, b:c, product:a*c, c, box:true, answer:c }; }
+    case 2:{ const p1=fix(8.9*rnd()+1), s=fix(1.9*rnd()+1); if(s===1){a=p1;b=10;}else{a=10;b=p1;} break; }
+    case 3: case 4:{
+      const S=fix(2.9*rnd()+1)+(menu-3)*3;
+      if(S===1) a=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1);
+      else if(S===2) a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1);
+      else if(S===3) a=(fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1))*10;
+      else if(S===4) a=fix(8.9*rnd()+1);
+      else if(S===5) a=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1);
+      else a=(fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1))*10;
+      b=(menu===3)?10:100; break; }
+    case 5:{ const s=fix(1.9*rnd()+1);
+      if(s===1){ a=fix(9*rnd()+1)*10; b=fix(9*rnd()+1); } else { a=fix(8.9*rnd()+1)*100; b=fix(9*rnd()+1); } break; }
+    case 6:{ let A,B,C,g=0; do{ A=fix(8.9*rnd()+1); B=fix(8.9*rnd()+1); C=fix(7.9*rnd()+2); g++; }while((B*C>9 || (10*A+B)*C>99) && g<600); a=10*A+B; b=C; break; }
+    case 7:{ let A,B,C,g=0; do{ A=fix(8.9*rnd()+1); B=fix(8.9*rnd()+1); C=fix(7.9*rnd()+2); g++; }while((B*C<10 || (10*A+B)*C>99) && g<600); a=10*A+B; b=C; break; }
+    case 8:{ a=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); b=fix(8.9*rnd()+1); break; }
+    case 9:{ const s=fix(2.9*rnd()+1);
+      if(s===1) a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1);
+      else if(s===2) a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1);
+      else a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10;
+      b=fix(8.9*rnd()+1); break; }
+    case 10:{ const s=fix(3*rnd()+1);
+      if(s===1) a=fix(8.9*rnd()+1);
+      else if(s===2) a=fix(8.9*rnd()+1)*10;
+      else a=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1);
+      b=fix(8.9*rnd()+1)*10; break; }
+    case 11:{ const s=fix(3*rnd()+1);
+      if(s===1){ a=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); }
+      else if(s===2){ a=fix(8.9*rnd()+1)*10; b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); }
+      else { a=fix(8.9*rnd()+1); b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); } break; }
+    case 12:{ const s=fix(4*rnd()+1);
+      if(s===1){ a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); }
+      else if(s===2){ a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); b=fix(8.9*rnd()+1)*10; }
+      else if(s===3){ a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1); b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); }
+      else { a=fix(8.9*rnd()+1)*100+fix(8.9*rnd()+1)*10; b=fix(8.9*rnd()+1)*10+fix(8.9*rnd()+1); } break; }
   }
-  return {a,b};
+  return { a, b, box:false, answer:a*b };
 }
 
 function buildRound(modeIndex){
-  const mode = modeIndex+1;
-  const seen = new Set(); const list = [];
+  const menu = MODES[modeIndex].menu;
+  const seen=new Set(); const list=[];
   for(let i=0;i<PROBLEMS_PER_ROUND;i++){
     let p, guard=0;
-    do{ p=generatePair(mode); guard++; }while(seen.has(p.a+"_"+p.b) && guard<400);
-    seen.add(p.a+"_"+p.b);
-    list.push({ a:p.a, b:p.b, answer:p.a-p.b, tries:0, correct:false, userAnswer:"" });
+    do{ p=generatePair(menu); guard++; }while(seen.has(p.box?(p.a+"_x_"+p.c):(p.a+"_"+p.b)) && guard<400);
+    seen.add(p.box?(p.a+"_x_"+p.c):(p.a+"_"+p.b));
+    list.push({ ...p, tries:0, correct:false, userAnswer:"" });
   }
   return list;
 }
@@ -322,7 +342,8 @@ const MSG = {
   perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
   miss:"もういちど かんがえよう！", miss3:"まちがってますよ！",
   promptAnzan:"ただしい こたえを いれましょう。",
-  promptHissan:"一のくらいから じゅんに いれましょう。",
+  promptHissan:"ノートで けいさんして こたえましょう！",
+  promptBox:"□に はいる かずを いれましょう。",
 };
 
 let state = { modeIndex:0, problems:[], current:0, input:"", locked:false, startTime:0, soundOn:true };
@@ -348,9 +369,10 @@ function buildMenu(){
   const grid=$("menuGrid"); grid.innerHTML="";
   MODES.forEach((m,i)=>{
     const btn=document.createElement("button"); btn.className="mode-card";
-    const exHtml=m.ex.replace(/−/g,'<span class="op">−</span>');
+    const exHtml=m.ex.replace(/×/g,'<span class="op">×</span>');
     btn.innerHTML=`<span class="no num">${i+1}</span>`+
       (m.hissan?`<span class="tagh">ひっさん</span>`:``)+
+      (m.box?`<span class="tagh">□</span>`:``)+
       `<div class="ex num">${exHtml}</div><div class="lbl">${m.bracket}</div>`;
     btn.addEventListener("click",()=>{ beep("tap"); startRound(i); });
     grid.appendChild(btn);
@@ -378,23 +400,25 @@ function updateDots(){
   });
 }
 
-function hissanCols(p){ return String(p.a).length; }        // ひっ算のけた数 = ひかれる数のけた数
 function maxLen(){
   const p=state.problems[state.current];
-  return MODES[state.modeIndex].hissan ? hissanCols(p) : 4;
+  const m=MODES[state.modeIndex];
+  if(p.box) return 1;
+  return m.hissan ? String(p.answer).length : String(p.answer).length+1;
 }
 
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   state.input=""; state.locked=false;
-  if(m.hissan){ const cols=String(p.a).length; state.cells=Array(cols).fill(""); state.hentered=0; }
+  if(m.hissan){ state.hi=hiSetup(p.a,p.b); }
   $("bracket").textContent="［"+m.bracket+"］";
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal"; $("reveal").innerHTML="";
   $("stamp").innerHTML="";
   const pr=$("prompt");
   if(m.hissan){ pr.textContent=MSG.promptHissan; pr.className="prompt note"; }
+  else if(p.box){ pr.textContent=MSG.promptBox; pr.className="prompt"; }
   else{ pr.textContent=MSG.promptAnzan; pr.className="prompt"; }
   renderProblemArea();
   setKeypad(true); updateDots();
@@ -404,63 +428,119 @@ function renderProblemArea(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   const area=$("problemArea");
-  if(m.hissan){ area.innerHTML=hissanHTML(p.a,p.b,state.cells,state.hentered,false); }
-  else{
-    area.innerHTML=`<div class="equation num"><span>${p.a}</span><span class="op">−</span><span>${p.b}</span><span class="eq">＝</span><span class="ansbox">${state.input}</span></div>`;
+  if(m.hissan){ area.innerHTML=hissanHTML(false); updateHissanPrompt(); }
+  else if(p.box){
+    area.innerHTML=`<div class="equation num"><span>${p.a}</span><span class="op">×</span>`+
+      `<span class="ansbox boxstyle boxblank" id="ansbox">□</span>`+
+      `<span class="eq">＝</span><span>${p.product}</span></div>`;
+  }else{
+    area.innerHTML=`<div class="equation num"><span>${p.a}</span><span class="op">×</span><span>${p.b}</span><span class="eq">＝</span><span class="ansbox" id="ansbox">${state.input}</span></div>`;
   }
 }
 
-// 筆算（たてがき）レイアウト：ひかれる数のけた数で右そろえ。こたえは 一のくらい（右）から 入力
-function hissanHTML(a,b,cells,entered,revealAll){
-  const answer=a-b;
-  const cols=String(a).length;
-  const pad=(s)=>String(s).padStart(cols," ").split("");
-  const aD=pad(a), bD=pad(b);
-  const cell=(ch)=> ch===" " ? `<span class="hcell blank">·</span>` : `<span class="hcell">${ch}</span>`;
-  const topRow=`<div class="hrow"><span class="hop">&nbsp;</span>${aD.map(cell).join("")}</div>`;
-  const botRow=`<div class="hrow"><span class="hop">−</span>${bD.map(cell).join("")}</div>`;
-  const lineW=((cols+1)*0.78)+"em";
-  const line=`<div class="hline" style="width:${lineW}"></div>`;
-  // こたえの行：各くらいを 1ますずつ。いま入力する くらい（右から entered番目）を ハイライト
-  const digits = revealAll ? String(answer).padStart(cols," ").split("") : (cells||[]);
-  const activeIdx = (!revealAll && entered<cols) ? (cols-1-entered) : -1;
-  let ansCells="";
-  for(let i=0;i<cols;i++){
-    const raw = digits[i];
-    const ch = (raw===undefined || raw==="" || raw===" ") ? "" : raw;
-    const isActive = (i===activeIdx);
-    if(ch===""){
-      ansCells += `<span class="hcell blank ${isActive?'active':''}">${isActive?'&nbsp;':'·'}</span>`;
-    }else{
-      ansCells += `<span class="hcell ${isActive?'active':''}">${ch}</span>`;
-    }
+// ===== 筆算（教科書どおり）=====
+//  ×1けた … 積を 一のくらいから 入力（1段）
+//  ×2けた … 部分積2段（1つ左にずらす）＋ 合計。各段とも 一のくらいから、「こたえ」で つぎの段へ
+function mkRow(key,target,onesCol,cols){ return { key, target, onesCol, cells:Array(cols).fill(""), entered:0 }; }
+function hiSetup(a,b){
+  const answer=a*b;
+  const multi = String(b).length>=2;
+  if(!multi){
+    const cols=String(answer).length;
+    return { multi:false, cols, stage:0, rows:[ mkRow('prod',answer,cols-1,cols) ] };
   }
-  const ansRow=`<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${ansCells}</div>`;
-  return `<div class="hissan num">${topRow}${botRow}${line}${ansRow}</div>`;
+  const bo=b%10, bt=Math.floor(b/10)%10;   // 一のくらい・十のくらい
+  const pp1=a*bo, pp2=a*bt;                 // 部分積（pp2は 1つ左に ずれる）
+  const cols=Math.max(String(answer).length, String(pp1).length, String(pp2).length+1);
+  return { multi:true, cols, stage:0, rows:[
+    mkRow('pp1',pp1,cols-1,cols),
+    mkRow('pp2',pp2,cols-2,cols),
+    mkRow('sum',answer,cols-1,cols),
+  ]};
+}
+function hiRowValue(row){ const s=row.cells.join(""); return s===""?null:parseInt(s,10); }
+function hiActiveCol(row){ return (row.entered<=row.onesCol) ? row.onesCol-row.entered : -1; }
+
+function updateHissanPrompt(){
+  const hi=state.hi; if(!hi) return;
+  const pr=$("prompt"); pr.className="prompt note";
+  if(!hi.multi){ pr.textContent="一のくらいから じゅんに いれましょう。"; return; }
+  if(hi.stage===0)      pr.textContent="１だんめ：一のくらいから いれて、「こたえ」で つぎへ。";
+  else if(hi.stage===1) pr.textContent="２だんめ：１つ 左に ずらして。「こたえ」で つぎへ。";
+  else                  pr.textContent="たして 合計を、一のくらいから。「こたえ」で おわり。";
+}
+
+// 筆算レイアウト（state.hi をもとに 描画）
+function hissanHTML(revealAll){
+  const p=state.problems[state.current];
+  const a=p.a, b=p.b, hi=state.hi, cols=hi.cols;
+  const pad=(s)=>String(s).padStart(cols," ").split("");
+  const cell=(ch)=> ch===" " ? `<span class="hcell blank">·</span>` : `<span class="hcell">${ch}</span>`;
+  const topRow=`<div class="hrow"><span class="hop">&nbsp;</span>${pad(a).map(cell).join("")}</div>`;
+  const botRow=`<div class="hrow"><span class="hop">×</span>${pad(b).map(cell).join("")}</div>`;
+  const lineW=((cols+1)*0.8)+"em";
+  const line=()=>`<div class="hline" style="width:${lineW}"></div>`;
+  function renderRow(row, idx){
+    let digits;
+    if(revealAll){
+      digits=Array(cols).fill("");
+      const ts=String(row.target);
+      for(let i=0;i<ts.length;i++){ const col=row.onesCol-i; if(col>=0) digits[col]=ts[ts.length-1-i]; }
+    } else { digits=row.cells; }
+    const activeCol = (!revealAll && idx===hi.stage) ? hiActiveCol(row) : -1;
+    let cellsHtml="";
+    for(let i=0;i<cols;i++){
+      const raw=digits[i];
+      const ch=(raw===undefined||raw===""||raw===" ")?"":raw;
+      const isA=(i===activeCol);
+      if(ch===""){ cellsHtml+=`<span class="hcell blank ${isA?'active':''}">${isA?'&nbsp;':'·'}</span>`; }
+      else{ cellsHtml+=`<span class="hcell ${isA?'active':''}">${ch}</span>`; }
+    }
+    return `<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${cellsHtml}</div>`;
+  }
+  let body;
+  if(hi.multi){ body = renderRow(hi.rows[0],0)+renderRow(hi.rows[1],1)+line()+renderRow(hi.rows[2],2); }
+  else { body = renderRow(hi.rows[0],0); }
+  return `<div class="hissan num">${topRow}${botRow}${line()}${body}</div>`;
+}
+
+function pressKeyHissan(k){
+  const hi=state.hi; const row=hi.rows[hi.stage];
+  if(k==="del"){
+    if(row.entered>0){ row.entered--; row.cells[row.onesCol-row.entered]=""; renderProblemArea(); beep("tap"); }
+    else if(hi.stage>0){ hi.stage--; renderProblemArea(); beep("tap"); }
+    return;
+  }
+  if(k==="enter"){
+    if(row.entered<1){ beep("wrong"); return; }              // 空の段は 進めない
+    if(hi.stage < hi.rows.length-1){ hi.stage++; renderProblemArea(); beep("tap"); }
+    else { submit(); }
+    return;
+  }
+  if(row.entered > row.onesCol) return;                       // これ以上 左には ない
+  row.cells[row.onesCol-row.entered]=k; row.entered++;
+  beep("tap"); renderProblemArea();
 }
 
 function updateAnswerView(){
+  const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  if(m.hissan){ renderProblemArea(); }
-  else{ const box=document.querySelector(".ansbox"); if(box) box.textContent=state.input; }
+  if(m.hissan){ renderProblemArea(); return; }
+  const box=document.querySelector(".ansbox");
+  if(!box) return;
+  if(p.box){
+    if(state.input===""){ box.textContent="□"; box.classList.add("boxblank"); }
+    else{ box.textContent=state.input; box.classList.remove("boxblank"); }
+  }else{
+    box.textContent=state.input;
+  }
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
 function pressKey(k){
   if(state.locked) return;
-  const m=MODES[state.modeIndex];
-  if(m.hissan){
-    const cols=state.cells.length;
-    if(k==="del"){ if(state.hentered>0){ state.hentered--; state.cells[cols-1-state.hentered]=""; updateAnswerView(); beep("tap"); } return; }
-    if(k==="enter"){ submit(); return; }
-    if(state.hentered>=cols) return;               // これ以上 くらいは ない
-    state.cells[cols-1-state.hentered]=k;           // 一のくらい（右）から 順に
-    state.hentered++;
-    beep("tap"); updateAnswerView();
-    return;
-  }
-  // 暗算モード（従来どおり 左から 1つの こたえ）
+  if(MODES[state.modeIndex].hissan){ pressKeyHissan(k); return; }
   if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); updateAnswerView(); beep("tap"); } return; }
   if(k==="enter"){ submit(); return; }
   if(state.input.length>=maxLen()) return;
@@ -471,22 +551,24 @@ function submit(){
   if(state.locked) return;
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  let val;
   if(m.hissan){
-    if(state.hentered<1){ beep("wrong"); return; }        // まだ 何も 入れていない
-    val = parseInt(state.cells.join(""),10);              // 右そろえ：先頭の空欄は 0として扱わない
-  }else{
-    if(state.input===""){ beep("wrong"); return; }
-    val = parseInt(state.input,10);
+    const hi=state.hi; let ok=true;
+    for(const row of hi.rows){ if(hiRowValue(row)!==row.target){ ok=false; break; } }
+    state.locked=true; setKeypad(false);
+    if(ok) onCorrect(p); else onWrong(p);
+    return;
   }
+  if(state.input===""){ beep("wrong"); return; }
   state.locked=true; setKeypad(false);
-  if(val===p.answer) onCorrect(p); else onWrong(p);
+  if(parseInt(state.input,10)===p.answer) onCorrect(p); else onWrong(p);
 }
 function onCorrect(p){
   p.correct=true; p.userAnswer=String(p.answer);
+  const box=document.querySelector(".ansbox");
+  if(box && !MODES[state.modeIndex].hissan){ box.style.color="var(--green)"; box.style.borderColor="var(--green)"; box.style.borderBottomColor="var(--green)"; }
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
-  beep("correct"); setTimeout(nextProblem,1200);
+  beep("correct"); setTimeout(nextProblem,1100);
 }
 function onWrong(p){
   p.tries+=1; showStamp("batsu"); beep("wrong");
@@ -494,18 +576,21 @@ function onWrong(p){
   const msg=$("msg");
   if(p.tries>=MAX_TRIES){
     msg.textContent=MSG.miss3; msg.className="msg bad";
-    p.correct=false; p.userAnswer = m.hissan ? state.cells.join("") : state.input;
+    p.correct=false;
+    if(m.hissan){ const lv=hiRowValue(state.hi.rows[state.hi.rows.length-1]); p.userAnswer=(lv!==null?String(lv):""); }
+    else { p.userAnswer=state.input; }
     const rev=$("reveal");
-    if(m.hissan){ $("problemArea").innerHTML=hissanHTML(p.a,p.b,state.cells,state.hentered,true); rev.innerHTML=`こたえは <b>${p.answer}</b>`; }
-    else{ rev.innerHTML=`こたえは ${p.a}−${p.b}＝ <b>${p.answer}</b>`; }
+    if(m.hissan){ $("problemArea").innerHTML=hissanHTML(true); rev.innerHTML=`こたえは <b>${p.answer}</b>`; }
+    else if(p.box){ rev.innerHTML=`□は <b>${p.answer}</b>（${p.a}×${p.answer}＝${p.product}）`; }
+    else{ rev.innerHTML=`こたえは ${p.a}×${p.b}＝ <b>${p.answer}</b>`; }
     rev.classList.add("show");
     setTimeout(nextProblem,2300);
   }else{
     msg.textContent=MSG.miss; msg.className="msg bad";
     setTimeout(()=>{ $("stamp").innerHTML="";
-      if(m.hissan){ const cols=String(p.a).length; state.cells=Array(cols).fill(""); state.hentered=0; }
+      if(m.hissan){ state.hi=hiSetup(p.a,p.b); }
       else{ state.input=""; }
-      state.locked=false; setKeypad(true); updateAnswerView(); },900);
+      state.locked=false; setKeypad(true); renderProblemArea(); },900);
   }
 }
 function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }
@@ -534,9 +619,11 @@ function finishRound(){
   const rv=$("review"); rv.innerHTML="";
   state.problems.forEach((p)=>{
     const row=document.createElement("div"); row.className="review-row";
+    const q = p.box ? `${p.a}<span class="op">×</span>□<span class="op">＝</span>${p.product}` : `${p.a}<span class="op">×</span>${p.b}<span class="op">＝</span>`;
     let ansHtml=p.correct?`<span class="rc">${p.answer}</span>`:`<span class="ra wrong">${p.userAnswer!==""?p.userAnswer:"―"}</span><span class="rc">${p.answer}</span>`;
+    if(p.box) ansHtml = `<span style="color:var(--ink-soft);font-size:14px;">□＝</span>`+ansHtml;
     row.innerHTML=`<span class="rmark ${p.correct?'ok':'ng'}">${p.correct?'○':'✕'}</span>`+
-      `<span class="rq num">${p.a}<span class="op">−</span>${p.b}<span class="op">＝</span></span>`+
+      `<span class="rq num">${q}</span>`+
       `<span class="num">${ansHtml}</span>`;
     rv.appendChild(row);
   });

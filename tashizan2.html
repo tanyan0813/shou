@@ -164,6 +164,9 @@
   .hcell.blank{color:#D8DEDC;}
   .hrow.hanswer .hcell.blank{color:#E6E0F5;}
   .hrow.reveal-row .hcell{color:var(--red);}
+  /* いま入力する くらい（教科書どおり 一のくらいから 順に）を ハイライト */
+  @keyframes hblink{50%{opacity:.4;}}
+  .hrow.hanswer .hcell.active{background:rgba(246,185,59,.45);border-radius:5px;box-shadow:0 0 0 2px rgba(246,185,59,.55);animation:hblink 1s steps(2) infinite;}
 
   /* stamps */
   .stamp{position:absolute;top:50%;left:50%;pointer-events:none;z-index:3;}
@@ -245,7 +248,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展） Ver 5.00／ Web版
+        岐阜女子大学（安藤忠展） Ver 5.01／ Web版
       </div>
     </div>
   </section>
@@ -368,7 +371,7 @@ const MSG = {
   perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
   miss:"もういちど かんがえよう！", miss3:"まちがってますよ！",
   promptAnzan:"ただしい こたえを いれましょう。",
-  promptHissan:"ノートで けいさんして こたえましょう！",
+  promptHissan:"一のくらいから じゅんに いれましょう。",
 };
 
 let state = { modeIndex:0, problems:[], current:0, input:"", locked:false, startTime:0, soundOn:true };
@@ -441,6 +444,7 @@ function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   state.input=""; state.locked=false;
+  if(m.hissan){ const cols=String(p.answer).length; state.cells=Array(cols).fill(""); state.hentered=0; }
   $("bracket").textContent = "［"+m.bracket+"］";
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal"; $("reveal").innerHTML="";
@@ -456,7 +460,7 @@ function renderProblemArea(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   const area=$("problemArea");
-  if(m.hissan){ area.innerHTML=hissanHTML(p.a,p.b,state.input,false); }
+  if(m.hissan){ area.innerHTML=hissanHTML(p.a,p.b,state.cells,state.hentered,false); }
   else{
     area.innerHTML =
       `<div class="equation num"><span>${p.a}</span><span class="op">＋</span><span>${p.b}</span><span class="eq">＝</span>`+
@@ -464,21 +468,31 @@ function renderProblemArea(){
   }
 }
 
-// 筆算（縦書き）レイアウト
-function hissanHTML(a,b,typed,revealAll){
+// 筆算（縦書き）レイアウト … こたえは 一のくらい（右）から 順に 入力
+function hissanHTML(a,b,cells,entered,revealAll){
   const answer=a+b;
   const cols=String(answer).length;
   const pad=(s)=>String(s).padStart(cols," ").split("");
   const aD=pad(a), bD=pad(b);
-  const tStr = revealAll ? String(answer) : typed;
-  const tD = tStr.padStart(cols," ").split("");
   const cell=(ch)=> ch===" " ? `<span class="hcell blank">·</span>` : `<span class="hcell">${ch}</span>`;
   const topRow = `<div class="hrow"><span class="hop">&nbsp;</span>${aD.map(cell).join("")}</div>`;
   const botRow = `<div class="hrow"><span class="hop">＋</span>${bD.map(cell).join("")}</div>`;
   const lineW = ((cols+1)*0.78)+"em";
   const line  = `<div class="hline" style="width:${lineW}"></div>`;
-  const ansCell=(ch)=> ch===" " ? `<span class="hcell blank">·</span>` : `<span class="hcell">${ch}</span>`;
-  const ansRow = `<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${tD.map(ansCell).join("")}</div>`;
+  // こたえの行： 各くらいを 1ますずつ。いま入力する くらい（右から entered番目）を ハイライト
+  const digits = revealAll ? String(answer).split("") : (cells||[]);
+  const activeIdx = (!revealAll && entered<cols) ? (cols-1-entered) : -1;
+  let ansCells="";
+  for(let i=0;i<cols;i++){
+    const ch = (digits[i]===undefined || digits[i]==="") ? "" : digits[i];
+    const isActive = (i===activeIdx);
+    if(ch===""){
+      ansCells += `<span class="hcell blank ${isActive?'active':''}">${isActive?'&nbsp;':'·'}</span>`;
+    }else{
+      ansCells += `<span class="hcell ${isActive?'active':''}">${ch}</span>`;
+    }
+  }
+  const ansRow = `<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${ansCells}</div>`;
   return `<div class="hissan num">${topRow}${botRow}${line}${ansRow}</div>`;
 }
 
@@ -495,6 +509,18 @@ function setKeypad(enabled){
 // ---- input ----
 function pressKey(k){
   if(state.locked) return;
+  const m=MODES[state.modeIndex];
+  if(m.hissan){
+    const cols=state.cells.length;
+    if(k==="del"){ if(state.hentered>0){ state.hentered--; state.cells[cols-1-state.hentered]=""; updateAnswerView(); beep("tap"); } return; }
+    if(k==="enter"){ submit(); return; }
+    if(state.hentered>=cols) return;               // すべての くらいを 入力ずみ
+    state.cells[cols-1-state.hentered]=k;           // 一のくらい（右）から 順に
+    state.hentered++;
+    beep("tap"); updateAnswerView();
+    return;
+  }
+  // 暗算モード（従来どおり 左から 1つの こたえ）
   if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); updateAnswerView(); beep("tap"); } return; }
   if(k==="enter"){ submit(); return; }
   if(state.input.length>=maxLen()) return;
@@ -504,10 +530,18 @@ function pressKey(k){
 
 function submit(){
   if(state.locked) return;
-  if(state.input==="") { beep("wrong"); return; }
   const p=state.problems[state.current];
+  const m=MODES[state.modeIndex];
+  let val;
+  if(m.hissan){
+    if(state.hentered < state.cells.length){ beep("wrong"); return; }  // まだ 全部の くらいが うまっていない
+    val = parseInt(state.cells.join(""),10);
+  }else{
+    if(state.input===""){ beep("wrong"); return; }
+    val = parseInt(state.input,10);
+  }
   state.locked=true; setKeypad(false);
-  if(parseInt(state.input,10)===p.answer) onCorrect(p); else onWrong(p);
+  if(val===p.answer) onCorrect(p); else onWrong(p);
 }
 
 function onCorrect(p){
@@ -520,13 +554,14 @@ function onCorrect(p){
 
 function onWrong(p){
   p.tries+=1; showStamp("batsu"); beep("wrong");
+  const m=MODES[state.modeIndex];
   const msg=$("msg");
   if(p.tries>=MAX_TRIES){
     msg.textContent=MSG.miss3; msg.className="msg bad";
-    p.correct=false; p.userAnswer=state.input;
-    const m=MODES[state.modeIndex]; const rev=$("reveal");
+    p.correct=false; p.userAnswer = m.hissan ? state.cells.join("") : state.input;
+    const rev=$("reveal");
     if(m.hissan){
-      $("problemArea").innerHTML=hissanHTML(p.a,p.b,"",true);
+      $("problemArea").innerHTML=hissanHTML(p.a,p.b,state.cells,state.hentered,true);
       rev.innerHTML=`こたえは <b>${p.answer}</b>`;
     }else{
       rev.innerHTML=`こたえは ${p.a}＋${p.b}＝ <b>${p.answer}</b>`;
@@ -535,7 +570,10 @@ function onWrong(p){
     setTimeout(nextProblem,2300);
   }else{
     msg.textContent=MSG.miss; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); updateAnswerView(); },900);
+    setTimeout(()=>{ $("stamp").innerHTML="";
+      if(m.hissan){ const cols=String(p.answer).length; state.cells=Array(cols).fill(""); state.hentered=0; }
+      else{ state.input=""; }
+      state.locked=false; setKeypad(true); updateAnswerView(); },900);
   }
 }
 
