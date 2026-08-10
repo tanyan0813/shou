@@ -109,6 +109,34 @@
   .ansbox.blink{animation:bl 1s steps(2) infinite;}
   @keyframes bl{50%{border-bottom-color:transparent;}}
 
+  /* ---- わり算の筆算（長除法・段階入力） ---- */
+  .wari{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(23px,8vw,42px);line-height:1;color:var(--ink);}
+  .wrow{display:flex;align-items:flex-end;}
+  .wleft{display:flex;align-items:flex-end;justify-content:flex-end;}
+  .wleft .rbr{color:var(--ink);font-size:1.15em;margin-left:.04em;transform:scaleY(1.3);line-height:.86;}
+  .wdigits{display:flex;align-items:flex-end;}
+  .wcell{width:.82em;height:1.05em;display:flex;align-items:flex-end;justify-content:center;flex:none;position:relative;}
+  .wcell.blank{color:transparent;}
+  .wcell.dp{width:.36em;}
+  .wcell.dp .pt{width:.28em;height:.28em;border-radius:50%;background:currentColor;margin-bottom:.07em;}
+  .wcell .mv{position:absolute;left:50%;transform:translateX(-50%);bottom:-.34em;font-size:.4em;color:var(--red);line-height:1;}
+  .qrow .wcell{color:var(--blue);}
+  .wari .wcell.cin{color:var(--blue);}
+  .wari .wcell.active{background:rgba(46,155,214,.16);border-radius:5px;box-shadow:0 0 0 2px rgba(46,155,214,.55);animation:cellblink 1s steps(2) infinite;}
+  .wari .wcell.reveal{color:var(--red);}
+  .wari .wcell.bar{border-top:5px solid var(--ink);}
+  @keyframes cellblink{50%{opacity:.45;}}
+  .topline{border-top:5px solid var(--ink);}
+  .wcol{display:flex;flex-direction:column;align-items:center;}
+  .wprob{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(18px,5vw,24px);color:var(--ink-soft);margin-bottom:2px;}
+  .divhint{color:var(--blue);font-weight:900;font-size:13px;margin-bottom:6px;}
+  .roundwrap{margin-top:14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(17px,5vw,24px);color:var(--ink);display:flex;align-items:center;justify-content:center;gap:.35em;flex-wrap:wrap;}
+  .roundbox{min-width:1.5em;color:var(--blue);border-bottom:5px solid var(--blue);border-radius:5px;padding:0 .2em;display:inline-flex;justify-content:center;align-items:flex-end;min-height:1.15em;background:rgba(46,155,214,.10);}
+  .roundbox.active{animation:bl 1s steps(2) infinite;}
+  .roundbox.reveal{color:var(--red);}
+  .key.next{background:var(--blue);color:#fff;box-shadow:0 5px 0 var(--blue-deep);font-size:19px;}
+  .key.next:active{transform:translateY(4px);box-shadow:0 1px 0 var(--blue-deep);}
+
   .msg{margin-top:10px;font-weight:900;font-size:17px;min-height:24px;}
   .msg.good{color:var(--green);} .msg.bad{color:var(--red);}
   .reveal{display:none;margin-top:8px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:22px;}
@@ -126,7 +154,8 @@
   .key{border:none;background:var(--card);border-radius:16px;padding:15px 0;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:25px;color:var(--ink);cursor:pointer;box-shadow:0 5px 0 rgba(55,66,74,.14);}
   .key:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.14);}
   .key.del{background:#FDECE9;color:var(--red);box-shadow:0 5px 0 #F3C4BC;font-size:21px;}
-  .key.dot{color:var(--blue);}
+  .key.dotkey{color:var(--blue);}
+  .key.dotkey .dotmark{display:inline-block;width:15px;height:15px;border-radius:50%;background:currentColor;vertical-align:middle;}
   .enter-btn{width:100%;margin-top:10px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:16px;color:#fff;padding:14px 0;font-size:19px;background:var(--green);box-shadow:0 5px 0 var(--green-deep);}
   .enter-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-deep);}
 
@@ -174,7 +203,7 @@
     <div class="mlist" id="mlist"></div>
     <div class="foot"><a href="wsmenu.html">← 小数のわり算 の メニュー</a></div>
     <div class="credit">
-      岐阜女子大学（安藤忠展）　Ver 5.00 ／ Web版
+      岐阜女子大学（安藤忠展）　Ver 5.01 ／ Web版
     </div>
   </section>
 
@@ -199,7 +228,8 @@
       <button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button>
       <button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button>
       <button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button>
-      <button class="key dot" data-k="dot">・</button><button class="key" data-k="0">0</button><button class="key del" data-k="del">⌫</button>
+      <button class="key dotkey" data-k="dot"><span class="dotmark"></span></button><button class="key" data-k="0">0</button><button class="key del" data-k="del">⌫</button>
+      <button class="key next" data-k="next" id="nextKey" style="grid-column:1 / -1;display:none;">つぎへ ▶</button>
     </div>
     <button class="enter-btn" id="enterBtn">こたえあわせ</button>
   </section>
@@ -395,9 +425,115 @@ function updateDots(){ const ch=$("dots").children;
     if(i<S.cur){el.classList.add(it.correct?"ok":"ng");el.textContent=it.correct?"○":"✕";}
     else if(i===S.cur){el.classList.add("now");el.textContent="";} else el.textContent=""; } }
 
+/* ===== 小数の長除法エンジン（除数を整数化→たてる・かける・ひく・おろす、小数点つき） ===== */
+function decimalsOf(s){ const i=s.indexOf('.'); return i<0?0:s.length-i-1; }
+function optsFor(mode){ if(mode===6) return {mode:'round',k:1}; if(mode===7) return {mode:'round',k:0}; return {mode:'exact'}; }
+function buildDivisionDecimal(dvd, dvs, opts){
+  const decDvs=decimalsOf(dvs), b=parseInt(dvs.replace('.',''),10);
+  const dvdInt=dvd.replace('.',''), decDvd=decimalsOf(dvd), newDec=decDvd-decDvs;
+  let dig, dotAt;
+  if(newDec>=0){ dig=dvdInt.split('').map(Number); dotAt=dvdInt.length-newDec; }
+  else { dig=(dvdInt+'0'.repeat(-newDec)).split('').map(Number); dotAt=dig.length; }
+  const maxFrac = opts.mode==='round' ? opts.k+1 : 12;
+  const qcells={}; const bodyRows=[]; const inputs=[];
+  let working=0, started=false, prevDiff=null, i=0, guard=0;
+  while(true){
+    if(++guard>40) break;
+    if(i>=dig.length){ if(working===0) break; if((dig.length-dotAt)>=maxFrac) break; dig.push(0); }
+    working=working*10+dig[i];
+    if(started && i>0 && prevDiff!==null){ const idx=inputs.length; bodyRows[prevDiff].cells.push({col:i,expected:String(dig[i]),kind:'bringdown',idx}); inputs.push({row:prevDiff,col:i,kind:'bringdown',expected:String(dig[i]),idx}); }
+    const qd=Math.floor(working/b);
+    if(qd===0 && !started && i<dotAt-1){ i++; continue; }
+    started=true;
+    { const idx=inputs.length; qcells[i]={col:i,expected:String(qd),idx}; inputs.push({row:'q',col:i,kind:'quotient',expected:String(qd),idx}); }
+    if(qd===0){ i++; continue; }
+    const prod=qd*b, rem=working-prod;
+    const ps=String(prod), pStart=i-(ps.length-1), pRow=bodyRows.length, pc=[];
+    for(let k=0;k<ps.length;k++){ const idx=inputs.length,col=pStart+k; pc.push({col,expected:ps[k],kind:'prod',idx}); inputs.push({row:pRow,col,kind:'prod',expected:ps[k],idx}); }
+    bodyRows.push({kind:'prod',cells:pc});
+    const rs=String(rem), rStart=i-(rs.length-1), dRow=bodyRows.length, dc=[];
+    for(let k=0;k<rs.length;k++){ const idx=inputs.length,col=rStart+k; dc.push({col,expected:rs[k],kind:'diff',idx}); inputs.push({row:dRow,col,kind:'diff',expected:rs[k],idx}); }
+    bodyRows.push({kind:'diff',cells:dc,bar:{start:pStart,end:i}});
+    prevDiff=dRow; working=rem; i++;
+  }
+  const cols=Object.keys(qcells).map(Number).sort((a,b)=>a-b);
+  return {dvd,dvs,dig,dotAt,b,decDvs,qcells,cols,bodyRows,inputs,rem:working,len:dig.length};
+}
+function mkDivD(dvd,dvs,opts){ const D=buildDivisionDecimal(dvd,dvs,opts); D.vals={}; D.step=0; return D; }
+// 入力ずみ商（小数点つき、四捨五入前）
+function rawQuotient(D,fromExpected){
+  const val=(idx)=> fromExpected ? D.inputs[idx].expected : (D.vals[idx]||"");
+  let q=''; const fc=D.cols[0];
+  for(const c of D.cols){ if(c===D.dotAt && D.dotAt>fc) q+='.'; q+=val(D.qcells[c].idx); }
+  if(D.dotAt<=fc){ q='0.'+'0'.repeat(fc-D.dotAt)+q; }
+  return q;
+}
+
+function renderHissan(revealAll){
+  const D=S.div, len=D.len;
+  const val=(idx)=> revealAll ? D.inputs[idx].expected : (D.vals[idx]||"");
+  const act=(idx)=> (!revealAll && idx===D.step);
+  // 小数点：割られる数は「元の位置」、商は「移した後の位置」に表示
+  const origDec = D.dotAt - D.decDvs;   // 割られる数の 元の小数点
+  const movedDec = D.dotAt;             // 移した後（商の小数点の位置）
+  const markers=new Set(); if(D.cols.some(c=>c>=movedDec)) markers.add(movedDec); if(origDec>0 && origDec<=len) markers.add(origDec);
+  const slots=[]; for(let c=0;c<=len;c++){ if(markers.has(c)) slots.push({t:'mk',pos:c}); if(c<len) slots.push({t:'col',col:c}); }
+  const cell=(content,cls,idx)=>`<span class="wcell ${cls||''}"${idx!=null?` data-idx="${idx}"`:""}>${content===""||content==null?"&nbsp;":content}</span>`;
+  // 除数（元のまま・小数点つき）ガター
+  let dvsHtml=`<span class="wleft"><span class="divisor">${D.dvs}</span><span class="rbr">)</span></span>`;
+  let gutter=`<span class="wleft" style="visibility:hidden" aria-hidden="true"><span class="divisor">${D.dvs}</span><span class="rbr">)</span></span>`;
+  // 商の行
+  let qHtml="";
+  for(const s of slots){
+    if(s.t==='mk'){ const showDot = (s.pos===movedDec) && D.cols.some(c=>c>=movedDec); qHtml+=`<span class="wcell dp">${showDot?'<span class="pt"></span>':'&nbsp;'}</span>`; continue; }
+    const qc=D.qcells[s.col];
+    if(qc) qHtml+=cell(val(qc.idx),`cin ${act(qc.idx)?'active':''} ${revealAll?'reveal':''}`,qc.idx);
+    else qHtml+=cell("","");
+  }
+  let html=`<div class="wari num">`;
+  html+=`<div class="wrow qrow">${gutter}<span class="wdigits">${qHtml}</span></div>`;
+  // 割られる数の行（元の小数点を表示）
+  let dHtml="";
+  for(const s of slots){
+    if(s.t==='mk'){
+      const showDot = (s.pos===origDec);
+      dHtml+=`<span class="wcell dp">${showDot?'<span class="pt"></span>':'&nbsp;'}</span>`;
+      continue;
+    }
+    dHtml+=cell(String(D.dig[s.col]),"");
+  }
+  html+=`<div class="wrow">${dvsHtml}<span class="wdigits topline">${dHtml}</span></div>`;
+  // 積・差の行
+  for(const row of D.bodyRows){
+    const cmap={}; for(const cl of row.cells) cmap[cl.col]=cl;
+    let cHtml="";
+    for(const s of slots){
+      if(s.t==='mk'){ cHtml+=`<span class="wcell dp">&nbsp;</span>`; continue; }
+      const c=s.col, cl=cmap[c]; let cls="";
+      if(row.kind==='diff' && row.bar && c>=row.bar.start && c<=row.bar.end) cls+="bar ";
+      if(cl) cHtml+=cell(val(cl.idx),`${cls}cin ${act(cl.idx)?'active':''} ${revealAll?'reveal':''}`,cl.idx);
+      else cHtml+=cell("",cls);
+    }
+    html+=`<div class="wrow">${gutter}<span class="wdigits">${cHtml}</span></div>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+function bindDivTaps(){
+  $("hissan").querySelectorAll(".wari .wcell.cin[data-idx]").forEach(el=>{
+    el.addEventListener("click",()=>{ if(S.locked)return; S.div.step=parseInt(el.dataset.idx,10); S.roundActive=false; draw(); beep("type"); });
+  });
+}
+function showNextKey(){
+  const btn=$("nextKey"); if(!btn) return;
+  const D=S.div;
+  const show = !S.locked && D && D.step<D.inputs.length && D.bodyRows.length>0;
+  btn.style.display = show ? "" : "none";
+}
+
 function render(){
   const it=S.list[S.cur], p=it.p;
-  S.input=""; S.locked=false;
+  S.locked=false;
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").classList.remove("show"); $("reveal").innerHTML="";
   $("stamp").innerHTML="";
@@ -406,21 +542,63 @@ function render(){
   else if(S.mode===6) rw.innerHTML='<div class="rule">四捨五入によって、<span class="fr"><span>1</span><span class="b"></span><span>10</span></span>の位まで 求めましょう！</div>';
   else if(S.mode===7) rw.innerHTML='<div class="rule">四捨五入によって、一の位まで 求めましょう！</div>';
   else rw.innerHTML="";
-  $("hissan").innerHTML='<span class="dvs">'+p.dvs+'</span><span class="par">)</span><span class="dvd">'+p.dvd+'</span>';
-  $("equation").innerHTML='<span>'+p.dvd+'</span><span class="op">÷</span><span>'+p.dvs+'</span><span class="eq">＝</span><span class="ansbox blink" id="ans"></span>';
-  updateDots(); updateBox();
+  S.div=mkDivD(p.dvd,p.dvs,optsFor(S.mode));
+  S.round=(S.mode===6||S.mode===7); S.roundK=(S.mode===6)?1:(S.mode===7?0:null);
+  S.roundInput=""; S.roundActive=false;
+  updateDots(); draw();
 }
-function updateBox(){ const b=$("ans"); if(!b) return;
-  b.textContent=S.input; b.classList.toggle("blink",S.input===""&&!S.locked); }
+function draw(){
+  const D=S.div;
+  const p=S.list[S.cur].p;
+  const prob = '<div class="wprob">'+p.dvd+' ÷ '+p.dvs+'</div>';
+  const hint = D.decDvs>0
+     ? '<div class="divhint">わる数 '+p.dvs+' の 小数点を 右に '+D.decDvs+'つ うつして '+D.b+' に し、わられる数 '+p.dvd+' も おなじだけ うつして 計算します</div>'
+     : '';
+  $("hissan").innerHTML = '<div class="wcol">' + prob + hint + renderHissan(false) + '</div>';
+  if(S.round){
+    const kl = (S.roundK===1) ? '小数第一位まで' : '一の位まで';
+    $("equation").innerHTML =
+      '<div class="roundwrap"><span>四捨五入して（'+kl+'）</span><span class="roundbox '+(S.roundActive?'active':'')+'" id="roundBox">'+(S.roundInput||'')+'</span></div>';
+    const rb=$("equation").querySelector("#roundBox");
+    if(rb) rb.addEventListener("click",function(){ if(S.locked)return; S.roundActive=true; S.div.step=S.div.inputs.length; draw(); beep("type"); });
+  } else { $("equation").innerHTML=""; }
+  bindDivTaps(); showNextKey();
+}
 
 /* ---- キー ---- */
 function pressKey(k){
   if(S.locked){ if(k==="enter") next(); return; }
-  if(k==="del"){ S.input=S.input.slice(0,-1); beep("type"); updateBox(); return; }
+  const D=S.div;
+  // 四捨五入の答え欄に入力中
+  if(S.roundActive){
+    if(k==="del"){ S.roundInput=S.roundInput.slice(0,-1); beep("type"); draw(); return; }
+    if(k==="enter"){ submit(); return; }
+    if(k==="dot"){ if(S.roundInput===""||S.roundInput.indexOf(".")>=0){beep("wrong");return;} S.roundInput+="."; beep("type"); draw(); return; }
+    if(k==="next"){ beep("wrong"); return; }
+    if(S.roundInput.replace(".","").length>=6){ beep("wrong"); return; }
+    S.roundInput+=k; beep("type"); draw(); return;
+  }
+  // 筆算の段階入力（たてる・かける・ひく・おろす）
+  if(k==="del"){
+    if(D.step>0){ D.step--; D.vals[D.inputs[D.step].idx]=""; draw(); beep("type"); }
+    else if((D.vals[D.inputs[0].idx]||"")!==""){ D.vals[D.inputs[0].idx]=""; draw(); beep("type"); }
+    return;
+  }
   if(k==="enter"){ submit(); return; }
-  if(k==="dot"){ if(S.input===""||S.input.indexOf(".")>=0) return; S.input+="."; beep("type"); updateBox(); return; }
-  if(S.input.replace(".","").length>=6) return;
-  S.input+=k; beep("type"); updateBox();
+  if(k==="next"){                       // 全部入れなくても つぎの段へ
+    if(D.step>=D.inputs.length){ if(S.round){S.roundActive=true; draw();} else beep("wrong"); return; }
+    const curRow=D.inputs[D.step].row; let idx=-1;
+    for(let j=D.step+1;j<D.inputs.length;j++){ if(D.inputs[j].row!==curRow){ idx=j; break; } }
+    if(idx>=0){ D.step=idx; draw(); beep("type"); }
+    else if(S.round){ S.roundActive=true; draw(); beep("type"); }
+    else beep("wrong");
+    return;
+  }
+  if(k==="dot"){ beep("wrong"); return; }   // 商の小数点は 自動で 表示（入力しない）
+  if(D.step>=D.inputs.length){ if(S.round){ S.roundActive=true; draw(); } return; }
+  D.vals[D.inputs[D.step].idx]=k; D.step++;
+  if(D.step>=D.inputs.length && S.round) S.roundActive=true;
+  beep("type"); draw();
 }
 $("keypad").addEventListener("click",function(e){const b=e.target.closest(".key"); if(b) pressKey(b.dataset.k);});
 $("enterBtn").addEventListener("click",function(){pressKey("enter");});
@@ -443,25 +621,36 @@ function missType(ans,correct,isLast){
 }
 function submit(){
   if(S.locked) return;
-  const it=S.list[S.cur], correct=it.p.ans;
-  if(S.input===""||S.input==="."){ beep("wrong"); return; }
+  const it=S.list[S.cur], p=it.p, correct=p.ans, D=S.div;
+  let allCells=true;
+  for(const inp of D.inputs){ if((D.vals[inp.idx]||"")!==inp.expected){ allCells=false; break; } }
+  let ok, userStr;
+  if(S.round){ userStr=S.roundInput; ok = allCells && (S.roundInput===correct); }
+  else { userStr=rawQuotient(D,false); ok = allCells && (userStr===correct); }
   it.tries++;
-  if(S.input===correct){
-    S.locked=true; it.correct=true; it.user=S.input;
+  const last=it.tries>=MAXTRY;
+  if(ok){
+    S.locked=true; it.correct=true; it.user=userStr;
+    { const b=$("nextKey"); if(b) b.style.display="none"; }
     stamp("maru"); beep("correct");
     $("msg").textContent="せいかい！"; $("msg").className="msg good";
     setTimeout(next,1100);
   } else {
     stamp("batsu"); beep("wrong");
-    const last=it.tries>=MAXTRY;
-    $("msg").textContent=MISSMSG[missType(S.input,correct,last)];
-    $("msg").className="msg bad";
+    const shown = S.round ? (S.roundInput||"?") : (userStr||"?");
+    $("msg").textContent=MISSMSG[missType(shown,correct,last)]; $("msg").className="msg bad";
+    { const b=$("nextKey"); if(b) b.style.display="none"; }
     if(last){
-      S.locked=true; it.correct=false; it.user=S.input;
+      S.locked=true; it.correct=false; it.user=userStr;
+      const prob = '<div class="wprob">'+p.dvd+' ÷ '+p.dvs+'</div>';
+      const hint = D.decDvs>0 ? '<div class="divhint">小数点を 右に '+D.decDvs+'つ うつして 計算します</div>' : '';
+      $("hissan").innerHTML = '<div class="wcol">' + prob + hint + renderHissan(true) + '</div>';
+      if(S.round){ const kl=(S.roundK===1)?'小数第一位':'一の位'; $("equation").innerHTML='<div class="roundwrap"><span>四捨五入（'+kl+'）</span><span class="roundbox reveal">'+correct+'</span></div>'; }
+      else $("equation").innerHTML="";
       $("reveal").innerHTML='こたえは <b>'+correct+'</b> だよ'; $("reveal").classList.add("show");
       setTimeout(next,2300);
     } else {
-      setTimeout(function(){ $("stamp").innerHTML=""; $("msg").textContent=""; S.input=""; updateBox(); },1000);
+      setTimeout(function(){ $("stamp").innerHTML=""; $("msg").textContent=""; S.div.vals={}; S.div.step=0; S.roundInput=""; S.roundActive=false; draw(); },1000);
     }
   }
 }

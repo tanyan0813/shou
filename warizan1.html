@@ -128,6 +128,8 @@
   .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
   .key.enter{background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:20px;}
   .key.enter:active{box-shadow:0 1px 0 #279862;}
+  .key.next{grid-column:1 / -1;background:var(--blue);color:#fff;box-shadow:0 5px 0 #1F7CAE;font-size:20px;}
+  .key.next:active{box-shadow:0 1px 0 #1F7CAE;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
@@ -169,7 +171,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -209,6 +211,7 @@
       <button class="key del" data-k="del">⌫</button>
       <button class="key" data-k="0">0</button>
       <button class="key enter" data-k="enter">こたえ</button>
+      <button class="key next" data-k="next" id="nextKey" style="display:none;">つぎへ ▶</button>
     </div>
   </section>
 
@@ -376,6 +379,15 @@ function renderEquation(){
   eq.querySelectorAll(".ansbox").forEach(box=>{
     box.addEventListener("click",()=>{ if(state.locked) return; state.activeField=parseInt(box.dataset.f); renderEquation(); });
   });
+  updateNextKey();
+}
+
+// 「つぎへ」ボタンは あまりのある問題で、商（1つ目）を入力しているときだけ 表示
+function updateNextKey(){
+  const btn=$("nextKey"); if(!btn) return;
+  const p=state.problems[state.current];
+  const show = p && p.rem && state.activeField===1;
+  btn.style.display = show ? "" : "none";
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
@@ -388,10 +400,21 @@ function maxLenField(f){
 
 function pressKey(k){
   if(state.locked) return;
+  const p=state.problems[state.current];
   const f=state.activeField;
   const cur = f===1 ? state.inputQ : state.inputR;
   if(k==="del"){
-    if(cur.length){ if(f===1) state.inputQ=cur.slice(0,-1); else state.inputR=cur.slice(0,-1); renderEquation(); beep("tap"); }
+    if(cur.length){
+      if(f===1) state.inputQ=cur.slice(0,-1); else state.inputR=cur.slice(0,-1);
+      renderEquation(); beep("tap");
+    } else if(f===2 && p.rem){
+      state.activeField=1; renderEquation(); beep("tap");   // あまりが空でBS → 商へ もどる
+    }
+    return;
+  }
+  if(k==="next"){
+    if(p.rem && f===1 && state.inputQ!==""){ state.activeField=2; renderEquation(); beep("tap"); }
+    else beep("wrong");
     return;
   }
   if(k==="enter"){ onEnter(); return; }

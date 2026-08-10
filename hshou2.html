@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>小数の かけざん の れんしゅう ②（ひっさん）</title>
+<title>小数の ひきざん の れんしゅう ②</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800;900&display=swap" rel="stylesheet">
@@ -36,17 +36,7 @@
   .logo b{font-size:18px;font-weight:900;letter-spacing:.02em;}
   .logo .step{font-size:12px;font-weight:700;color:var(--ink-soft);}
   .tools{display:flex;gap:8px;}
-  .icon-btn{
-    border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;
-    color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;
-    display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
-  }
-  .icon-btn.text-btn{
-    width:auto;
-    padding:0 12px;
-    font-size:13px;
-    font-weight:700;
-  }
+  .icon-btn{border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;}
   .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
 
   .screen{display:none;animation:pop .3s ease;}
@@ -58,10 +48,10 @@
   .title-card h1{margin:6px 0 2px;font-size:clamp(26px,7vw,42px);font-weight:900;color:var(--teal);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #BEE7EA;}
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
   .title-card .tag{color:var(--teal-deep);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
-  .mini-fig{display:inline-flex;flex-direction:column;align-items:flex-end;gap:2px;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:24px;color:var(--ink);position:relative;}
-  .mini-fig .op{color:var(--red);}
-  .mini-fig .ln{height:3px;width:100%;background:var(--ink);border-radius:2px;margin:2px 0;}
-  .mini-fig .ans{color:var(--teal);}
+  .demo{display:inline-flex;align-items:center;gap:.12em;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:28px;color:var(--ink);position:relative;}
+  .demo .op{color:var(--red);}
+  .demo .eq{color:var(--ink-soft);}
+  .demo .ans{color:var(--teal);}
   .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
   .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--teal);box-shadow:0 5px 0 var(--teal-deep);transition:transform .08s, box-shadow .08s;}
@@ -75,14 +65,18 @@
   .menu-head h2{font-size:20px;font-weight:900;margin:0;}
   .menu-head p{margin:0;color:var(--ink-soft);font-weight:700;font-size:13px;}
   .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-  @media(min-width:640px){.menu-grid{grid-template-columns:repeat(4,1fr);}}
-  .mode-card{background:var(--card);border-radius:18px;padding:16px 10px 12px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
+  @media(min-width:640px){.menu-grid{grid-template-columns:repeat(3,1fr);}}
+  .mode-card{background:var(--card);border-radius:18px;padding:18px 12px 14px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
   .mode-card:hover{transform:translateY(-3px);}
   .mode-card:active{transform:translateY(1px);box-shadow:0 3px 0 rgba(55,66,74,.10);}
-  .mode-card .no{position:absolute;top:-9px;left:-9px;width:28px;height:28px;border-radius:50%;background:var(--yellow);color:#7A5410;font-weight:900;display:grid;place-items:center;font-size:14px;box-shadow:0 3px 0 #D89A2C;transform:rotate(-6deg);}
-  .mode-card .ex{font-size:17px;font-weight:900;color:var(--ink);line-height:1.1;margin:6px 0 5px;min-height:22px;}
+  .mode-card .no{position:absolute;top:-9px;left:-9px;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#7A5410;font-weight:900;display:grid;place-items:center;font-size:15px;box-shadow:0 3px 0 #D89A2C;transform:rotate(-6deg);}
+  .mode-card .ex{font-size:20px;font-weight:900;color:var(--ink);line-height:1.1;margin:6px 0 6px;}
   .mode-card .ex .op{color:var(--red);}
-  .mode-card .lbl{font-size:11px;color:var(--ink-soft);font-weight:700;line-height:1.35;}
+  .mode-card .lbl{font-size:12px;color:var(--ink-soft);font-weight:700;line-height:1.35;}
+  .mode-card.home{display:block;text-decoration:none;background:#EAF7F8;}
+  .mode-card.home .no{background:var(--teal);color:#fff;box-shadow:0 3px 0 var(--teal-deep);font-size:15px;}
+  .mode-card.home .ex{color:var(--teal-deep);font-size:26px;}
+  .mode-card.home .lbl{color:var(--teal-deep);font-size:13px;}
 
   .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
   .chip{background:var(--card);border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;box-shadow:0 3px 0 rgba(55,66,74,.10);display:inline-flex;align-items:center;gap:6px;}
@@ -95,33 +89,27 @@
   .dot.ng{background:var(--red);}
   .dot.now{background:var(--yellow);box-shadow:0 0 0 3px rgba(246,185,59,.35);}
 
-  .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .board .bracket{color:var(--ink-soft);font-weight:700;font-size:13px;min-height:18px;margin-bottom:8px;}
+  .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:26px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .board .bracket{color:var(--ink-soft);font-weight:700;font-size:13px;min-height:18px;margin-bottom:6px;}
+  .equation{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(30px,10vw,56px);line-height:1;display:flex;align-items:center;justify-content:center;gap:.14em;flex-wrap:wrap;color:var(--ink);}
+  .equation .op{color:var(--red);}
+  .equation .eq{color:var(--ink-soft);}
+  .ansbox{min-width:1.6em;min-height:1.05em;padding:0 .12em;border-bottom:6px solid var(--teal);color:var(--teal);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;}
+  .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--blue);min-height:20px;}
 
-  /* 小数のかけ算の筆算（右そろえ） */
-  .dfig{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(26px,8.5vw,46px);line-height:1;color:var(--ink);}
-  .drow{display:flex;align-items:flex-end;justify-content:flex-end;}
-  .drow.mul{justify-content:space-between;}
-  .dop{width:.9em;text-align:center;color:var(--red);flex:none;}
-  .dtxt{letter-spacing:.02em;}
-  .dline{height:5px;background:var(--ink);border-radius:3px;margin:5px 0;}
-  .ansbox2{display:inline-flex;justify-content:flex-end;align-items:flex-end;color:var(--teal);border-bottom:6px solid var(--teal);border-radius:4px;padding:0 .06em;min-height:1.1em;}
-  .ansbox2.reveal{color:var(--red);}
-
-  .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--green);min-height:20px;}
-  .msg{margin-top:8px;font-weight:900;font-size:18px;min-height:26px;}
-  .msg.good{color:var(--green);}
-  .msg.bad{color:var(--red);}
-  .reveal{display:none;margin-top:8px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:20px;color:var(--ink);}
-  .reveal.show{display:block;animation:pop .3s ease;}
-  .reveal b{color:var(--red);}
-
-  .stamp{position:absolute;top:44%;left:50%;pointer-events:none;z-index:3;}
-  .stamp svg{display:block;width:140px;height:140px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
+  .stamp{position:absolute;top:50%;left:50%;pointer-events:none;z-index:3;}
+  .stamp svg{display:block;width:150px;height:150px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
   .stamp.maru{animation:stampin .45s cubic-bezier(.2,1.5,.4,1) both;}
   .stamp.batsu{animation:shake .5s ease both;}
   @keyframes stampin{0%{transform:translate(-50%,-50%) scale(2.4) rotate(-25deg);opacity:0;}60%{opacity:1;}100%{transform:translate(-50%,-50%) scale(1) rotate(-8deg);opacity:1;}}
   @keyframes shake{0%{transform:translate(-50%,-50%) scale(1.4);opacity:0;}20%{opacity:1;}30%{transform:translate(-53%,-50%) rotate(-6deg);}45%{transform:translate(-47%,-50%) rotate(6deg);}60%{transform:translate(-52%,-50%) rotate(-4deg);}75%{transform:translate(-48%,-50%) rotate(3deg);}100%{transform:translate(-50%,-50%) rotate(0);opacity:1;}}
+
+  .msg{margin-top:8px;font-weight:900;font-size:18px;min-height:26px;}
+  .msg.good{color:var(--green);}
+  .msg.bad{color:var(--red);}
+  .reveal{display:none;margin-top:10px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:22px;color:var(--ink);}
+  .reveal.show{display:block;animation:pop .3s ease;}
+  .reveal b{color:var(--red);}
 
   .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px;}
   .key{border:none;background:var(--card);border-radius:16px;width:100%;height:62px;padding:0;display:flex;align-items:center;justify-content:center;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:28px;color:var(--ink);cursor:pointer;box-shadow:0 5px 0 rgba(55,66,74,.14);transition:transform .06s, box-shadow .06s;}
@@ -140,8 +128,8 @@
   .result-msg{font-weight:900;font-size:24px;margin:6px 0 8px;color:var(--green);}
   .hanamaru-wrap{height:130px;display:grid;place-items:center;margin:2px 0 6px;}
   .time-line{color:var(--ink-soft);font-weight:700;font-size:14px;margin-bottom:16px;}
-  .review{display:flex;flex-direction:column;gap:8px;text-align:left;margin:0 auto 22px;max-width:470px;}
-  .review-row{display:flex;align-items:center;gap:12px;background:#F7FAF9;border-radius:14px;padding:10px 14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:17px;}
+  .review{display:flex;flex-direction:column;gap:8px;text-align:left;margin:0 auto 22px;max-width:460px;}
+  .review-row{display:flex;align-items:center;gap:12px;background:#F7FAF9;border-radius:14px;padding:10px 14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:19px;}
   .review-row .rmark{width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:50%;font-size:18px;color:#fff;}
   .review-row .rmark.ok{background:var(--green);}
   .review-row .rmark.ng{background:var(--red);}
@@ -156,29 +144,21 @@
 <body>
 <div class="app">
   <header class="bar">
-    <div class="logo"><span class="pin">×</span><div><b>小数の かけざん</b><br><span class="step">ステップ２・小数の ひっさん</span></div></div>
-    <div class="tools">
-      <a href="ksmenu.html" class="icon-btn text-btn" title="はじめのメニュー">🏠 メニュー</a>
-      <button class="icon-btn" id="soundBtn" title="おと">🔊</button>
-    </div>
+    <div class="logo"><span class="pin">0.01</span><div><b>小数の ひきざん</b><br><span class="step">ステップ２・小数第二位</span></div></div>
+    <div class="tools"><button class="icon-btn" id="soundBtn" title="おと">🔊</button></div>
   </header>
 
   <!-- TITLE -->
   <section class="screen active" id="titleScreen">
     <div class="title-card">
-      <h1>小数の かけざん ②</h1>
-      <div class="sub">小数 × せいすう ／ 小数 × 小数</div>
-      <div class="tag">小数点の いちに 気をつけよう！</div>
-      <div class="mini-fig num">
-        <div>3.14</div>
-        <div><span class="op">×</span>&nbsp;&nbsp;&nbsp;6</div>
-        <div class="ln"></div>
-        <div class="ans">18.84</div>
-      </div>
+      <h1>小数の ひきざん ②</h1>
+      <div class="sub">小数第二位・けたちがい・1からひく</div>
+      <div class="tag">位を そろえて ひこう！</div>
+      <div class="demo num"><span>0.25</span><span class="op">−</span><span>0.12</span><span class="eq">＝</span><span class="ans">0.13</span></div>
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
+        岐阜女子大学（安藤忠展）　Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -199,7 +179,7 @@
     </div>
     <div class="board" id="board">
       <div class="bracket" id="bracket"></div>
-      <div id="problemArea"></div>
+      <div class="equation num" id="equation"></div>
       <div class="prompt" id="prompt"></div>
       <div class="msg" id="msg"></div>
       <div class="reveal" id="reveal"></div>
@@ -240,60 +220,59 @@
 
 <script>
 /* =========================================================
-   小数の かけざん の れんしゅう ②（ひっさん）  —  Web版
-   原作: N88-BASIC "KSHOU2.BAS" Ver 3.02 のロジックを移植
+   小数の ひきざん の れんしゅう ②  —  Web版
+   原作: N88-BASIC "HSHOU2.BAS" Ver 3.02 のロジックを移植
+   （6.8−2.5 ／ 0.25−0.12 ／ 0.2−0.01 ／ 0.49−0.3 ／ 1−0.25）
    ========================================================= */
 
 const MODES = [
-  { ex:"7.8 × 4",     bracket:"小数第一位 × 1けた",       menu:1  },
-  { ex:"0.28 × 4",    bracket:"小数第二位 × 1けた",       menu:2  },
-  { ex:"0.028 × 4",   bracket:"小数第三位 × 1けた",       menu:3  },
-  { ex:"3.14 × 6",    bracket:"1より 大きい 小数 × 1けた", menu:4  },
-  { ex:"0.714 × 6",   bracket:"小数第三位 × 1けた",       menu:5  },
-  { ex:"2.35 × 4",    bracket:"末が 5 の 小数 × 1けた",   menu:6  },
-  { ex:"5.2 × 43",    bracket:"小数第一位 × 2けた",       menu:7  },
-  { ex:"0.12 × 43",   bracket:"小数第二位 × 2けた",       menu:8  },
-  { ex:"0.012 × 43",  bracket:"小数第三位 × 2けた",       menu:9  },
-  { ex:"26.4 × 83",   bracket:"2けたの 小数 × 2けた",     menu:10 },
-  { ex:"2.64 × 83",   bracket:"小数第二位 × 2けた",       menu:11 },
-  { ex:"0.903 × 4.1", bracket:"小数 × 小数",              menu:12 },
+  { ex:"6.8 − 2.5",   bracket:"小数第一位どうし",        menu:1 },
+  { ex:"0.25 − 0.12", bracket:"小数第二位どうし",        menu:2 },
+  { ex:"0.2 − 0.01",  bracket:"けたの ちがう 小数",      menu:3 },
+  { ex:"0.49 − 0.3",  bracket:"けたの ちがう 小数",      menu:4 },
+  { ex:"1 − 0.25",    bracket:"1 から ひく",             menu:5 },
 ];
 
 const PROBLEMS_PER_ROUND = 5;
 const MAX_TRIES = 3;
 const rnd = () => Math.random();
 const fix = (x) => Math.trunc(x);
-const d1 = ()=> fix(8.9*rnd()+1);
+const pad2 = (n)=> n<10 ? "0"+n : String(n);
 
-// 整数 P に 小数点を dec けた 入れる（末の0は とる）
-function place(P, dec){
-  let s=String(P).padStart(dec+1,"0");
-  let ip=s.slice(0, s.length-dec), fp=dec?s.slice(s.length-dec):"";
-  fp=fp.replace(/0+$/,"");
-  return fp ? `${ip}.${fp}` : ip;
-}
-// 表示用（末の0も のこす）
-function showNum(P, dec){
-  const s=String(P).padStart(dec+1,"0");
-  return dec ? s.slice(0,s.length-dec)+"."+s.slice(s.length-dec) : s;
-}
-
-// --- 原作の乱数生成を忠実に移植（KSHOU2 の D.SET.1〜12）---
+// --- 原作の乱数生成を忠実に移植（HSHOU2 の D.SET.1〜5）---
 function generatePair(menu){
-  let A,decA,B,decB;
-  if(menu===1){ let a,b,c; do{ a=d1(); b=fix(7.9*rnd()+2); c=d1(); }while((b*c)%10===0); A=10*a+c; decA=1; B=b; decB=0; }
-  else if(menu===2){ let a,b,c; do{ a=d1(); b=d1(); c=d1(); }while((b*c)%10===0); A=10*a+c; decA=2; B=b; decB=0; }
-  else if(menu===3){ let a,b,c; do{ a=d1(); b=d1(); c=d1(); }while((b*c)%10===0); A=10*a+c; decA=3; B=b; decB=0; }
-  else if(menu===4){ let a,b,c,P; do{ a=d1(); b=d1(); c=d1(); P=d1(); }while((b*c)%10===0); A=100*P+10*a+c; decA=2; B=b; decB=0; }
-  else if(menu===5){ const b=d1(), P=d1(), c=d1(), a=d1(); A=100*P+10*a+c; decA=3; B=b; decB=0; }
-  else if(menu===6){ let a,b,P; do{ a=d1(); b=d1(); P=d1(); }while(((10*a+5)*b)%100===0); A=100*P+10*a+5; decA=2; B=b; decB=0; }
-  else if(menu===7){ let a,b,c,e; do{ a=d1(); b=d1(); c=d1(); e=d1(); }while((c*e)%10===0); A=10*a+c; decA=1; B=10*b+e; decB=0; }
-  else if(menu===8){ let a,b,c,e; do{ a=d1(); b=d1(); c=d1(); e=d1(); }while((c*e)%10===0); A=10*a+c; decA=2; B=10*b+e; decB=0; }
-  else if(menu===9){ let a,b,c,e; do{ a=d1(); b=d1(); c=d1(); e=d1(); }while((c*e)%10===0); A=10*a+c; decA=3; B=10*b+e; decB=0; }
-  else if(menu===10){ let a,b,c,e,P; do{ a=d1(); b=d1(); c=d1(); e=d1(); P=d1(); }while((c*e)%10===0); A=100*P+10*a+c; decA=1; B=10*b+e; decB=0; }
-  else if(menu===11){ let a,b,c,e,P; do{ a=d1(); b=d1(); c=d1(); e=d1(); P=d1(); }while((c*e)%10===0); A=100*P+10*a+c; decA=2; B=10*b+e; decB=0; }
-  else { let a,b,c,e; do{ a=d1(); b=d1(); c=d1(); e=d1(); }while((c*e)%10===0); A=100*a+c; decA=3; B=10*b+e; decB=1; }
-  return { dispA:showNum(A,decA), dispB:showNum(B,decB), canonical:place(A*B, decA+decB) };
+  if(menu===1){                       // a.c − b.d
+    let a,b,c,d;
+    while(true){
+      a=fix(7.9*rnd()+2); b=fix(8.9*rnd()+1); if(a<b) continue;
+      do{ c=fix(8.9*rnd()+1); d=fix(8.9*rnd()+1); }while(c===d);
+      if(10*(a-b)+c-d<=0) continue;
+      break;
+    }
+    const s=pad2(10*(a-b)+c-d);
+    return { dispA:`${a}.${c}`, dispB:`${b}.${d}`, canonical:s[0]+"."+s[1] };
+  }
+  if(menu===2){                       // 0.ac − 0.bd
+    let a,b,c,d;
+    while(true){
+      a=fix(8.9*rnd()+1); b=fix(8.9*rnd()+1); if(a<b) continue;
+      do{ c=fix(8.9*rnd()+1); d=fix(8.9*rnd()+1); }while(c===d);
+      if(10*(a-b)+c-d<=0) continue;
+      break;
+    }
+    return { dispA:`0.${a}${c}`, dispB:`0.${b}${d}`, canonical:"0."+pad2(10*(a-b)+c-d) };
+  }
+  if(menu===3){                       // 0.a − 0.0b
+    const a=fix(8.9*rnd()+1), b=fix(8.9*rnd()+1);
+    return { dispA:`0.${a}`, dispB:`0.0${b}`, canonical:"0."+pad2(10*a-b) };
+  }
+  if(menu===4){                       // 0.ac − 0.b （位ちがいの ひっかけ判定つき）
+    let a,b; do{ a=fix(8.9*rnd()+1); b=fix(8.9*rnd()+1); }while(a<b);
+    const c=fix(8.9*rnd()+1);
+    return { dispA:`0.${a}${c}`, dispB:`0.${b}`, canonical:"0."+pad2(10*(a-b)+c), trap:"0."+(10*a+c-b) };
+  }
+  const b=fix(8.9*rnd()+1), d=fix(8.9*rnd()+1);   // 1 − 0.bd
+  return { dispA:"1", dispB:`0.${b}${d}`, canonical:"0."+pad2(100-10*b-d) };
 }
 
 function buildRound(modeIndex){
@@ -312,7 +291,8 @@ const MSG = {
   perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
   miss0:"まちがってますよ！", miss1:"もういちど かんがえよう！",
   miss2:"０ が よぶんです！", miss3:"小数点の いちが ちがいます！",
-  prompt:"ノートで けいさんして こたえましょう！",
+  miss4:"位を そろえて ひいて いますか？",
+  prompt:"ただしい こたえを いれましょう。",
 };
 
 let state = { modeIndex:0, problems:[], current:0, input:"", locked:false, startTime:0, soundOn:true };
@@ -338,11 +318,18 @@ function buildMenu(){
   const grid=$("menuGrid"); grid.innerHTML="";
   MODES.forEach((m,i)=>{
     const btn=document.createElement("button"); btn.className="mode-card";
-    const exHtml=m.ex.replace(/×/g,'<span class="op">×</span>');
+    const exHtml=m.ex.replace(/−/g,'<span class="op">−</span>');
     btn.innerHTML=`<span class="no num">${i+1}</span><div class="ex num">${exHtml}</div><div class="lbl">${m.bracket}</div>`;
     btn.addEventListener("click",()=>{ beep("tap"); startRound(i); });
     grid.appendChild(btn);
   });
+  // はじめのメニュー（hsmenu.html）へ もどる
+  const home=document.createElement("a");
+  home.className="mode-card home";
+  home.href="hsmenu.html";
+  home.innerHTML=`<span class="no">🏠</span><div class="ex">🏠</div><div class="lbl">はじめのメニューに戻る</div>`;
+  home.addEventListener("click",()=>{ beep("tap"); });
+  grid.appendChild(home);
 }
 
 function startRound(modeIndex){
@@ -371,38 +358,23 @@ function renderProblem(){
   const m=MODES[state.modeIndex];
   state.input=""; state.locked=false;
   $("bracket").textContent="［"+m.bracket+"］";
+  $("equation").innerHTML=`<span>${p.dispA}</span><span class="op">−</span><span>${p.dispB}</span><span class="eq">＝</span><span class="ansbox" id="ansbox"></span>`;
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal"; $("reveal").innerHTML="";
   $("stamp").innerHTML="";
-  renderFigure();
-  setKeypad(true); updateDots();
+  setKeypad(true); updateDots(); updateAnsbox();
 }
-
-function renderFigure(revealAll){
-  const p=state.problems[state.current];
-  const ansStr = revealAll ? p.canonical : (state.input||"");
-  const w = Math.max(p.dispA.length, p.dispB.length+1, p.canonical.length) + 0.4;
-  const lineW = (w*0.62)+"em";
-  const html =
-    `<div class="dfig num">`+
-      `<div class="drow"><span class="dop">&nbsp;</span><span class="dtxt">${p.dispA}</span></div>`+
-      `<div class="drow mul"><span class="dop">×</span><span class="dtxt">${p.dispB}</span></div>`+
-      `<div class="drow"><span class="dline" style="width:${lineW}"></span></div>`+
-      `<div class="drow"><span class="ansbox2 ${revealAll?'reveal':''}" style="min-width:${lineW}">${ansStr}</span></div>`+
-    `</div>`;
-  $("problemArea").innerHTML=html;
-}
-
+function updateAnsbox(){ const box=$("ansbox"); if(box) box.textContent=state.input; }
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
 function pressKey(k){
   if(state.locked) return;
-  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); renderFigure(); beep("tap"); } return; }
+  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); updateAnsbox(); beep("tap"); } return; }
   if(k==="enter"){ submit(); return; }
-  if(k==="."){ if(state.input.includes(".")||state.input==="") { beep("wrong"); return; } state.input+="."; beep("tap"); renderFigure(); return; }
-  if(state.input.length>=8) return;
-  state.input+=k; beep("tap"); renderFigure();
+  if(k==="."){ if(state.input.includes(".")||state.input==="") { beep("wrong"); return; } state.input+="."; beep("tap"); updateAnsbox(); return; }
+  if(state.input.length>=6) return;
+  state.input+=k; beep("tap"); updateAnsbox();
 }
 function submit(){
   if(state.locked) return;
@@ -410,25 +382,27 @@ function submit(){
   const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
   if(state.input===p.canonical) onCorrect(p);
-  else onWrong(p, classify(state.input, p.canonical));
+  else onWrong(p, classify(state.input, p));
 }
 
-// 原作 MISS.TYPE を移植：小数点・0 のまちがいを こまかく はんてい
-function classify(typed, canonical){
+// 原作 MISS.TYPE を移植：小数点・0・位ちがい を こまかく はんてい
+function classify(typed, p){
+  const canonical=p.canonical;
+  if(p.trap && typed===p.trap) return 4;                             // 位を そろえていない
   let r=typed;
   while(r.length && (r[r.length-1]==="0" || r[r.length-1]===".")){    // 2: 0が よぶん
     r=r.slice(0,-1);
     if(r===canonical) return 2;
   }
-  const digits=(s)=>parseInt((s.replace(".","").replace(/^0+/,"").replace(/0+$/,"")||"0"),10);
-  if(digits(typed)===digits(canonical)) return 3;                     // 3: 小数点の いちが ちがう
+  const nzc=parseInt((canonical.replace(".","").replace(/^0+/,"").replace(/0+$/,"")||"0"),10);
+  const nza=parseInt((typed.replace(".","").replace(/^0+/,"").replace(/0+$/,"")||"0"),10);
+  if(nzc===nza) return 3;                                            // 3: 小数点の いちが ちがう
   return 1;
 }
 
 function onCorrect(p){
   p.correct=true; p.userAns=p.canonical;
-  const box=$("problemArea").querySelector(".ansbox2");
-  if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
+  const box=$("ansbox"); if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
   beep("correct"); setTimeout(nextProblem,1100);
@@ -436,18 +410,17 @@ function onCorrect(p){
 function onWrong(p, missType){
   p.tries+=1; showStamp("batsu"); beep("wrong");
   const msg=$("msg");
-  const MISS={0:MSG.miss0,1:MSG.miss1,2:MSG.miss2,3:MSG.miss3};
+  const MISS={0:MSG.miss0,1:MSG.miss1,2:MSG.miss2,3:MSG.miss3,4:MSG.miss4};
   if(p.tries>=MAX_TRIES){
     let mt=(missType===1)?0:missType;
     msg.textContent=MISS[mt]; msg.className="msg bad";
     p.correct=false; p.userAns=state.input;
-    renderFigure(true);
-    $("reveal").innerHTML=`こたえは ${p.dispA}×${p.dispB}＝ <b>${p.canonical}</b>`;
+    $("reveal").innerHTML=`こたえは ${p.dispA}−${p.dispB}＝ <b>${p.canonical}</b>`;
     $("reveal").classList.add("show");
-    setTimeout(nextProblem,2400);
+    setTimeout(nextProblem,2300);
   }else{
     msg.textContent=MISS[missType]; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); renderFigure(); $("msg").textContent=""; $("msg").className="msg"; },1100);
+    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); updateAnsbox(); $("msg").textContent=""; $("msg").className="msg"; },1100);
   }
 }
 function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }
@@ -478,7 +451,7 @@ function finishRound(){
     const row=document.createElement("div"); row.className="review-row";
     let ansHtml=p.correct?`<span class="rc">${p.canonical}</span>`:`<span class="ra wrong">${p.userAns!==""?p.userAns:"―"}</span><span class="rc">${p.canonical}</span>`;
     row.innerHTML=`<span class="rmark ${p.correct?'ok':'ng'}">${p.correct?'○':'✕'}</span>`+
-      `<span class="rq num">${p.dispA}<span class="op">×</span>${p.dispB}<span class="op">＝</span></span>`+
+      `<span class="rq num">${p.dispA}<span class="op">−</span>${p.dispB}<span class="op">＝</span></span>`+
       `<span class="num">${ansHtml}</span>`;
     rv.appendChild(row);
   });

@@ -49,9 +49,11 @@
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
   .title-card .tag{color:var(--violet);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
   .mini-hissan{display:inline-flex;flex-direction:column;align-items:flex-end;gap:3px;margin:6px auto 20px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;}
-  .mini-hissan .ln{height:4px;width:100%;background:var(--ink);border-radius:2px;}
-  .mini-hissan .op{color:var(--red);}
-  .mini-hissan .ans{color:var(--violet);}
+  .mini-hissan .mrow{display:flex;justify-content:flex-end;align-items:center;}
+  .mini-hissan .mcell{width:.9em;text-align:center;}
+  .mini-hissan .mop{width:.9em;text-align:center;color:var(--red);}
+  .mini-hissan .ln{height:4px;width:100%;background:var(--ink);border-radius:2px;margin:2px 0;}
+  .mini-hissan .ans .mcell{color:var(--violet);}
   .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
   /* メニュー戻るボタン用の追加スタイル */
@@ -182,10 +184,10 @@
       <div class="sub">×10・×100・2けた・3けた・ひっさん</div>
       <div class="tag">いろいろな かけざんに ちょうせん！</div>
       <div class="mini-hissan num">
-        <div>２４</div>
-        <div><span class="op">×</span>３８</div>
+        <div class="mrow"><span class="mop"></span><span class="mcell"></span><span class="mcell">2</span><span class="mcell">4</span></div>
+        <div class="mrow"><span class="mop">×</span><span class="mcell"></span><span class="mcell">3</span><span class="mcell">8</span></div>
         <div class="ln"></div>
-        <div class="ans">912</div>
+        <div class="mrow ans"><span class="mop"></span><span class="mcell">9</span><span class="mcell">1</span><span class="mcell">2</span></div>
       </div>
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>

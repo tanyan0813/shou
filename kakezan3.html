@@ -108,6 +108,8 @@
   .hcell.blank{color:#D8DEDC;}
   .hrow.hanswer .hcell.blank{color:#DED6F5;}
   .hrow.reveal-row .hcell{color:var(--red);}
+  @keyframes hblink{50%{opacity:.4;}}
+  .hrow.hanswer .hcell.active{background:rgba(246,185,59,.5);border-radius:5px;box-shadow:0 0 0 2px rgba(246,185,59,.6);animation:hblink 1s steps(2) infinite;}
 
   .stamp{position:absolute;top:50%;left:50%;pointer-events:none;z-index:3;}
   .stamp svg{display:block;width:150px;height:150px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
@@ -131,6 +133,8 @@
   .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
   .key.enter{background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:22px;}
   .key.enter:active{box-shadow:0 1px 0 #279862;}
+  .key.next{grid-column:1 / -1;background:var(--blue);color:#fff;box-shadow:0 5px 0 #1F7CAE;font-size:22px;}
+  .key.next:active{box-shadow:0 1px 0 #1F7CAE;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
@@ -180,7 +184,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）　Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）　Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -220,6 +224,7 @@
       <button class="key del" data-k="del">⌫</button>
       <button class="key" data-k="0">0</button>
       <button class="key enter" data-k="enter">こたえ</button>
+      <button class="key next" data-k="next" id="nextKey" style="display:none;">つぎへ ▶</button>
     </div>
   </section>
 
@@ -354,6 +359,7 @@ function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   state.input=""; state.locked=false;
+  state.hi=hiSetup(p.a,p.b);
   $("bracket").textContent="［"+m.bracket+"］";
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal"; $("reveal").innerHTML="";
@@ -364,43 +370,123 @@ function renderProblem(){
 }
 
 function renderProblemArea(){
-  const p=state.problems[state.current];
-  $("problemArea").innerHTML=hissanHTML(p.a,p.b,state.input,false);
+  $("problemArea").innerHTML=hissanHTML(false);
+  updateHissanPrompt(); updateNextKey();
 }
 
-// 筆算（たてがき）：こたえ（積）のけた数で右そろえ
-function hissanHTML(a,b,typed,revealAll){
+// ===== 筆算（教科書どおり）=====
+//  乗数の 各くらい ごとに 部分積を つくり（0の くらいは とばす）、1つ左に ずらして ならべ、
+//  さいごに ぜんぶ たす。各段とも 一のくらいから 入力。「つぎへ」で つぎの だんへ。
+function mkRow(key,target,onesCol,cols){ return { key, target, onesCol, cells:Array(cols).fill(""), entered:0 }; }
+function digitsOnesFirst(n){ const s=String(n), a=[]; for(let i=s.length-1;i>=0;i--) a.push(+s[i]); return a; }
+function hiSetup(a,b){
   const answer=a*b;
-  const cols=String(answer).length;
+  const bd=digitsOnesFirst(b);
+  const partials=[];
+  for(let i=0;i<bd.length;i++){ if(bd[i]!==0) partials.push({ shift:i, target:a*bd[i] }); }
+  let cols=String(answer).length;
+  for(const pp of partials){ cols=Math.max(cols, String(pp.target).length+pp.shift); }
+  if(partials.length<=1){   // 実質1段（部分積が1つ）→ 積だけ 入力
+    return { multi:false, cols, stage:0, rows:[ mkRow('prod',answer,cols-1,cols) ] };
+  }
+  const rows=partials.map((pp,idx)=> mkRow('pp'+(idx+1), pp.target, cols-1-pp.shift, cols));
+  rows.push( mkRow('sum', answer, cols-1, cols) );
+  return { multi:true, cols, stage:0, rows };
+}
+function hiRowValue(row){ const s=row.cells.join(""); return s===""?null:parseInt(s,10); }
+function hiActiveCol(row){ return (row.entered<=row.onesCol) ? row.onesCol-row.entered : -1; }
+
+function updateHissanPrompt(){
+  const hi=state.hi; if(!hi) return;
+  const pr=$("prompt"); pr.className="prompt note";
+  if(!hi.multi){ pr.textContent="一のくらいから じゅんに いれましょう。"; return; }
+  const last=hi.rows.length-1;
+  if(hi.stage<last) pr.textContent=(hi.stage+1)+"だんめ：一のくらいから いれて、「つぎへ」で つぎの だんへ。";
+  else pr.textContent="ぜんぶ たして 合計を、一のくらいから。「こたえ」で はんてい。";
+}
+function updateNextKey(){
+  const btn=$("nextKey"); if(!btn) return;
+  const show = state.hi && state.hi.multi && state.hi.stage < state.hi.rows.length-1;
+  btn.style.display = show ? "" : "none";
+}
+
+// 筆算レイアウト（state.hi をもとに 描画）
+function hissanHTML(revealAll){
+  const p=state.problems[state.current];
+  const a=p.a, b=p.b, hi=state.hi, cols=hi.cols;
   const pad=(s)=>String(s).padStart(cols," ").split("");
-  const aD=pad(a), bD=pad(b);
-  const tStr=revealAll?String(answer):typed;
-  const tD=tStr.padStart(cols," ").split("");
   const cell=(ch)=> ch===" " ? `<span class="hcell blank">·</span>` : `<span class="hcell">${ch}</span>`;
-  const topRow=`<div class="hrow"><span class="hop">&nbsp;</span>${aD.map(cell).join("")}</div>`;
-  const botRow=`<div class="hrow"><span class="hop">×</span>${bD.map(cell).join("")}</div>`;
+  const topRow=`<div class="hrow"><span class="hop">&nbsp;</span>${pad(a).map(cell).join("")}</div>`;
+  const botRow=`<div class="hrow"><span class="hop">×</span>${pad(b).map(cell).join("")}</div>`;
   const lineW=((cols+1)*0.82)+"em";
-  const line=`<div class="hline" style="width:${lineW}"></div>`;
-  const ansRow=`<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${tD.map(cell).join("")}</div>`;
-  return `<div class="hissan num">${topRow}${botRow}${line}${ansRow}</div>`;
+  const line=()=>`<div class="hline" style="width:${lineW}"></div>`;
+  function renderRow(row, idx){
+    let digits;
+    if(revealAll){
+      digits=Array(cols).fill("");
+      const ts=String(row.target);
+      for(let i=0;i<ts.length;i++){ const col=row.onesCol-i; if(col>=0) digits[col]=ts[ts.length-1-i]; }
+    } else { digits=row.cells; }
+    const activeCol = (!revealAll && idx===hi.stage) ? hiActiveCol(row) : -1;
+    let cellsHtml="";
+    for(let i=0;i<cols;i++){
+      const raw=digits[i];
+      const ch=(raw===undefined||raw===""||raw===" ")?"":raw;
+      const isA=(i===activeCol);
+      if(ch===""){ cellsHtml+=`<span class="hcell blank ${isA?'active':''}">${isA?'&nbsp;':'·'}</span>`; }
+      else{ cellsHtml+=`<span class="hcell ${isA?'active':''}">${ch}</span>`; }
+    }
+    return `<div class="hrow hanswer ${revealAll?'reveal-row':''}"><span class="hop">&nbsp;</span>${cellsHtml}</div>`;
+  }
+  let body="";
+  if(hi.multi){
+    const last=hi.rows.length-1;
+    for(let i=0;i<last;i++) body+=renderRow(hi.rows[i],i);
+    body+=line();
+    body+=renderRow(hi.rows[last],last);
+  } else {
+    body=renderRow(hi.rows[0],0);
+  }
+  return `<div class="hissan num">${topRow}${botRow}${line()}${body}</div>`;
+}
+
+function pressKeyHissan(k){
+  const hi=state.hi; const row=hi.rows[hi.stage];
+  if(k==="del"){
+    if(row.entered>0){ row.entered--; row.cells[row.onesCol-row.entered]=""; renderProblemArea(); beep("tap"); }
+    else if(hi.stage>0){ hi.stage--; renderProblemArea(); beep("tap"); }
+    return;
+  }
+  if(k==="next"){
+    if(!hi.multi || row.entered<1){ beep("wrong"); return; }
+    if(hi.stage < hi.rows.length-1){ hi.stage++; renderProblemArea(); beep("tap"); }
+    else { beep("wrong"); }
+    return;
+  }
+  if(k==="enter"){
+    if(row.entered<1){ beep("wrong"); return; }
+    if(hi.stage < hi.rows.length-1){ hi.stage++; renderProblemArea(); beep("tap"); }
+    else { submit(); }
+    return;
+  }
+  if(row.entered > row.onesCol) return;
+  row.cells[row.onesCol-row.entered]=k; row.entered++;
+  beep("tap"); renderProblemArea();
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
 function pressKey(k){
   if(state.locked) return;
-  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); renderProblemArea(); beep("tap"); } return; }
-  if(k==="enter"){ submit(); return; }
-  if(state.input.length>=maxLen()) return;
-  if(state.input==="0") state.input="";
-  state.input+=k; beep("tap"); renderProblemArea();
+  pressKeyHissan(k);
 }
 function submit(){
   if(state.locked) return;
-  if(state.input==="") { beep("wrong"); return; }
   const p=state.problems[state.current];
+  const hi=state.hi; let ok=true;
+  for(const row of hi.rows){ if(hiRowValue(row)!==row.target){ ok=false; break; } }
   state.locked=true; setKeypad(false);
-  if(parseInt(state.input,10)===p.answer) onCorrect(p); else onWrong(p);
+  if(ok) onCorrect(p); else onWrong(p);
 }
 function onCorrect(p){
   p.correct=true; p.userAnswer=String(p.answer);
@@ -413,14 +499,15 @@ function onWrong(p){
   const msg=$("msg");
   if(p.tries>=MAX_TRIES){
     msg.textContent=MSG.miss3; msg.className="msg bad";
-    p.correct=false; p.userAnswer=state.input;
-    $("problemArea").innerHTML=hissanHTML(p.a,p.b,"",true);
+    p.correct=false;
+    const lv=hiRowValue(state.hi.rows[state.hi.rows.length-1]); p.userAnswer=(lv!==null?String(lv):"");
+    $("problemArea").innerHTML=hissanHTML(true);
     $("reveal").innerHTML=`こたえは <b>${p.answer}</b>`;
     $("reveal").classList.add("show");
     setTimeout(nextProblem,2400);
   }else{
     msg.textContent=MSG.miss; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); renderProblemArea(); },900);
+    setTimeout(()=>{ $("stamp").innerHTML=""; state.hi=hiSetup(p.a,p.b); state.locked=false; setKeypad(true); renderProblemArea(); },900);
   }
 }
 function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }

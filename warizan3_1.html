@@ -41,12 +41,7 @@
     color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;
     display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
   }
-  .icon-btn.text-btn{
-    width:auto;
-    padding:0 12px;
-    font-size:13px;
-    font-weight:700;
-  }
+  .icon-btn.text-btn{ width:auto; padding:0 12px; font-size:13px; font-weight:700; }
   .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
 
   .screen{display:none;animation:pop .3s ease;}
@@ -58,12 +53,13 @@
   .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--rose);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #F4C9DA;}
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
   .title-card .tag{color:var(--rose-deep);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
+  
   .mini-wari{display:inline-block;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;text-align:left;}
   .mini-wari .mrow{display:flex;align-items:flex-end;}
   .mini-wari .mleft{display:flex;align-items:center;justify-content:flex-end;color:var(--red);}
   .mini-wari .mbr{font-size:1.15em;margin-left:.06em;transform:scaleY(1.25);}
   .mini-wari .mdigits{display:flex;}
-  .mini-wari .mcell{width:.6em;text-align:center;}
+  .mini-wari .mcell{width:.82em;text-align:center;}
   .mini-wari .mcell.blank{color:transparent;}
   .mini-wari .mq .mcell{color:var(--rose);}
   .mini-wari .mtop{border-top:3px solid var(--ink);padding-top:2px;}
@@ -103,7 +99,7 @@
   .dot.ng{background:var(--red);}
   .dot.now{background:var(--yellow);box-shadow:0 0 0 3px rgba(246,185,59,.35);}
 
-  .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .board{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 18px 20px;text-align:center;position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
   .board .bracket{color:var(--ink-soft);font-weight:700;font-size:13px;min-height:18px;margin-bottom:8px;}
 
   /* あん算（横） */
@@ -111,44 +107,31 @@
   .equation .op{color:var(--red);}
   .equation .eq{color:var(--ink-soft);}
   .equation .amari{color:var(--ink-soft);font-size:.62em;margin:0 .06em;}
-  .ansbox{min-width:1.2em;min-height:1.05em;padding:0 .1em;border-bottom:6px solid #C9CFD3;color:var(--rose);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;cursor:pointer;}
+  .ansbox{min-width:1.2em;min-height:1.05em;padding:0 .1em;border-bottom:6px solid #C9CFD3;color:var(--rose);border-radius:4px;display:inline-flex;align-items:flex-end;justify-content:center;}
   .ansbox.active{border-bottom-color:var(--rose);animation:blink 1s steps(2) infinite;}
 
-  /* わり算の筆算 */
-  .wari{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(26px,9vw,48px);line-height:1;color:var(--ink);}
-  .wrow{display:flex;align-items:flex-end;}
-  .wleft{display:flex;align-items:center;justify-content:flex-end;}
-  .wleft .divisor{color:var(--ink);}
-  .wleft .rbr{color:var(--ink);font-size:1.15em;margin-left:.06em;transform:scaleY(1.25);}
-  .wdigits{display:flex;}
-  .wcell{width:.82em;text-align:center;}
-  .wcell.blank{color:transparent;}
-  .qdigits{padding-bottom:4px;}
-  .qdigits .wcell{color:var(--rose);}
-  .qdigits .wcell.blank{color:transparent;}
-  .qdigits.active{background:rgba(219,90,139,.10);border-radius:6px;box-shadow:inset 0 -4px 0 var(--rose);}
-  .qdigits.reveal .wcell{color:var(--red);}
-  .topline{border-top:5px solid var(--ink);padding-top:4px;}
-  .amari-line{margin-top:14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(22px,7vw,34px);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;gap:.3em;}
-  .amari-line .abox{min-width:1.1em;color:var(--rose);border-bottom:5px solid #C9CFD3;border-radius:4px;padding:0 .1em;display:inline-flex;justify-content:center;cursor:pointer;}
-  .amari-line .abox.active{border-bottom-color:var(--rose);animation:blink 1s steps(2) infinite;}
-  .amari-line .abox.reveal{color:var(--red);}
-  @keyframes blink{50%{border-bottom-color:transparent;}}
-  .wari .wcell.cin{color:var(--rose);}
-  .wari .wcell.active{background:rgba(219,90,139,.16);border-radius:5px;box-shadow:0 0 0 2px rgba(219,90,139,.55);animation:cellblink 1s steps(2) infinite;}
-  .wari .wcell.reveal{color:var(--red);}
-  .wari .wcell.bar{border-top:5px solid var(--ink);}
-  @keyframes cellblink{50%{opacity:.45;}}
+  /* 新・全マス目式 筆算グリッド */
+  .hgrid-container{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(24px,8vw,42px);line-height:1.25;color:var(--ink);}
+  .hrow{display:flex;align-items:center;justify-content:flex-end;}
+  .hcell{width:1em;height:1.1em;display:inline-flex;align-items:center;justify-content:center;text-align:center;}
+  .hcell.blank{color:transparent;}
+  .hcell.divisor{color:var(--ink);}
+  .hcell.rbr{color:var(--ink);font-size:1.15em;transform:scaleY(1.25);width:.4em;}
+  .hcell.q-cell{color:var(--rose);}
+  .hcell.p-cell{color:var(--ink);}
+  .hcell.d-cell{color:var(--ink);}
+  .hcell.box{border:2px dashed #D0D7DA;border-radius:6px;margin:1px;background:#FAFCFC;}
+  .hcell.box.active{border:3px solid var(--rose);background:#FFF0F5;box-shadow:0 0 8px rgba(219,90,139,.4);animation:blinkBox 1s infinite alternate;}
+  @keyframes blinkBox{ from{ border-color:var(--rose); } to{ border-color:#F498B8; } }
+  .hline{border-top:4px solid var(--ink);width:100%;margin:2px 0;}
 
-  .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--green);min-height:20px;}
-  .prompt.anzan{color:var(--blue);}
-  .msg{margin-top:8px;font-weight:900;font-size:19px;min-height:26px;}
+  .prompt{margin-top:14px;font-weight:800;font-size:16px;color:var(--blue);min-height:24px;}
+  .msg{margin-top:6px;font-weight:900;font-size:18px;min-height:24px;}
   .msg.good{color:var(--green);}
   .msg.bad{color:var(--red);}
-  .reveal{display:none;margin-top:8px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:22px;color:var(--ink);}
+  .reveal{display:none;margin-top:8px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:20px;color:var(--ink);}
   .reveal.show{display:block;animation:pop .3s ease;}
   .reveal b{color:var(--red);}
-  .reveal .am{color:var(--ink-soft);font-size:.8em;}
 
   .stamp{position:absolute;top:44%;left:50%;pointer-events:none;z-index:3;}
   .stamp svg{display:block;width:140px;height:140px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.15));}
@@ -164,8 +147,6 @@
   .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
   .key.enter{background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:20px;}
   .key.enter:active{box-shadow:0 1px 0 #279862;}
-  .key.next{grid-column:1 / -1;background:var(--blue);color:#fff;box-shadow:0 5px 0 #1F7CAE;font-size:20px;}
-  .key.next:active{box-shadow:0 1px 0 #1F7CAE;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
@@ -181,11 +162,8 @@
   .review-row .rmark.ng{background:var(--red);}
   .review-row .rq{flex:1;color:var(--ink);}
   .review-row .rq .op{color:var(--red);}
-  .review-row .ra.wrong{color:var(--red);text-decoration:line-through;margin-right:6px;}
   .review-row .rc{color:var(--green);}
-  .review-row .am{color:var(--ink-soft);font-size:.8em;}
   .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;} }
 </style>
 </head>
 <body>
@@ -210,7 +188,7 @@
       <div class="mini-wari num">
         <div class="mrow">
           <span class="mleft" style="visibility:hidden" aria-hidden="true"><span class="op">26</span><span class="mbr">)</span></span>
-          <span class="mdigits mq"><span class="mcell blank">&nbsp;</span><span class="mcell">3</span><span class="mcell">7</span><span class="mcell">1</span></span>
+          <span class="mdigits mq"><span class="mcell blank">0</span><span class="mcell">3</span><span class="mcell">7</span><span class="mcell">1</span></span>
         </div>
         <div class="mrow">
           <span class="mleft"><span class="op">26</span><span class="mbr">)</span></span>
@@ -260,7 +238,6 @@
       <button class="key del" data-k="del">⌫</button>
       <button class="key" data-k="0">0</button>
       <button class="key enter" data-k="enter">こたえ</button>
-      <button class="key next" data-k="next" id="nextKey" style="display:none;">つぎへ ▶</button>
     </div>
   </section>
 
@@ -281,13 +258,7 @@
 </div>
 
 <script>
-/* =========================================================
-   わりざん の れんしゅう ③（ひっさん）  —  Web版
-   原作: N88-BASIC "WARI3.BAS" Ver 1.00 のロジックを移植
-   （÷何十のあん算＋わり算の筆算・2〜3けたで わる）
-   ========================================================= */
-
-const REM = new Set([2,4,6,8,10]);   // あまりの ある モード
+const REM = new Set([2,4,6,8,10]);
 const MODES = [
   { ex:"240 ÷ 60",   bracket:"÷ 何十（あん算）",              menu:1  },
   { ex:"250 ÷ 60",   bracket:"÷ 何十・あまり（あん算）",      menu:2  },
@@ -312,40 +283,126 @@ const fix = (x) => Math.trunc(x);
 const d2 = ()=> fix(8.9*rnd()+1)*10 + fix(8.9*rnd()+1);
 const d3 = ()=> fix(8.9*rnd()+1)*100 + fix(8.9*rnd()+1)*10 + fix(8.9*rnd()+1);
 
-// --- 原作の乱数生成を忠実に移植（WARI3 の D.SET.1.2〜14）---
 function generatePair(menu){
   const even=REM.has(menu);
   let a,b,g=0;
   while(true){
     g++; if(g>8000) break;
-    if(menu<=2){                 // ÷何十（あん算）
+    if(menu<=2){
       const dd=fix(7.9*rnd()+2), q=fix(8.9*rnd()+1);
       const am=fix((dd-1)*rnd()+1); if(am>=dd) continue;
       a=dd*q*10; b=dd*10; if(even)a+=am*10; break;
-    } else if(menu<=4){          // 3けた÷2けた 商1けた
+    } else if(menu<=4){
       const d=d2(); const am=fix((d-1)*rnd()+1); if(am>=d) continue;
       const q=fix(8.9*rnd()+1); a=d*q; if(even)a+=am; b=d; break;
-    } else if(menu<=6){          // 3けた÷2けた 商2けた
+    } else if(menu<=6){
       const d=d2(); const am=fix((d-1)*rnd()+1); if(am>=d) continue;
       const q=d2(); a=d*q; if(even)a+=am; b=d; if(a>999) continue; break;
-    } else if(menu<=8){          // 4けた÷2けた 商3けた
+    } else if(menu<=8){
       const d=d2(); const am=fix((d-1)*rnd()+1); if(am>=d) continue;
       const q=d3(); if(d*q/10>999) continue; a=d*q; if(even)a+=am; b=d; break;
-    } else if(menu<=10){         // 4けた÷2けた 商2けた
+    } else if(menu<=10){
       const d=d2(), q=d2(); const am=fix((d-1)*rnd()+1); if(am>=d) continue;
       a=d*q; if(a<1000) continue; if(even)a+=am; b=d; break;
-    } else if(menu===11){        // 商に0
+    } else if(menu===11){
       const d=d2(); const q=fix(8.9*rnd()+1)*100 + fix(8.9*rnd()+1);
       if(d*q/10>999) continue; a=d*q; b=d; break;
-    } else if(menu<=13){         // 4けた÷3けた
+    } else if(menu<=13){
       const d=d3(); const q=(menu===12)?d2():fix(7.9*rnd()+2);
       const ppp=d*q/10; if(ppp>999||ppp<100) continue; a=d*q; b=d; break;
-    } else {                     // 何百何十で わる
+    } else {
       const dd=d2(), q=d2(); const dv=dd*q; if(dv>999) continue;
       a=dv*10; b=dd*10; break;
     }
   }
   return { a, b, quotient:Math.floor(a/b), remainder:a%b, rem:even, anzan:(menu<=2) };
+}
+
+// 筆算の全「1マス入力ステップ」を分解作成（画像対応）
+function generateGridSteps(a, b) {
+  const aStr = String(a);
+  const bStr = String(b);
+  const qStr = String(Math.floor(a/b));
+  const steps = [];
+  
+  const aLen = aStr.length;
+  const qLen = qStr.length;
+  const startCol = aLen - qLen;
+  
+  let currentVal = 0;
+  
+  for (let qIdx = 0; qIdx < qLen; qIdx++) {
+    const col = startCol + qIdx;
+    const qDigit = qStr[qIdx];
+    
+    // 1. 商をたてる（1マス）
+    steps.push({
+      rowType: 'q',
+      col: col,
+      expected: qDigit,
+      prompt: `商の${qIdx+1}けた目を たてる`
+    });
+    
+    // 2. かける（積）
+    const prodStr = String(parseInt(qDigit, 10) * b);
+    const prodLen = prodStr.length;
+    const prodStartCol = col - prodLen + 1;
+    for (let p = 0; p < prodLen; p++) {
+      steps.push({
+        rowType: 'prod',
+        cycle: qIdx,
+        col: prodStartCol + p,
+        expected: prodStr[p],
+        prompt: `かける （${b} × ${qDigit}）`
+      });
+    }
+    
+    // 3. ひく（差）・おろす
+    // 次の桁がある場合は、ひいて次の桁をおろす
+    let valForDiff = 0;
+    if (qIdx === 0) {
+      valForDiff = parseInt(aStr.slice(0, startCol + 1), 10);
+    } else {
+      valForDiff = currentVal;
+    }
+    const diff = valForDiff - (parseInt(qDigit, 10) * b);
+    
+    if (qIdx < qLen - 1) {
+      // ひいて下ろした結果の数字
+      const nextDownDigit = aStr[col + 1];
+      const nextValStr = String(diff) + nextDownDigit;
+      // 0の扱い調整
+      const showStr = (diff === 0) ? nextDownDigit : nextValStr;
+      const showLen = showStr.length;
+      const showStartCol = (col + 1) - showLen + 1;
+      
+      for (let d = 0; d < showLen; d++) {
+        steps.push({
+          rowType: 'diff',
+          cycle: qIdx,
+          col: showStartCol + d,
+          expected: showStr[d],
+          prompt: `ひいて、つぎの位を おろす`
+        });
+      }
+      currentVal = parseInt(showStr, 10);
+    } else {
+      // 最後のひく（あまり）
+      const remStr = String(diff);
+      const remLen = remStr.length;
+      const remStartCol = col - remLen + 1;
+      for (let r = 0; r < remLen; r++) {
+        steps.push({
+          rowType: 'diff',
+          cycle: qIdx,
+          col: remStartCol + r,
+          expected: remStr[r],
+          prompt: `ひく （あまり）`
+        });
+      }
+    }
+  }
+  return steps;
 }
 
 function buildRound(modeIndex){
@@ -363,12 +420,15 @@ function buildRound(modeIndex){
 const MSG = {
   perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
   miss3all:"まちがってますよ！", missAgain:"もういちど かんがえよう！",
-  missAmari:"あまりが ちがいます！", missShou:"商が ちがいます！",
-  promptHissan:"ノートで けいさんして こたえましょう！",
   promptAnzan:"あん算で こたえましょう。",
 };
 
-let state = { modeIndex:0, problems:[], current:0, inputQ:"", inputR:"", activeField:1, locked:false, startTime:0, soundOn:true };
+let state = { 
+  modeIndex:0, problems:[], current:0, 
+  steps:[], currentStepIdx:0, userGridValues:{},
+  inputQ:"", inputR:"", activeField:1, locked:false, startTime:0, soundOn:true 
+};
+
 const $ = (id)=>document.getElementById(id);
 const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen") };
 function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
@@ -409,11 +469,13 @@ function startRound(modeIndex){
   $("modeChip").textContent="＜"+(modeIndex+1)+"＞ "+MODES[modeIndex].ex;
   buildDots(); startTimer(); show("play"); renderProblem();
 }
+
 function buildDots(){
   const dots=$("dots"); dots.innerHTML="";
   for(let i=0;i<PROBLEMS_PER_ROUND;i++){const d=document.createElement("div");d.className="dot";d.id="dot"+i;dots.appendChild(d);}
   updateDots();
 }
+
 function updateDots(){
   state.problems.forEach((p,i)=>{
     const d=$("dot"+i); d.className="dot";
@@ -427,10 +489,14 @@ function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
   state.inputQ=""; state.inputR=""; state.activeField=1; state.locked=false;
-  state.div = p.anzan ? null : mkDiv(p.a,p.b);
+  state.userGridValues = {};
+  
+  if(!p.anzan){
+    state.steps = generateGridSteps(p.a, p.b);
+    state.currentStepIdx = 0;
+  }
+  
   $("bracket").textContent="［"+m.bracket+"］";
-  $("prompt").textContent = p.anzan ? MSG.promptAnzan : MSG.promptHissan;
-  $("prompt").className = p.anzan ? "prompt anzan" : "prompt";
   $("msg").textContent=""; $("msg").className="msg";
   $("reveal").className="reveal"; $("reveal").innerHTML="";
   $("stamp").innerHTML="";
@@ -440,9 +506,12 @@ function renderProblem(){
 
 function renderFigure(revealAll){
   const p=state.problems[state.current];
-  if(p.anzan) renderAnzan(revealAll); else renderHissan(revealAll);
-  wireFields();
-  if(!revealAll){ updateNextKey(); if(!p.anzan){ bindCellTaps(); updateDivPrompt(); } }
+  if(p.anzan) {
+    $("prompt").textContent = MSG.promptAnzan;
+    renderAnzan(revealAll); 
+  } else {
+    renderHissanGrid(revealAll);
+  }
 }
 
 function renderAnzan(revealAll){
@@ -458,185 +527,180 @@ function renderAnzan(revealAll){
   $("problemArea").innerHTML=html;
 }
 
-// ===== 長除法（わり算の筆算）エンジン：教科書どおり たてる→かける→ひく→おろす =====
-function mkDiv(a,b){ const D=buildDivision(a,b); D.vals=Array(D.inputs.length).fill(""); D.step=0; return D; }
-function buildDivision(a,b){
-  const ds=String(a).split("").map(Number), n=ds.length;
-  const qcells=Array(n).fill(null);
-  const bodyRows=[]; const inputs=[];
-  let working=0, started=false, prevDiff=null;
-  for(let i=0;i<n;i++){
-    working=working*10+ds[i];
-    if(started && i>0){ const idx=inputs.length; bodyRows[prevDiff].cells.push({col:i,expected:String(ds[i]),kind:'bringdown',idx}); inputs.push({row:prevDiff,col:i,expected:String(ds[i]),kind:'bringdown',idx}); }
-    const qd=Math.floor(working/b);
-    if(qd===0 && !started) continue;           // 先頭のけたが割る数より小さい→商を立てない
-    { const idx=inputs.length; qcells[i]={col:i,expected:String(qd),idx}; inputs.push({row:'q',col:i,expected:String(qd),kind:'quotient',idx}); }
-    started=true;
-    if(qd===0) continue;                         // 商に0：積・差の行は作らず そのまま次を おろす
-    const prod=qd*b, rem=working-prod;
-    const ps=String(prod), pStart=i-(ps.length-1), pRow=bodyRows.length;
-    const pc=[]; for(let k=0;k<ps.length;k++){ const idx=inputs.length,col=pStart+k; pc.push({col,expected:ps[k],kind:'prod',idx}); inputs.push({row:pRow,col,expected:ps[k],kind:'prod',idx}); }
-    bodyRows.push({kind:'prod',cells:pc});
-    const rs=String(rem), rStart=i-(rs.length-1), dRow=bodyRows.length;
-    const dc=[]; for(let k=0;k<rs.length;k++){ const idx=inputs.length,col=rStart+k; dc.push({col,expected:rs[k],kind:'diff',idx}); inputs.push({row:dRow,col,expected:rs[k],kind:'diff',idx}); }
-    bodyRows.push({kind:'diff',cells:dc,bar:{start:pStart,end:i}});
-    prevDiff=dRow; working=rem;
-  }
-  const quotient=parseInt(qcells.filter(x=>x).map(x=>x.expected).join(""),10);
-  return { a,b,n, qcells, bodyRows, inputs, quotient, remainder:working };
-}
-
-function renderHissan(revealAll){
-  const p=state.problems[state.current], dv=state.div, n=dv.n;
-  const valOf=(idx)=> revealAll ? dv.inputs[idx].expected : (dv.vals[idx]||"");
-  const isActive=(idx)=> (!revealAll && idx===dv.step);
-  const cellSpan=(content,cls,idx)=>`<span class="wcell ${cls||''}"${idx!=null?` data-idx="${idx}"`:""}>${content===""?"&nbsp;":content}</span>`;
-  const gutter=`<span class="wleft" style="visibility:hidden" aria-hidden="true"><span class="divisor">${p.b}</span><span class="rbr">)</span></span>`;
-  // 商
-  let qHtml="";
-  for(let c=0;c<n;c++){ const qc=dv.qcells[c]; if(qc) qHtml+=cellSpan(valOf(qc.idx),`cin ${isActive(qc.idx)?'active':''} ${revealAll?'reveal':''}`,qc.idx); else qHtml+=cellSpan("",""); }
-  let html=`<div class="wari num">`;
-  html+=`<div class="wrow">${gutter}<span class="wdigits">${qHtml}</span></div>`;
-  // 割られる数
-  const aStr=String(p.a); let dHtml=""; for(let c=0;c<n;c++) dHtml+=cellSpan(aStr[c],"");
-  html+=`<div class="wrow"><span class="wleft"><span class="divisor">${p.b}</span><span class="rbr">)</span></span><span class="wdigits topline">${dHtml}</span></div>`;
-  // 積・差
-  for(const row of dv.bodyRows){
-    const cmap={}; for(const cell of row.cells) cmap[cell.col]=cell;
-    let cHtml="";
-    for(let c=0;c<n;c++){
-      const cell=cmap[c]; let cls="";
-      if(row.kind==='diff' && row.bar && c>=row.bar.start && c<=row.bar.end) cls+="bar ";
-      if(cell) cHtml+=cellSpan(valOf(cell.idx),`${cls}cin ${isActive(cell.idx)?'active':''} ${revealAll?'reveal':''}`,cell.idx);
-      else cHtml+=cellSpan("",cls);
-    }
-    html+=`<div class="wrow">${gutter}<span class="wdigits">${cHtml}</span></div>`;
-  }
-  html+=`</div>`;
-  $("problemArea").innerHTML=html;
-}
-function bindCellTaps(){
-  const dv=state.div; if(!dv) return;
-  $("problemArea").querySelectorAll(".wari .wcell.cin[data-idx]").forEach(el=>{
-    el.addEventListener("click",()=>{ if(state.locked)return; dv.step=parseInt(el.dataset.idx,10); renderFigure(); beep("tap"); });
-  });
-}
-function updateDivPrompt(){
-  const dv=state.div, pr=$("prompt"); if(!dv) return; pr.className="prompt";
-  if(dv.step>=dv.inputs.length){ pr.textContent="ぜんぶ いれたら「こたえ」を おそう。"; return; }
-  const kind=dv.inputs[dv.step].kind;
-  const map={ quotient:"たてる：商を いれよう。", prod:"かける：わる数 × 商 の こたえを いれよう。", diff:"ひく：ひきざんの こたえを いれよう。", bringdown:"おろす：つぎの けたを おろそう。" };
-  pr.textContent=map[kind]||MSG.promptHissan;
-}
-function updateNextKey(){
-  const btn=$("nextKey"); if(!btn) return;
+// 画像に完全対応した動的筆算グリッド描画
+function renderHissanGrid(revealAll){
   const p=state.problems[state.current];
-  const show = !state.locked && p && !p.anzan && state.div && state.div.step < state.div.inputs.length;
-  btn.style.display = show ? "" : "none";
-}
-function enteredQuotient(dv){ let s=""; for(const inp of dv.inputs){ if(inp.kind==='quotient') s+=(dv.vals[inp.idx]||"?"); } return s; }
-function enteredRemainder(dv){ let last=null; for(const row of dv.bodyRows){ if(row.kind==='diff') last=row; } if(!last) return ""; return last.cells.filter(c=>c.kind==='diff').sort((a,b)=>a.col-b.col).map(c=>dv.vals[c.idx]||"").join(""); }
-
-function wireFields(){
-  $("problemArea").querySelectorAll("[data-f]").forEach(el=>{
-    el.addEventListener("click",()=>{ if(state.locked)return; state.activeField=parseInt(el.dataset.f); renderFigure(); });
-  });
+  const aStr = String(p.a);
+  const bStr = String(p.b);
+  const cols = aStr.length;
+  
+  const currStep = state.steps[state.currentStepIdx];
+  if(!revealAll && currStep){
+    $("prompt").textContent = currStep.prompt;
+  }
+  
+  // マス目のキー生成ヘルパー
+  const getKey = (type, cycle, col) => `${type}_${cycle}_${col}`;
+  
+  let html = `<div class="hgrid-container num">`;
+  
+  // 1. 商の行 (q)
+  html += `<div class="hrow">`;
+  html += `<span class="hcell blank"></span><span class="hcell rbr" style="visibility:hidden">)</span>`;
+  for(let c=0; c<cols; c++){
+    const k = getKey('q', 0, c);
+    const isCurrent = !revealAll && currStep && currStep.rowType === 'q' && currStep.col === c;
+    const val = revealAll ? (String(p.quotient).padStart(cols,' ')[c] || '') : (state.userGridValues[k] || '');
+    const cls = isCurrent ? "hcell q-cell box active" : (val !== '' ? "hcell q-cell" : "hcell blank");
+    html += `<span class="${cls}">${val === ' ' ? '' : val}</span>`;
+  }
+  html += `</div>`;
+  
+  // 2. 問題の行（わる数 ) わられる数）
+  html += `<div class="hrow">`;
+  html += `<span class="hcell divisor">${bStr}</span><span class="hcell rbr">)</span>`;
+  for(let c=0; c<cols; c++){
+    html += `<span class="hcell">${aStr[c]}</span>`;
+  }
+  html += `</div>`;
+  
+  // 3. 途中計算（積 prod と 差 diff）
+  const qLen = String(p.quotient).length;
+  for(let qIdx=0; qIdx<qLen; qIdx++){
+    // 積の行
+    let hasProd = false;
+    for(let c=0; c<cols; c++){ if(state.userGridValues[getKey('prod', qIdx, c)]) hasProd = true; }
+    if(revealAll || hasProd || (currStep && currStep.cycle === qIdx && currStep.rowType === 'prod')){
+      html += `<div class="hrow">`;
+      html += `<span class="hcell blank"></span><span class="hcell rbr" style="visibility:hidden">)</span>`;
+      for(let c=0; c<cols; c++){
+        const k = getKey('prod', qIdx, c);
+        const isCurrent = !revealAll && currStep && currStep.cycle === qIdx && currStep.rowType === 'prod' && currStep.col === c;
+        const val = state.userGridValues[k] || '';
+        const cls = isCurrent ? "hcell p-cell box active" : (val !== '' ? "hcell p-cell" : "hcell blank");
+        html += `<span class="${cls}">${val}</span>`;
+      }
+      html += `</div>`;
+      html += `<div class="hline"></div>`;
+    }
+    
+    // 差・あまりの行
+    let hasDiff = false;
+    for(let c=0; c<cols; c++){ if(state.userGridValues[getKey('diff', qIdx, c)]) hasDiff = true; }
+    if(revealAll || hasDiff || (currStep && currStep.cycle === qIdx && currStep.rowType === 'diff')){
+      html += `<div class="hrow">`;
+      html += `<span class="hcell blank"></span><span class="hcell rbr" style="visibility:hidden">)</span>`;
+      for(let c=0; c<cols; c++){
+        const k = getKey('diff', qIdx, c);
+        const isCurrent = !revealAll && currStep && currStep.cycle === qIdx && currStep.rowType === 'diff' && currStep.col === c;
+        const val = state.userGridValues[k] || '';
+        const cls = isCurrent ? "hcell d-cell box active" : (val !== '' ? "hcell d-cell" : "hcell blank");
+        html += `<span class="${cls}">${val}</span>`;
+      }
+      html += `</div>`;
+    }
+  }
+  
+  html += `</div>`;
+  $("problemArea").innerHTML = html;
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
-function maxLenField(f){
-  const p=state.problems[state.current];
-  if(f===2) return 3;
-  return p.anzan ? String(p.quotient).length+1 : String(p.a).length; // 筆算は わられ数のけた数まで
-}
-
 function pressKey(k){
   if(state.locked) return;
   const p=state.problems[state.current];
-  if(p.anzan) pressKeyAnzan(k); else pressKeyHissan(k);
-}
-function pressKeyAnzan(k){
-  const f=state.activeField;
-  const cur = f===1 ? state.inputQ : state.inputR;
-  if(k==="del"){
-    if(cur.length){ if(f===1) state.inputQ=cur.slice(0,-1); else state.inputR=cur.slice(0,-1); renderFigure(); beep("tap"); }
-    return;
+  
+  if(p.anzan){
+    const f=state.activeField;
+    const cur = f===1 ? state.inputQ : state.inputR;
+    if(k==="del"){
+      if(cur.length){ if(f===1) state.inputQ=cur.slice(0,-1); else state.inputR=cur.slice(0,-1); renderFigure(); beep("tap"); }
+      return;
+    }
+    if(k==="enter"){ onEnterAnzan(); return; }
+    if(cur.length >= 3) return;
+    let nv=(cur==="0")?k:cur+k;
+    if(f===1) state.inputQ=nv; else state.inputR=nv;
+    beep("tap"); renderFigure();
+  } else {
+    // 筆算：1マス入力
+    const currStep = state.steps[state.currentStepIdx];
+    if(!currStep) return;
+    
+    if(k==="del"){
+      const key = `${currStep.rowType}_${currStep.cycle||0}_${currStep.col}`;
+      delete state.userGridValues[key];
+      renderFigure(); beep("tap");
+      return;
+    }
+    
+    if(k==="enter"){
+      // 確定・判定
+      const key = `${currStep.rowType}_${currStep.cycle||0}_${currStep.col}`;
+      const userVal = state.userGridValues[key];
+      if(!userVal){ beep("wrong"); return; }
+      
+      if(userVal === currStep.expected){
+        // 正解マス -> 次のマスへ
+        beep("tap");
+        state.currentStepIdx++;
+        if(state.currentStepIdx >= state.steps.length){
+          // 筆算コンプリート
+          state.locked = true; setKeypad(false);
+          onCorrect(p);
+        } else {
+          renderFigure();
+        }
+      } else {
+        // 不正解マス
+        delete state.userGridValues[key];
+        onWrong(p);
+      }
+      return;
+    }
+    
+    // 数字入力（押した瞬間にそのマスに入る）
+    const key = `${currStep.rowType}_${currStep.cycle||0}_${currStep.col}`;
+    state.userGridValues[key] = k;
+    beep("tap");
+    renderFigure();
   }
-  if(k==="enter"){ onEnter(); return; }
-  if(cur.length>=maxLenField(f)) return;
-  let nv=(cur==="0")?k:cur+k;
-  if(f===1) state.inputQ=nv; else state.inputR=nv;
-  beep("tap"); renderFigure();
-}
-function pressKeyHissan(k){
-  const dv=state.div;
-  if(k==="del"){
-    if(dv.step>0){ dv.step--; dv.vals[dv.step]=""; renderFigure(); beep("tap"); }
-    else if(dv.vals[0]!==""){ dv.vals[0]=""; renderFigure(); beep("tap"); }
-    return;
-  }
-  if(k==="next"){ if(dv.step<dv.inputs.length){ dv.step++; renderFigure(); beep("tap"); } else beep("wrong"); return; }
-  if(k==="enter"){ submit(); return; }
-  if(dv.step>=dv.inputs.length) return;
-  dv.vals[dv.step]=k; dv.step++;
-  beep("tap"); renderFigure();
 }
 
-function onEnter(){
+function onEnterAnzan(){
   const p=state.problems[state.current];
-  if(!p.rem){ if(state.inputQ!=="") submit(); else beep("wrong"); return; }
+  if(!p.rem){ if(state.inputQ!=="") submitAnzan(); else beep("wrong"); return; }
   if(state.activeField===1){ if(state.inputQ!==""){ state.activeField=2; renderFigure(); } else beep("wrong"); }
-  else{ if(state.inputR!=="") submit(); else beep("wrong"); }
+  else{ if(state.inputR!=="") submitAnzan(); else beep("wrong"); }
 }
 
-function submit(){
+function submitAnzan(){
   if(state.locked) return;
   const p=state.problems[state.current];
-  if(p.anzan) submitAnzan(); else submitHissan();
-}
-function submitAnzan(){
-  const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
-  let correct, missType;
+  let correct;
   if(!p.rem){
-    correct = parseInt(state.inputQ,10)===p.quotient; missType=3;
+    correct = parseInt(state.inputQ,10)===p.quotient;
   }else{
-    const qOk=parseInt(state.inputQ,10)===p.quotient;
-    const rOk=parseInt(state.inputR,10)===p.remainder;
-    correct=qOk&&rOk;
-    missType=correct?0:(qOk?1:(rOk?2:3));
+    correct = (parseInt(state.inputQ,10)===p.quotient) && (parseInt(state.inputR,10)===p.remainder);
   }
-  if(correct) onCorrect(p); else onWrong(p, missType);
-}
-function submitHissan(){
-  const dv=state.div;
-  for(let i=0;i<dv.inputs.length;i++){ if(dv.vals[i]===""){ beep("wrong"); return; } }
-  const ok=dv.inputs.every((inp,i)=>dv.vals[i]===inp.expected);
-  const p=state.problems[state.current];
-  state.locked=true; setKeypad(false);
-  if(ok) onCorrect(p); else onWrong(p, 3);
+  if(correct) onCorrect(p); else onWrong(p);
 }
 
 function onCorrect(p){
-  p.correct=true; p.userQ=String(p.quotient); if(p.rem) p.userR=String(p.remainder);
-  $("problemArea").querySelectorAll(".active").forEach(el=>el.classList.remove("active"));
-  const nk=$("nextKey"); if(nk) nk.style.display="none";
+  p.correct=true;
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
   beep("correct"); setTimeout(nextProblem,1100);
 }
 
-function onWrong(p, missType){
+function onWrong(p){
   p.tries+=1; showStamp("batsu"); beep("wrong");
-  const msg=$("msg"); const nk=$("nextKey"); if(nk) nk.style.display="none";
-  const anzan=p.anzan;
+  const msg=$("msg");
   if(p.tries>=MAX_TRIES){
-    let t=anzan ? ((missType===1?MSG.missAmari:(missType===2?MSG.missShou:MSG.miss3all))) : MSG.miss3all;
-    msg.textContent=t; msg.className="msg bad";
+    msg.textContent=MSG.miss3all; msg.className="msg bad";
     p.correct=false;
-    if(anzan){ p.userQ=state.inputQ; if(p.rem) p.userR=state.inputR; }
-    else{ p.userQ=enteredQuotient(state.div); if(p.rem) p.userR=enteredRemainder(state.div); }
     renderFigure(true);
     const rev=$("reveal");
     if(p.rem) rev.innerHTML=`こたえは ${p.a}÷${p.b}＝ <b>${p.quotient}</b> <span class="am">あまり</span> <b>${p.remainder}</b>`;
@@ -644,12 +708,10 @@ function onWrong(p, missType){
     rev.classList.add("show");
     setTimeout(nextProblem,2400);
   }else{
-    let t=anzan ? (!p.rem?MSG.missAgain:(missType===1?MSG.missAmari:(missType===2?MSG.missShou:MSG.missAgain))) : MSG.missAgain;
-    msg.textContent=t; msg.className="msg bad";
+    msg.textContent=MSG.missAgain; msg.className="msg bad";
     setTimeout(()=>{
       $("stamp").innerHTML="";
-      if(anzan){ state.inputQ=""; state.inputR=""; state.activeField=1; }
-      else{ state.div=mkDiv(p.a,p.b); }
+      if(p.anzan){ state.inputQ=""; state.inputR=""; state.activeField=1; }
       state.locked=false;
       setKeypad(true); renderFigure();
       $("msg").textContent=""; $("msg").className="msg";
@@ -684,16 +746,9 @@ function finishRound(){
   state.problems.forEach((p)=>{
     const row=document.createElement("div"); row.className="review-row";
     const correctAns = p.rem ? `${p.quotient}<span class="am"> あまり </span>${p.remainder}` : `${p.quotient}`;
-    let ansHtml;
-    if(p.correct){ ansHtml=`<span class="rc">${correctAns}</span>`; }
-    else{
-      const uq=p.userQ!==""?p.userQ:"―";
-      const userAns=p.rem?`${uq}<span class="am"> あまり </span>${p.userR!==""?p.userR:"―"}`:uq;
-      ansHtml=`<span class="ra wrong">${userAns}</span><span class="rc">${correctAns}</span>`;
-    }
     row.innerHTML=`<span class="rmark ${p.correct?'ok':'ng'}">${p.correct?'○':'✕'}</span>`+
       `<span class="rq num">${p.a}<span class="op">÷</span>${p.b}<span class="op">＝</span></span>`+
-      `<span class="num">${ansHtml}</span>`;
+      `<span class="num"><span class="rc">${correctAns}</span></span>`;
     rv.appendChild(row);
   });
   show("result");
@@ -722,7 +777,6 @@ document.addEventListener("keydown",(e)=>{
   if(e.key>="0"&&e.key<="9"){ pressKey(e.key); e.preventDefault(); }
   else if(e.key==="Backspace"){ pressKey("del"); e.preventDefault(); }
   else if(e.key==="Enter"){ pressKey("enter"); e.preventDefault(); }
-  else if(e.key==="Tab"){ const p=state.problems[state.current]; if(p&&!state.locked){ if(p.anzan){ if(p.rem){ state.activeField=state.activeField===1?2:1; renderFigure(); } } else pressKey("next"); e.preventDefault(); } }
 });
 
 buildMenu();

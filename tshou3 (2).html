@@ -131,10 +131,9 @@
   .hcalc{display:inline-block;font-family:"Roboto Mono","SFMono-Regular",monospace;font-weight:700;font-size:clamp(30px,9vw,46px);line-height:1.16;color:var(--ink);margin:12px 0 8px;}
   .hcalc .hrow{display:flex;align-items:flex-end;justify-content:center;}
   .hcalc .hop{width:1em;text-align:center;color:var(--red);flex:0 0 auto;}
-  .hcalc .hcells{display:flex;align-items:flex-end;}
-  .hcalc .hcell{width:.72em;height:1.1em;display:flex;align-items:flex-end;justify-content:center;line-height:1;}
-  .hcalc .hcell.dot{width:.5em;color:var(--ink);}
-  .hcalc .hcell.dot .pt{width:.38em;height:.38em;border-radius:50%;background:currentColor;margin-bottom:.08em;}
+  .hcalc .hcells{display:flex;}
+  .hcalc .hcell{width:.72em;text-align:center;}
+  .hcalc .hcell.dot{width:.4em;color:var(--ink);}
   .hcalc .hline{height:5px;background:var(--ink);border-radius:3px;margin:6px 0 8px;}
   .hcalc .ansrow .hcell{color:var(--blue);}
   .hcalc .hcell.ans.active{background:rgba(46,155,214,.16);border-radius:6px;box-shadow:0 0 0 2px rgba(46,155,214,.55);animation:cellblink 1s steps(2) infinite;}
@@ -201,7 +200,7 @@
   <section class="screen active" id="menuScreen">
     <div class="title-card">
       <span class="eyebrow">小数（しょうすう）の <span class="st">★★★</span></span>
-      <h1>たしざん（ひっさん）</h1>
+      <h1>ひっさん の たしざん</h1>
       <div class="sub">やりたい けいさんを えらんでね</div>
     </div>
     <div class="menu-head"><h2>メニュー</h2><p>ばんごうキー 1〜6 でも えらべます</p></div>
@@ -374,7 +373,7 @@ function opCells(numStr, model){
 function renderCalc(revealAll){
   const model=st.model, p=model.p;
   const cell=(ch)=>`<span class="hcell">${ch===''||ch==null?'&nbsp;':ch}</span>`;
-  const dotCell=(ch)=>`<span class="hcell dot">${ch==='.'?'<span class="pt"></span>':'&nbsp;'}</span>`;
+  const dotCell=(ch)=>`<span class="hcell dot">${ch===''||ch==null?'&nbsp;':ch}</span>`;
   const opRow=(numStr,opSym)=>{
     const cs=opCells(numStr,model).map(c=> c.kind==='dot'?dotCell(c.ch):cell(c.ch)).join('');
     return `<div class="hrow"><span class="hop">${opSym||''}</span><span class="hcells">${cs}</span></div>`;
@@ -389,7 +388,7 @@ function renderCalc(revealAll){
     const rev = revealAll ? 'reveal' : '';
     if(c.kind==='dot'){
       const v = revealAll ? '.' : (st.cells[idx]||'');
-      ans+=`<span class="hcell dot ans ${active} ${rev}">${v==='.'?'<span class="pt"></span>':'&nbsp;'}</span>`;
+      ans+=`<span class="hcell dot ans ${active} ${rev}">${v===''?'&nbsp;':v}</span>`;
       return;
     }
     const isInput=(c.expected!=='' && c.expected!=null);

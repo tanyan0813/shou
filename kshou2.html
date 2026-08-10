@@ -103,7 +103,16 @@
   .drow{display:flex;align-items:flex-end;justify-content:flex-end;}
   .dop{width:.9em;text-align:center;color:var(--red);flex:none;}
   .dtxt{letter-spacing:.02em;}
+  .dcell{width:.82em;height:1.1em;display:flex;align-items:flex-end;justify-content:center;flex:none;}
+  .dcell.blank{color:transparent;}
+  .dcell.dp{width:.42em;color:var(--ink);}
+  .dcell.dp .pt{width:.34em;height:.34em;border-radius:50%;background:currentColor;margin-bottom:.08em;}
+  .dfig .dcell.ans{color:var(--teal);}
+  .dfig .dcell.ans.active{background:rgba(14,165,176,.16);border-radius:6px;box-shadow:0 0 0 2px rgba(14,165,176,.55);animation:cellblink 1s steps(2) infinite;}
+  .dfig .dcell.reveal{color:var(--red);}
+  @keyframes cellblink{50%{opacity:.45;}}
   .dline{height:5px;background:var(--ink);border-radius:3px;margin:5px 0;}
+  .lrow{justify-content:center;align-items:center;}
   .ansbox2{display:inline-flex;justify-content:flex-end;align-items:flex-end;color:var(--teal);border-bottom:6px solid var(--teal);border-radius:4px;padding:0 .06em;min-height:1.1em;}
   .ansbox2.reveal{color:var(--red);}
 
@@ -131,6 +140,8 @@
   .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
   .key.enter{grid-column:span 3;background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:22px;}
   .key.enter:active{box-shadow:0 1px 0 #279862;}
+  .key.next{grid-column:span 3;background:var(--blue);color:#fff;box-shadow:0 5px 0 #1F7CAE;font-size:22px;}
+  .key.next:active{box-shadow:0 1px 0 #1F7CAE;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
@@ -177,7 +188,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -217,6 +228,7 @@
       <button class="key dot" data-k="."><span class="dotmark"></span></button>
       <button class="key" data-k="0">0</button>
       <button class="key del" data-k="del">⌫</button>
+      <button class="key next" id="nextBtn" data-k="next">つぎへ</button>
       <button class="key enter" data-k="enter">こたえ</button>
     </div>
   </section>
@@ -275,6 +287,39 @@ function place(P, dec){
 function showNum(P, dec){
   const s=String(P).padStart(dec+1,"0");
   return dec ? s.slice(0,s.length-dec)+"."+s.slice(s.length-dec) : s;
+}
+function decimalsOf(s){ const i=s.indexOf('.'); return i<0?0:s.length-i-1; }
+// 表示文字列（例 "0.28"）を 桁→数字 の対応にする（col0が一番右）
+function placeDisplay(dispStr){
+  const dot=dispStr.indexOf('.'); const ip=dot<0?dispStr:dispStr.slice(0,dot); const fp=dot<0?'':dispStr.slice(dot+1);
+  const dec=fp.length; const map={};
+  for(let j=0;j<fp.length;j++) map[dec-1-j]=fp[j];
+  for(let j=0;j<ip.length;j++) map[dec+j]=ip[ip.length-1-j];
+  return {map, dec};
+}
+// 部分積＋小数点モデル（教科書どおり）
+function buildMulModel(p){
+  const A=parseInt(p.dispA.replace('.',''),10), B=parseInt(p.dispB.replace('.',''),10);
+  const decA=decimalsOf(p.dispA), decB=decimalsOf(p.dispB), decTotal=decA+decB;
+  const P=A*B, sigB=String(B), ansStr=showNum(P,decTotal);
+  const W=Math.max(String(P).length, decTotal+1);
+  const posSet=new Set(); [decA,decB,decTotal].forEach(d=>{ if(d>0&&d<W) posSet.add(d); });
+  const slots=[]; for(let c=W-1;c>=0;c--){ slots.push({t:'col',col:c}); if(posSet.has(c)) slots.push({t:'dot',pos:c}); }
+  const inputs=[], body=[];
+  function ansRow(){ const ds=ansStr.replace('.',''); const cells={}; for(let k=0;k<ds.length;k++) cells[k]={expected:ds[ds.length-1-k]}; body.push({kind:'ans',shift:0,dec:decTotal,cells,dotPos:decTotal>0?decTotal:-1}); }
+  if(sigB.length===1){ ansRow(); }
+  else{
+    const bd=[...sigB].reverse().map(Number);
+    for(let i=0;i<sigB.length;i++){ const pp=A*bd[i], ds=String(pp), cells={}; for(let k=0;k<ds.length;k++) cells[i+k]={expected:ds[ds.length-1-k]}; body.push({kind:'pp',shift:i,dec:-1,cells}); }
+    ansRow();
+  }
+  body.forEach((row,ri)=>{ const cols=Object.keys(row.cells).map(Number).sort((a,b)=>a-b);
+    for(const col of cols){
+      if(row.kind==='ans'&&row.dotPos>0&&col===row.dotPos){ const idx=inputs.length; row.dotIdx=idx; inputs.push({row:ri,type:'dot',expected:'.',idx}); }
+      const idx=inputs.length; row.cells[col].idx=idx; inputs.push({row:ri,type:'digit',col,expected:row.cells[col].expected,idx});
+    }
+  });
+  return {A,B,decA,decB,decTotal,P,W,ansStr,sigB,posSet,slots,body,inputs, dispA:p.dispA, dispB:p.dispB};
 }
 
 // --- 原作の乱数生成を忠実に移植（KSHOU2 の D.SET.1〜12）---
@@ -368,7 +413,8 @@ function updateDots(){
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  state.input=""; state.locked=false;
+  state.model=buildMulModel(p); state.vals={}; state.step=0; state.input=""; state.locked=false;
+  { const nb=$("nextBtn"); if(nb) nb.style.display = state.model.body.length>1 ? "" : "none"; }
   $("bracket").textContent="［"+m.bracket+"］";
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
@@ -379,37 +425,104 @@ function renderProblem(){
 }
 
 function renderFigure(revealAll){
-  const p=state.problems[state.current];
-  const ansStr = revealAll ? p.canonical : (state.input||"");
-  const w = Math.max(p.dispA.length, p.dispB.length+1, p.canonical.length) + 0.4;
-  const lineW = (w*0.62)+"em";
-  const html =
-    `<div class="dfig num">`+
-      `<div class="drow"><span class="dop">&nbsp;</span><span class="dtxt">${p.dispA}</span></div>`+
-      `<div class="drow"><span class="dop">×</span><span class="dtxt">${p.dispB}</span></div>`+
-      `<div class="drow"><span class="dline" style="width:${lineW}"></span></div>`+
-      `<div class="drow"><span class="ansbox2 ${revealAll?'reveal':''}" style="min-width:${lineW}">${ansStr}</span></div>`+
-    `</div>`;
+  const m=state.model, cur=m.inputs[state.step];
+  // 上段（被乗数・乗数）を スロットに沿って描く
+  function topRow(dispStr, opChar){
+    const pd=placeDisplay(dispStr);
+    let h=`<div class="drow"><span class="dop">${opChar}</span>`;
+    for(const s of m.slots){
+      if(s.t==='dot'){ h+=`<span class="dcell dp">${pd.dec===s.pos?'<span class="pt"></span>':'&nbsp;'}</span>`; }
+      else{ const ch=pd.map[s.col]; h+= ch!=null?`<span class="dcell">${ch}</span>`:`<span class="dcell blank">0</span>`; }
+    }
+    return h+`</div>`;
+  }
+  // 本体行（部分積・答え）
+  function bodyRow(row,ri){
+    let h=`<div class="drow"><span class="dop">&nbsp;</span>`;
+    for(const s of m.slots){
+      if(s.t==='dot'){
+        if(row.kind==='ans' && row.dotPos===s.pos){
+          const placed = revealAll || state.vals[row.dotIdx]==='.';
+          const active = (!revealAll && cur && cur.idx===row.dotIdx)?'active':'';
+          const rev = revealAll?'reveal':'';
+          h+=`<span class="dcell dp ans ${active} ${rev}" data-idx="${row.dotIdx}">${placed?'<span class="pt"></span>':'&nbsp;'}</span>`;
+        } else { h+=`<span class="dcell dp">&nbsp;</span>`; }
+        continue;
+      }
+      const cell=row.cells[s.col];
+      if(!cell){ h+=`<span class="dcell blank">0</span>`; continue; }
+      const active=(!revealAll && cur && cur.idx===cell.idx)?'active':'';
+      const rev=revealAll?'reveal':'';
+      const v = revealAll ? cell.expected : (state.vals[cell.idx]||'');
+      h+=`<span class="dcell ans ${active} ${rev}" data-idx="${cell.idx}">${v===''?'&nbsp;':v}</span>`;
+    }
+    return h+`</div>`;
+  }
+  const figW=(0.9 + m.slots.reduce((a,s)=>a+(s.t==='dot'?0.42:0.82),0)).toFixed(2)+"em";
+  let html=`<div class="dfig num">`;
+  html+=topRow(m.dispA,"&nbsp;");
+  html+=topRow(m.dispB,"×");
+  html+=`<div class="drow lrow"><span class="dline" style="width:${figW}"></span></div>`;
+  m.body.forEach((row,ri)=>{
+    html+=bodyRow(row,ri);
+    if(row.kind==='pp' && ri===m.body.length-2){ html+=`<div class="drow lrow"><span class="dline" style="width:${figW}"></span></div>`; }
+  });
+  html+=`</div>`;
   $("problemArea").innerHTML=html;
+  if(!revealAll) bindTaps();
+}
+function bindTaps(){
+  const m=state.model;
+  $("problemArea").querySelectorAll(".dcell.ans[data-idx]").forEach(el=>{
+    el.addEventListener("click",()=>{ if(state.locked)return; const idx=parseInt(el.dataset.idx,10); const s=m.inputs.findIndex(x=>x.idx===idx); if(s>=0){ state.step=s; renderFigure(); beep("tap"); } });
+  });
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
 function pressKey(k){
   if(state.locked) return;
-  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); renderFigure(); beep("tap"); } return; }
+  const m=state.model;
+  if(k==="del"){
+    if(state.step>0){ state.step--; state.vals[m.inputs[state.step].idx]=''; renderFigure(); beep("tap"); }
+    else if(state.vals[m.inputs[0].idx]){ state.vals[m.inputs[0].idx]=''; renderFigure(); beep("tap"); }
+    return;
+  }
   if(k==="enter"){ submit(); return; }
-  if(k==="."){ if(state.input.includes(".")||state.input==="") { beep("wrong"); return; } state.input+="."; beep("tap"); renderFigure(); return; }
-  if(state.input.length>=8) return;
-  state.input+=k; beep("tap"); renderFigure();
+  if(k==="next"){
+    if(state.model.body.length<=1){ beep("wrong"); return; }   // 段が1つだけ
+    const curRow = state.step<m.inputs.length ? m.inputs[state.step].row : m.body.length-1;
+    const idx = m.inputs.findIndex(x=>x.row===curRow+1);
+    if(idx>=0){ state.step=idx; renderFigure(); beep("tap"); } else { beep("wrong"); }
+    return;
+  }
+  if(state.step>=m.inputs.length) return;
+  const cur=m.inputs[state.step];
+  if(k==="."){
+    if(cur.type==='dot'){ state.vals[cur.idx]='.'; state.step++; renderFigure(); beep("tap"); }
+    else beep("wrong");
+    return;
+  }
+  if(cur.type==='dot'){ beep("wrong"); return; }        // ここは 小数点（● を おす）
+  state.vals[cur.idx]=k; state.step++; renderFigure(); beep("tap");
 }
 function submit(){
   if(state.locked) return;
-  if(state.input==="") { beep("wrong"); return; }
+  const m=state.model;
+  // 未完成でも 判定する（空欄は まちがい扱い）
+  const ansRow=m.body[m.body.length-1];
+  let entered='';
+  for(const s of m.slots){
+    if(s.t==='dot'){ if(ansRow.dotPos===s.pos) entered += (state.vals[ansRow.dotIdx]||''); }
+    else { const cell=ansRow.cells[s.col]; if(cell) entered += (state.vals[cell.idx]||''); }
+  }
+  // 筆算ぜんたいが 正しいか
+  let allCells=true;
+  for(const inp of m.inputs){ if((state.vals[inp.idx]||'')!==inp.expected){ allCells=false; break; } }
   const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
-  if(state.input===p.canonical) onCorrect(p);
-  else onWrong(p, classify(state.input, p.canonical));
+  if(allCells && entered===m.ansStr) onCorrect(p);
+  else { const mt = (entered!==m.ansStr)?classify(entered,p.canonical):1; onWrong(p, mt); }
 }
 
 // 原作 MISS.TYPE を移植：小数点・0 のまちがいを こまかく はんてい
@@ -426,8 +539,6 @@ function classify(typed, canonical){
 
 function onCorrect(p){
   p.correct=true; p.userAns=p.canonical;
-  const box=$("problemArea").querySelector(".ansbox2");
-  if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
   beep("correct"); setTimeout(nextProblem,1100);
@@ -439,14 +550,14 @@ function onWrong(p, missType){
   if(p.tries>=MAX_TRIES){
     let mt=(missType===1)?0:missType;
     msg.textContent=MISS[mt]; msg.className="msg bad";
-    p.correct=false; p.userAns=state.input;
+    p.correct=false; p.userAns=state.model.ansStr;
     renderFigure(true);
     $("reveal").innerHTML=`こたえは ${p.dispA}×${p.dispB}＝ <b>${p.canonical}</b>`;
     $("reveal").classList.add("show");
     setTimeout(nextProblem,2400);
   }else{
     msg.textContent=MISS[missType]; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); renderFigure(); $("msg").textContent=""; $("msg").className="msg"; },1100);
+    setTimeout(()=>{ $("stamp").innerHTML=""; state.vals={}; state.step=0; state.locked=false; setKeypad(true); renderFigure(); $("msg").textContent=""; $("msg").className="msg"; },1100);
   }
 }
 function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }

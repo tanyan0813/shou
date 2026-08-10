@@ -58,10 +58,13 @@
   .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--rose);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #F4C9DA;}
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
   .title-card .tag{color:var(--rose-deep);font-weight:900;font-size:13px;margin-bottom:16px;position:relative;}
-  .mini-wari{display:inline-block;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;text-align:left;}
-  .mini-wari .q{color:var(--rose);padding-left:1.3em;}
-  .mini-wari .d{border-top:3px solid var(--ink);padding-top:2px;}
-  .mini-wari .d .op{color:var(--red);}
+  .mini-wari{display:inline-block;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--ink);position:relative;}
+  .mini-wari .mw-row{display:flex;align-items:flex-end;justify-content:center;}
+  .mini-wari .mw-gut{min-width:1.5em;display:flex;justify-content:flex-end;align-items:center;}
+  .mini-wari .mw-gut .op{color:var(--red);}
+  .mini-wari .mw-gut .rbr{color:var(--ink);font-size:1.1em;transform:scaleY(1.2);margin-left:.06em;}
+  .mini-wari .mw-q{color:var(--rose);padding:0 .12em;letter-spacing:.12em;}
+  .mini-wari .mw-div{border-top:3px solid var(--ink);padding:2px .12em 0;letter-spacing:.12em;}
   .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
   .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--rose);box-shadow:0 5px 0 var(--rose-deep);transition:transform .08s, box-shadow .08s;}
@@ -118,6 +121,11 @@
   .amari-line .abox.active{border-bottom-color:var(--rose);animation:blink 1s steps(2) infinite;}
   .amari-line .abox.reveal{color:var(--red);}
   @keyframes blink{50%{border-bottom-color:transparent;}}
+  .wari .wcell.cin{color:var(--rose);}
+  .wari .wcell.active{background:rgba(219,90,139,.16);border-radius:5px;box-shadow:0 0 0 2px rgba(219,90,139,.55);animation:cellblink 1s steps(2) infinite;}
+  .wari .wcell.reveal{color:var(--red);}
+  .wari .wcell.bar{border-top:5px solid var(--ink);}
+  @keyframes cellblink{50%{opacity:.45;}}
 
   .prompt{margin-top:12px;font-weight:700;font-size:14px;color:var(--green);min-height:20px;}
   .msg{margin-top:8px;font-weight:900;font-size:19px;min-height:26px;}
@@ -142,6 +150,8 @@
   .key.del:active{box-shadow:0 1px 0 #F3C4BC;}
   .key.enter{background:var(--green);color:#fff;box-shadow:0 5px 0 #279862;font-size:20px;}
   .key.enter:active{box-shadow:0 1px 0 #279862;}
+  .key.next{grid-column:1 / -1;background:var(--blue);color:#fff;box-shadow:0 5px 0 #1F7CAE;font-size:20px;}
+  .key.next:active{box-shadow:0 1px 0 #1F7CAE;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
@@ -184,13 +194,13 @@
       <div class="sub">わり算の ひっさん の れんしゅう</div>
       <div class="tag">2〜4けた ÷ 1けた に ちょうせん！</div>
       <div class="mini-wari num">
-        <div class="q">&nbsp;&nbsp;12</div>
-        <div class="d"><span class="op">8 )</span>96</div>
+        <div class="mw-row"><span class="mw-gut"></span><span class="mw-q">12</span></div>
+        <div class="mw-row"><span class="mw-gut"><span class="op">8</span><span class="rbr">)</span></span><span class="mw-div">96</span></div>
       </div>
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -230,6 +240,7 @@
       <button class="key del" data-k="del">⌫</button>
       <button class="key" data-k="0">0</button>
       <button class="key enter" data-k="enter">こたえ</button>
+      <button class="key next" data-k="next" id="nextKey" style="display:none;">つぎへ ▶</button>
     </div>
   </section>
 
@@ -395,7 +406,7 @@ function updateDots(){
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  state.inputQ=""; state.inputR=""; state.activeField=1; state.locked=false;
+  state.div=mkDiv(p.a,p.b); state.locked=false;
   $("bracket").textContent="［"+m.bracket+"］";
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
@@ -405,93 +416,136 @@ function renderProblem(){
   setKeypad(true); updateDots();
 }
 
-function renderFigure(revealAll){
-  const p=state.problems[state.current];
-  const aStr=String(p.a); const cols=aStr.length;
-  const qStr = revealAll ? String(p.quotient) : state.inputQ;
-  const qPad = qStr.padStart(cols," ").split("");
-  const qCell=(ch)=> ch===" " ? `<span class="wcell blank">0</span>` : `<span class="wcell">${ch}</span>`;
-  const dCell=(ch)=> `<span class="wcell">${ch}</span>`;
-  const qActive = (!revealAll && state.activeField===1) ? "active" : "";
-  const qReveal = revealAll ? "reveal" : "";
-  const qRow=`<div class="wrow"><span class="wleft"></span><span class="wdigits qdigits ${qActive} ${qReveal}">${qPad.map(qCell).join("")}</span></div>`;
-  const dRow=`<div class="wrow"><span class="wleft"><span class="divisor">${p.b}</span><span class="rbr">)</span></span><span class="wdigits topline">${aStr.split("").map(dCell).join("")}</span></div>`;
-  let html=`<div class="wari num">${qRow}${dRow}</div>`;
-  if(p.rem){
-    const rStr = revealAll ? String(p.remainder) : state.inputR;
-    const rActive=(!revealAll && state.activeField===2)?"active":"";
-    const rReveal=revealAll?"reveal":"";
-    html+=`<div class="amari-line">あまり <span class="abox ${rActive} ${rReveal}" data-f="2">${rStr}</span></div>`;
+// ===== 長除法（わり算の筆算）エンジン：教科書どおり たてる→かける→ひく→おろす =====
+function mkDiv(a,b){ const D=buildDivision(a,b); D.vals=Array(D.inputs.length).fill(""); D.step=0; return D; }
+function buildDivision(a,b){
+  const ds=String(a).split("").map(Number), n=ds.length;
+  const qcells=Array(n).fill(null);   // 商：col→{col,expected,idx}
+  const bodyRows=[];                  // {kind:'prod'|'diff', cells:[{col,expected,idx,kind}], bar?:{start,end}}
+  const inputs=[];                    // 入力順の セル {row:'q'|bodyIndex, col, expected, kind, idx}
+  let working=0, started=false, prevDiff=null;
+  for(let i=0;i<n;i++){
+    working=working*10+ds[i];
+    if(started && i>0){  // おろす：前の「差」の行に つぎのけたを おろす
+      const idx=inputs.length; const cell={col:i,expected:String(ds[i]),kind:'bringdown',idx};
+      bodyRows[prevDiff].cells.push(cell); inputs.push({row:prevDiff,col:i,expected:cell.expected,kind:'bringdown',idx});
+    }
+    const qd=Math.floor(working/b);
+    if(qd===0 && !started) continue;  // 先頭のけたが小さいときは 商を立てない
+    started=true;
+    { const idx=inputs.length; qcells[i]={col:i,expected:String(qd),idx}; inputs.push({row:'q',col:i,expected:String(qd),kind:'quotient',idx}); }
+    const prod=qd*b, rem=working-prod, ps=String(prod), pStart=i-(ps.length-1);
+    const prodCells=[];
+    for(let k=0;k<ps.length;k++){ const idx=inputs.length; const col=pStart+k; prodCells.push({col,expected:ps[k],kind:'prod',idx}); inputs.push({row:bodyRows.length,col,expected:ps[k],kind:'prod',idx}); }
+    bodyRows.push({kind:'prod',cells:prodCells});
+    const dRowIdx=bodyRows.length; const idx=inputs.length;
+    bodyRows.push({kind:'diff',cells:[{col:i,expected:String(rem),kind:'diff',idx}],bar:{start:pStart,end:i}});
+    inputs.push({row:dRowIdx,col:i,expected:String(rem),kind:'diff',idx});
+    prevDiff=dRowIdx; working=rem;
   }
+  const quotient=parseInt(qcells.filter(x=>x).map(x=>x.expected).join(""),10);
+  return { a,b,n, qcells, bodyRows, inputs, quotient, remainder:working };
+}
+
+function renderFigure(revealAll){
+  const p=state.problems[state.current], dv=state.div, n=dv.n;
+  const valOf=(idx)=> revealAll ? dv.inputs[idx].expected : (dv.vals[idx]||"");
+  const isActive=(idx)=> (!revealAll && idx===dv.step);
+  const cellSpan=(content,cls,idx)=>`<span class="wcell ${cls||''}"${idx!=null?` data-idx="${idx}"`:""}>${content===""?"&nbsp;":content}</span>`;
+  // 商の行
+  let qHtml="";
+  for(let c=0;c<n;c++){
+    const qc=dv.qcells[c];
+    if(qc) qHtml+=cellSpan(valOf(qc.idx), `cin ${isActive(qc.idx)?'active':''} ${revealAll?'reveal':''}`, qc.idx);
+    else qHtml+=cellSpan("","");
+  }
+  let html=`<div class="wari num">`;
+  html+=`<div class="wrow"><span class="wleft"></span><span class="wdigits">${qHtml}</span></div>`;
+  // 割られる数の行
+  const aStr=String(p.a); let dHtml="";
+  for(let c=0;c<n;c++) dHtml+=cellSpan(aStr[c],"");
+  html+=`<div class="wrow"><span class="wleft"><span class="divisor">${p.b}</span><span class="rbr">)</span></span><span class="wdigits topline">${dHtml}</span></div>`;
+  // 積・差 の行
+  for(const row of dv.bodyRows){
+    const cmap={}; for(const cell of row.cells) cmap[cell.col]=cell;
+    let cHtml="";
+    for(let c=0;c<n;c++){
+      const cell=cmap[c]; let cls="";
+      if(row.kind==='diff' && row.bar && c>=row.bar.start && c<=row.bar.end) cls+="bar ";
+      if(cell) cHtml+=cellSpan(valOf(cell.idx), `${cls}cin ${isActive(cell.idx)?'active':''} ${revealAll?'reveal':''}`, cell.idx);
+      else cHtml+=cellSpan("", cls);
+    }
+    html+=`<div class="wrow"><span class="wleft"></span><span class="wdigits">${cHtml}</span></div>`;
+  }
+  html+=`</div>`;
   $("problemArea").innerHTML=html;
-  const qd=$("problemArea").querySelector(".qdigits");
-  if(qd) qd.addEventListener("click",()=>{ if(state.locked)return; state.activeField=1; renderFigure(); });
-  const ab=$("problemArea").querySelector(".abox");
-  if(ab) ab.addEventListener("click",()=>{ if(state.locked)return; state.activeField=2; renderFigure(); });
+  if(!revealAll){ bindCellTaps(); updateDivPrompt(); updateNextKey(); }
+}
+function bindCellTaps(){
+  const dv=state.div;
+  $("problemArea").querySelectorAll(".wari .wcell.cin[data-idx]").forEach(el=>{
+    el.addEventListener("click",()=>{ if(state.locked)return; dv.step=parseInt(el.dataset.idx,10); renderFigure(); beep("tap"); });
+  });
+}
+function updateDivPrompt(){
+  const dv=state.div, pr=$("prompt");
+  if(dv.step>=dv.inputs.length){ pr.textContent="ぜんぶ いれたら「こたえ」を おそう。"; return; }
+  const kind=dv.inputs[dv.step].kind;
+  const map={ quotient:"たてる：商を いれよう。", prod:"かける：わる数 × 商 の こたえを いれよう。", diff:"ひく：ひきざんの こたえを いれよう。", bringdown:"おろす：つぎの けたを おろそう。" };
+  pr.textContent=map[kind]||MSG.prompt;
+}
+function updateNextKey(){
+  const btn=$("nextKey"); if(!btn) return;
+  const dv=state.div;
+  btn.style.display=(dv && dv.step<dv.inputs.length)?"":"none";
 }
 
 function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
 
-function maxLenField(f){
-  const p=state.problems[state.current];
-  if(f===2) return 1;
-  return String(p.quotient).length;
-}
-
 function pressKey(k){
   if(state.locked) return;
-  const f=state.activeField;
-  const cur = f===1 ? state.inputQ : state.inputR;
+  const dv=state.div;
   if(k==="del"){
-    if(cur.length){ if(f===1) state.inputQ=cur.slice(0,-1); else state.inputR=cur.slice(0,-1); renderFigure(); beep("tap"); }
+    if(dv.step>0){ dv.step--; dv.vals[dv.step]=""; renderFigure(); beep("tap"); }
+    else if(dv.vals[0]!==""){ dv.vals[0]=""; renderFigure(); beep("tap"); }
     return;
   }
-  if(k==="enter"){ onEnter(); return; }
-  if(cur.length>=maxLenField(f)) return;
-  let nv=(cur==="0")?k:cur+k;
-  if(f===1) state.inputQ=nv; else state.inputR=nv;
+  if(k==="next"){
+    if(dv.step<dv.inputs.length){ dv.step++; renderFigure(); beep("tap"); } else beep("wrong");
+    return;
+  }
+  if(k==="enter"){ submit(); return; }
+  if(dv.step>=dv.inputs.length) return;   // すべて入力ずみ
+  dv.vals[dv.step]=k; dv.step++;
   beep("tap"); renderFigure();
-}
-
-function onEnter(){
-  const p=state.problems[state.current];
-  if(!p.rem){ if(state.inputQ!=="") submit(); else beep("wrong"); return; }
-  if(state.activeField===1){ if(state.inputQ!==""){ state.activeField=2; renderFigure(); } else beep("wrong"); }
-  else{ if(state.inputR!=="") submit(); else beep("wrong"); }
 }
 
 function submit(){
   if(state.locked) return;
+  const dv=state.div;
+  for(let i=0;i<dv.inputs.length;i++){ if(dv.vals[i]===""){ beep("wrong"); return; } }  // 未完成
+  const ok = dv.inputs.every((inp,i)=> dv.vals[i]===inp.expected);
   const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
-  let correct, missType;
-  if(!p.rem){
-    correct = parseInt(state.inputQ,10)===p.quotient; missType=3;
-  }else{
-    const qOk=parseInt(state.inputQ,10)===p.quotient;
-    const rOk=parseInt(state.inputR,10)===p.remainder;
-    correct=qOk&&rOk;
-    missType=correct?0:(qOk?1:(rOk?2:3));
-  }
-  if(correct) onCorrect(p); else onWrong(p, missType);
+  if(ok) onCorrect(p); else onWrong(p);
 }
+
+function enteredQuotient(dv){ let s=""; for(let i=0;i<dv.inputs.length;i++){ if(dv.inputs[i].kind==='quotient') s+=(dv.vals[i]||"?"); } return s; }
+function enteredRemainder(dv){ let last=""; for(let i=0;i<dv.inputs.length;i++){ if(dv.inputs[i].kind==='diff') last=dv.vals[i]; } return last; }
 
 function onCorrect(p){
   p.correct=true; p.userQ=String(p.quotient); if(p.rem) p.userR=String(p.remainder);
-  const qd=$("problemArea").querySelector(".qdigits"); if(qd) qd.classList.remove("active");
-  const ab=$("problemArea").querySelector(".abox"); if(ab) ab.classList.remove("active");
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
   beep("correct"); setTimeout(nextProblem,1100);
 }
 
-function onWrong(p, missType){
+function onWrong(p){
   p.tries+=1; showStamp("batsu"); beep("wrong");
-  const msg=$("msg");
+  const dv=state.div; const msg=$("msg");
   if(p.tries>=MAX_TRIES){
-    let t=(missType===3)?MSG.miss3all:(missType===1?MSG.missAmari:(missType===2?MSG.missShou:MSG.miss3all));
-    msg.textContent=t; msg.className="msg bad";
-    p.correct=false; p.userQ=state.inputQ; if(p.rem) p.userR=state.inputR;
+    msg.textContent=MSG.miss3all; msg.className="msg bad";
+    p.correct=false; p.userQ=enteredQuotient(dv); if(p.rem) p.userR=enteredRemainder(dv);
     renderFigure(true);
     const rev=$("reveal");
     if(p.rem) rev.innerHTML=`こたえは ${p.a}÷${p.b}＝ <b>${p.quotient}</b> <span class="am">あまり</span> <b>${p.remainder}</b>`;
@@ -499,11 +553,10 @@ function onWrong(p, missType){
     rev.classList.add("show");
     setTimeout(nextProblem,2400);
   }else{
-    let t=(!p.rem)?MSG.missAgain:(missType===1?MSG.missAmari:(missType===2?MSG.missShou:MSG.missAgain));
-    msg.textContent=t; msg.className="msg bad";
+    msg.textContent=MSG.missAgain; msg.className="msg bad";
     setTimeout(()=>{
       $("stamp").innerHTML="";
-      state.inputQ=""; state.inputR=""; state.activeField=1; state.locked=false;
+      state.div=mkDiv(p.a,p.b); state.locked=false;
       setKeypad(true); renderFigure();
       $("msg").textContent=""; $("msg").className="msg";
     },1100);
@@ -575,7 +628,7 @@ document.addEventListener("keydown",(e)=>{
   if(e.key>="0"&&e.key<="9"){ pressKey(e.key); e.preventDefault(); }
   else if(e.key==="Backspace"){ pressKey("del"); e.preventDefault(); }
   else if(e.key==="Enter"){ pressKey("enter"); e.preventDefault(); }
-  else if(e.key==="Tab"){ const p=state.problems[state.current]; if(p&&p.rem&&!state.locked){ state.activeField=state.activeField===1?2:1; renderFigure(); e.preventDefault(); } }
+  else if(e.key==="Tab"){ pressKey("next"); e.preventDefault(); }
 });
 
 buildMenu();

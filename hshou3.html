@@ -102,9 +102,14 @@
   .dfig{display:inline-block;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:clamp(26px,8.5vw,48px);line-height:1;color:var(--ink);}
   .drow{display:flex;align-items:flex-end;}
   .dop{width:.9em;text-align:center;color:var(--red);flex:none;}
-  .dcell{width:.82em;text-align:center;flex:none;}
+  .dcell{width:.82em;height:1.1em;display:flex;align-items:flex-end;justify-content:center;flex:none;}
   .dcell.blank{color:transparent;}
-  .dcell.dp{color:var(--ink);}
+  .dcell.dp{width:.5em;color:var(--ink);}
+  .dcell.dp .pt{width:.36em;height:.36em;border-radius:50%;background:currentColor;margin-bottom:.08em;}
+  .dfig .dcell.ans{color:var(--teal);}
+  .dfig .dcell.ans.active{background:rgba(14,165,176,.16);border-radius:6px;box-shadow:0 0 0 2px rgba(14,165,176,.55);animation:cellblink 1s steps(2) infinite;}
+  .dfig .dcell.reveal{color:var(--red);}
+  @keyframes cellblink{50%{opacity:.45;}}
   .dline{height:5px;background:var(--ink);border-radius:3px;margin:5px 0;}
   .ansbox2{display:inline-flex;justify-content:flex-end;align-items:flex-end;color:var(--teal);border-bottom:6px solid var(--teal);border-radius:4px;padding:0 .06em;min-height:1.1em;}
   .ansbox2.reveal{color:var(--red);}
@@ -179,7 +184,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.01 ／ Web版
       </div>
     </div>
   </section>
@@ -382,10 +387,40 @@ function updateDots(){
   });
 }
 
+/* ---- 位ごとの こたえ入力（教科書どおり） ---- */
+function decimalsOf(s){ const i=s.indexOf('.'); return i<0?0:s.length-i-1; }
+function intLenOf(s){ const i=s.indexOf('.'); return i<0?s.length:i; }
+function buildAnsModel(p){
+  const parse=(s)=>{ const i=s.indexOf("."); return i<0?{ip:s,fp:""}:{ip:s.slice(0,i),fp:s.slice(i+1)}; };
+  const A=parse(p.dispA), B=parse(p.dispB), C=parse(p.canonical);
+  const iW=Math.max(A.ip.length,B.ip.length,C.ip.length);
+  const dW=Math.max(A.fp.length,B.fp.length);
+  const hasDot=dW>0;
+  let ai=C.ip, ad=C.fp; if(ad.length<dW) ad=ad.padEnd(dW,'0');
+  const cols=[];
+  const ipad=ai.padStart(iW,' ');
+  for(let c=0;c<iW;c++) cols.push({kind:'int', expected: ipad[c]===' '?'':ipad[c]});
+  if(hasDot){ cols.push({kind:'dot', expected:'.'}); for(let c=0;c<dW;c++) cols.push({kind:'dec', expected: ad[c]}); }
+  const order=[]; cols.forEach((c,idx)=>{ const isDigit=(c.kind==='int'||c.kind==='dec')&&c.expected!==''&&c.expected!=null; if(isDigit||c.kind==='dot') order.push(idx); });
+  order.sort((a,b)=>b-a);  // 右（小さい位）→ 左（小数点も 位置どおり）
+  return { iW, dW, hasDot, cols, order };
+}
+function enteredAnswer(){
+  const model=state.model; let s='';
+  model.cols.forEach((c,idx)=>{ if(c.kind==='dot') s+=(state.cells[idx]||''); else if(c.expected!==''&&c.expected!=null) s+=(state.cells[idx]||''); });
+  return s;
+}
+function bindAnsTaps(){
+  const model=state.model;
+  $("problemArea").querySelectorAll(".dcell.ans[data-idx]").forEach(el=>{
+    el.addEventListener("click",()=>{ if(state.locked)return; const s=model.order.indexOf(parseInt(el.dataset.idx,10)); if(s>=0){ state.step=s; renderFigure(); beep("tap"); } });
+  });
+}
+
 function renderProblem(){
   const p=state.problems[state.current];
   const m=MODES[state.modeIndex];
-  state.input=""; state.locked=false;
+  state.model=buildAnsModel(p); state.cells={}; state.step=0; state.input=""; state.locked=false;
   $("bracket").textContent="［"+m.bracket+"］";
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
@@ -396,32 +431,44 @@ function renderProblem(){
 }
 
 function renderFigure(revealAll){
-  const p=state.problems[state.current];
-  $("problemArea").innerHTML=figureHTML(p.dispA, p.dispB, state.input, revealAll, p.canonical);
+  $("problemArea").innerHTML=figureHTML(revealAll);
+  if(!revealAll) bindAnsTaps();
 }
 
-// 小数の筆算：小数点をそろえて たてに ならべる
-function figureHTML(dispA, dispB, typed, revealAll, canonical){
+// 小数の筆算：小数点をそろえて たてに ならべ、答えは 位ごとに入力
+function figureHTML(revealAll){
+  const p=state.problems[state.current], model=state.model;
   const parse=(s)=>{ const i=s.indexOf("."); return i<0?{ip:s,fp:""}:{ip:s.slice(0,i),fp:s.slice(i+1)}; };
-  const A=parse(dispA), B=parse(dispB);
-  const maxInt=Math.max(A.ip.length,B.ip.length);
-  const maxFrac=Math.max(A.fp.length,B.fp.length);
-  const hasFrac=maxFrac>0;
-  const totalCols=maxInt+(hasFrac?1:0)+maxFrac;
-  const cell=(ch)=> ch===" " ? `<span class="dcell blank">0</span>` : `<span class="dcell">${ch}</span>`;
+  const A=parse(p.dispA), B=parse(p.dispB);
+  const maxInt=model.iW, maxFrac=model.dW, hasFrac=model.hasDot;
+  const cellD=(ch)=> (ch===" "||ch==="") ? `<span class="dcell blank">0</span>` : `<span class="dcell">${ch}</span>`;
+  const dotOp=(present)=> present ? `<span class="dcell dp"><span class="pt"></span></span>` : `<span class="dcell blank">0</span>`;
   function numRow(part, opChar){
-    const ip=part.ip.padStart(maxInt," ").split("").map(cell).join("");
-    let mid="";
-    if(hasFrac){ mid = part.fp!=="" ? `<span class="dcell dp">.</span>` : `<span class="dcell blank">0</span>`; }
-    const fp = hasFrac ? part.fp.padEnd(maxFrac," ").split("").map(cell).join("") : "";
+    const ip=part.ip.padStart(maxInt," ").split("").map(cellD).join("");
+    const mid = hasFrac ? dotOp(part.fp!=="") : "";
+    const fp = hasFrac ? part.fp.padEnd(maxFrac," ").split("").map(ch=>cellD(ch===" "?"":ch)).join("") : "";
     return `<div class="drow"><span class="dop">${opChar}</span>${ip}${mid}${fp}</div>`;
   }
   const row1=numRow(A,"&nbsp;");
   const row2=numRow(B,"−");
-  const lineW=(totalCols*0.82)+"em";
+  const lineW=((maxInt+(hasFrac?1:0)+maxFrac)*0.82)+"em";
   const line=`<div class="drow"><span class="dop">&nbsp;</span><span class="dline" style="width:${lineW}"></span></div>`;
-  const ansStr=(revealAll?canonical:(typed||"")) || "";
-  const ansRow=`<div class="drow"><span class="dop">&nbsp;</span><span class="ansbox2 ${revealAll?'reveal':''}" style="min-width:${lineW}">${ansStr}</span></div>`;
+  // 答え行（位ごとの入力セル）
+  let ans="";
+  model.cols.forEach((c,idx)=>{
+    const active=(!revealAll && state.step<model.order.length && model.order[state.step]===idx)?'active':'';
+    const rev=revealAll?'reveal':'';
+    if(c.kind==='dot'){
+      const placed = revealAll || state.cells[idx]==='.';
+      ans+=`<span class="dcell dp ans ${active} ${rev}" data-idx="${idx}">${placed?'<span class="pt"></span>':'&nbsp;'}</span>`;
+      return;
+    }
+    const isInput=(c.expected!==''&&c.expected!=null);
+    if(!isInput){ ans+=`<span class="dcell blank">0</span>`; return; }
+    const v = revealAll ? c.expected : (state.cells[idx]||'');
+    ans+=`<span class="dcell ans ${active} ${rev}" data-idx="${idx}">${v===''?'&nbsp;':v}</span>`;
+  });
+  const ansRow=`<div class="drow"><span class="dop">&nbsp;</span>${ans}</div>`;
   return `<div class="dfig num">${row1}${row2}${line}${ansRow}</div>`;
 }
 
@@ -429,19 +476,32 @@ function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k
 
 function pressKey(k){
   if(state.locked) return;
-  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); renderFigure(); beep("tap"); } return; }
+  const model=state.model;
+  if(k==="del"){
+    if(state.step>0){ state.step--; state.cells[model.order[state.step]]=""; renderFigure(); beep("tap"); }
+    else if(state.cells[model.order[0]]){ state.cells[model.order[0]]=""; renderFigure(); beep("tap"); }
+    return;
+  }
   if(k==="enter"){ submit(); return; }
-  if(k==="."){ if(state.input.includes(".")||state.input==="") { beep("wrong"); return; } state.input+="."; beep("tap"); renderFigure(); return; }
-  if(state.input.length>=7) return;
-  state.input+=k; beep("tap"); renderFigure();
+  if(state.step>=model.order.length) return;               // すべて入力ずみ
+  const colIdx=model.order[state.step], kind=model.cols[colIdx].kind;
+  if(k==="."){
+    if(kind==='dot'){ state.cells[colIdx]='.'; state.step++; renderFigure(); beep("tap"); }
+    else beep("wrong");                                     // ここは 数字のマス
+    return;
+  }
+  if(kind==='dot'){ beep("wrong"); return; }                // ここは 小数点のマス（● を おす）
+  state.cells[colIdx]=k; state.step++; renderFigure(); beep("tap");
 }
 function submit(){
   if(state.locked) return;
-  if(state.input==="") { beep("wrong"); return; }
+  const model=state.model;
+  for(const idx of model.order){ if(!state.cells[idx]){ beep("wrong"); return; } }   // 未完成
+  const entered=enteredAnswer();
   const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
-  if(state.input===p.canonical || (p.alt && state.input===p.alt)) onCorrect(p);
-  else onWrong(p, classify(state.input, p));
+  if(entered===p.canonical || (p.alt && entered===p.alt)) onCorrect(p);
+  else onWrong(p, classify(entered, p));
 }
 
 // 原作 MISS.TYPE を移植
@@ -458,8 +518,6 @@ function classify(typed, p){
 
 function onCorrect(p){
   p.correct=true; p.userAns=p.canonical;
-  const box=$("problemArea").querySelector(".ansbox2");
-  if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
   showStamp("maru");
   const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
   beep("correct"); setTimeout(nextProblem,1100);
@@ -471,14 +529,14 @@ function onWrong(p, missType){
   if(p.tries>=MAX_TRIES){
     let mt=(missType===1)?0:missType;
     msg.textContent=MISS[mt]; msg.className="msg bad";
-    p.correct=false; p.userAns=state.input;
+    p.correct=false; p.userAns=enteredAnswer();
     renderFigure(true);
     $("reveal").innerHTML=`こたえは ${p.dispA}−${p.dispB}＝ <b>${p.canonical}</b>`;
     $("reveal").classList.add("show");
     setTimeout(nextProblem,2400);
   }else{
     msg.textContent=MISS[missType]; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); renderFigure(); $("msg").textContent=""; $("msg").className="msg"; },1100);
+    setTimeout(()=>{ $("stamp").innerHTML=""; state.cells={}; state.step=0; state.locked=false; setKeypad(true); renderFigure(); $("msg").textContent=""; $("msg").className="msg"; },1100);
   }
 }
 function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }
