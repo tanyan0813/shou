@@ -11,7 +11,10 @@
   :root{
     --paper:#FCFBF4; --grid:#DDE7E3; --grid2:#EDF2EF;
     --ink:#37424A; --ink-soft:#6A757C;
-    --red:#EA5040; --blue:#2E9BD6; --yellow:#F6B93B; --green:#34B37A; --pink:#F27B9D;
+    --red:#EA5040; --red-deep:#D33B2E;
+    --blue:#2E9BD6; --blue-deep:#1F7CAE;
+    --yellow:#F6B93B; --yellow-deep:#D89A2C;
+    --green:#34B37A; --green-deep:#279862;
     --violet:#6E56CF; --violet-deep:#533FB0;
     --card:#FFFFFF; --shadow:0 6px 0 rgba(55,66,74,.10), 0 12px 28px rgba(55,66,74,.12);
   }
@@ -34,54 +37,64 @@
   .logo{display:flex;align-items:center;gap:10px;}
   .logo .pin{width:34px;height:34px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900;display:grid;place-items:center;font-size:20px;box-shadow:0 3px 0 var(--violet-deep);transform:rotate(-8deg);}
   .logo b{font-size:18px;font-weight:900;letter-spacing:.02em;}
-  .tools{display:flex;gap:8px;}
+  .tools{display:flex;gap:8px;align-items:center;}
   .icon-btn{
     border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;
     color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;
     display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
   }
-  .icon-btn.text-btn{
-    width:auto;
-    padding:0 12px;
-    font-size:13px;
-    font-weight:700;
-  }
+  .icon-btn.text-btn{width:auto;padding:0 12px;font-size:13px;font-weight:700;}
   .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
+
+  .who{display:flex;align-items:center;gap:6px;}
+  .who .badge{
+    background:var(--card);border-radius:999px;padding:6px 12px;font-weight:900;font-size:12px;
+    box-shadow:0 3px 0 rgba(55,66,74,.10);color:var(--violet);cursor:pointer;border:none;font-family:inherit;
+    max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .who .badge:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.10);}
 
   .screen{display:none;animation:pop .3s ease;}
   .screen.active{display:block;}
   @keyframes pop{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-  .title-card{background:var(--card);border-radius:26px;padding:30px 24px 26px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;}
+  .title-card{background:var(--card);border-radius:26px;padding:26px 22px 20px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;margin-bottom:14px;}
   .title-card::before{content:"";position:absolute;inset:8px;border:3px dashed #CFC6F0;border-radius:20px;pointer-events:none;}
-  .title-card h1{margin:6px 0 2px;font-size:clamp(28px,7.5vw,44px);font-weight:900;color:var(--violet);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #D4CCF2;}
-  .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:16px;position:relative;}
-  .kuku-demo{display:inline-flex;align-items:center;gap:.12em;margin:6px auto 18px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:30px;color:var(--ink);position:relative;}
+  .title-card h1{margin:6px 0 2px;font-size:clamp(26px,7vw,40px);font-weight:900;color:var(--violet);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #D4CCF2;}
+  .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:12px;position:relative;}
+  .kuku-demo{display:inline-flex;align-items:center;gap:.12em;margin:4px auto 14px;font-family:"M PLUS Rounded 1c";font-weight:900;font-size:30px;color:var(--ink);position:relative;}
   .kuku-demo .op{color:var(--red);}
   .kuku-demo .eq{color:var(--ink-soft);}
   .kuku-demo .ans{color:var(--violet);}
-  .credit{margin-top:20px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
+  .credit{margin-top:16px;font-size:11px;color:#9AA4A9;line-height:1.6;position:relative;}
 
-  .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--violet);box-shadow:0 5px 0 var(--violet-deep);transition:transform .08s, box-shadow .08s;}
+  .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:14px 26px;font-size:18px;background:var(--violet);box-shadow:0 5px 0 var(--violet-deep);transition:transform .08s, box-shadow .08s;}
   .big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--violet-deep);}
   .big-btn.blue{background:var(--blue);box-shadow:0 5px 0 #1F7CAE;}
   .big-btn.blue:active{box-shadow:0 1px 0 #1F7CAE;}
   .big-btn.green{background:var(--green);box-shadow:0 5px 0 #279862;}
   .big-btn.green:active{box-shadow:0 1px 0 #279862;}
+  .big-btn.red{background:var(--red);box-shadow:0 5px 0 var(--red-deep);}
+  .big-btn.red:active{box-shadow:0 1px 0 var(--red-deep);}
 
   .menu-head{display:flex;align-items:baseline;gap:10px;margin:4px 2px 14px;}
   .menu-head h2{font-size:20px;font-weight:900;margin:0;}
   .menu-head p{margin:0;color:var(--ink-soft);font-weight:700;font-size:13px;}
   .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-  @media(max-width:560px){.menu-grid{grid-template-columns:repeat(3,1fr);}}
   .mode-card{background:var(--card);border-radius:18px;padding:16px 8px 12px;cursor:pointer;box-shadow:var(--shadow);border:none;font-family:inherit;text-align:center;transition:transform .1s, box-shadow .1s;position:relative;color:var(--ink);}
   .mode-card:hover{transform:translateY(-3px);}
   .mode-card:active{transform:translateY(1px);box-shadow:0 3px 0 rgba(55,66,74,.10);}
-  .mode-card.bara{grid-column:span 3;background:linear-gradient(135deg,#F3F0FF,#FFFFFF);}
   .mode-card .dan{font-size:30px;font-weight:900;color:var(--violet);line-height:1;}
   .mode-card .dan .sm{font-size:15px;color:var(--ink-soft);}
   .mode-card .lbl{font-size:12px;color:var(--ink-soft);font-weight:700;margin-top:4px;}
-  .mode-card.bara .dan{font-size:24px;}
+  
+  .mode-card.special{background:linear-gradient(135deg,#F3F0FF,#FFFFFF);}
+  .mode-card.special .dan{font-size:22px;}
+  .mode-card.bara{grid-column:span 3;}
+  .mode-card.review{grid-column:span 3; background:linear-gradient(135deg,#FFF2F0,#FFFFFF);}
+  .mode-card.review .dan{color:var(--red);}
+  .mode-card.data{grid-column:span 3; background:linear-gradient(135deg,#F0F7FF,#FFFFFF);}
+  .mode-card.data .dan{color:var(--blue);}
 
   /* choice screen */
   .choice-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:26px 22px;text-align:center;}
@@ -91,12 +104,11 @@
   .choice-btn{border:none;cursor:pointer;font-family:inherit;font-weight:900;font-size:18px;border-radius:18px;padding:18px;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.15);transition:transform .08s, box-shadow .08s;display:flex;align-items:center;justify-content:center;gap:10px;}
   .choice-btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.15);}
   .choice-btn.order{background:var(--violet);box-shadow:0 5px 0 var(--violet-deep);}
-  .choice-btn.order:active{box-shadow:0 1px 0 var(--violet-deep);}
   .choice-btn.rand{background:var(--blue);box-shadow:0 5px 0 #1F7CAE;}
-  .choice-btn.rand:active{box-shadow:0 1px 0 #1F7CAE;}
   .choice-btn .cnum{background:rgba(255,255,255,.25);border-radius:8px;padding:2px 8px;font-family:"M PLUS Rounded 1c";}
   .choice-back{margin-top:18px;}
 
+  /* play */
   .play-top{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
   .chip{background:var(--card);border-radius:999px;padding:7px 12px;font-weight:700;font-size:12px;box-shadow:0 3px 0 rgba(55,66,74,.10);display:inline-flex;align-items:center;gap:4px;}
   .chip.mode{color:var(--violet);}
@@ -141,6 +153,7 @@
   .key.enter:active{box-shadow:0 1px 0 #279862;}
   .key[disabled]{opacity:.4;pointer-events:none;}
 
+  /* result */
   .result-card{background:var(--card);border-radius:26px;box-shadow:var(--shadow);padding:26px 20px 24px;text-align:center;}
   .score-line{font-weight:900;font-size:22px;margin:8px 0 4px;}
   .score-line .big{font-family:"M PLUS Rounded 1c";font-size:56px;color:var(--red);vertical-align:-6px;margin:0 4px;}
@@ -159,14 +172,129 @@
   .review-row .ra.wrong{color:var(--red);text-decoration:line-through;margin-right:5px;}
   .review-row .rc{color:var(--green);}
   .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+  /* DATA SCREEN & PANELS */
+  .panel{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px 16px;margin-bottom:14px;text-align:left;}
+  .panel h3{margin:0 0 10px;font-size:16px;font-weight:900;display:flex;align-items:center;gap:8px;}
+  .panel h3 .bar2{width:6px;height:18px;border-radius:3px;background:var(--violet);}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media(max-width:480px){.stat-row{grid-template-columns:1fr 1fr;}}
+  .stat{background:#F7FAF9;border-radius:14px;padding:12px 8px;text-align:center;}
+  .stat .v{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--violet);}
+  .stat .k{font-size:11px;color:var(--ink-soft);font-weight:700;margin-top:2px;}
+
+  .spark{display:flex;align-items:flex-end;gap:3px;height:70px;padding-top:4px;}
+  .spark .b{flex:1;min-width:5px;background:var(--violet);border-radius:3px 3px 0 0;position:relative;}
+  .spark .b.s100{background:var(--red);} .spark .b.s80{background:var(--yellow);}
+  .empty{color:var(--ink-soft);font-weight:700;font-size:13px;text-align:center;padding:14px 0;}
+
+  table.rec{width:100%;border-collapse:collapse;font-size:13px;}
+  table.rec th,table.rec td{padding:8px 6px;border-bottom:1px solid #EDF2EF;text-align:left;}
+  table.rec th{font-size:11px;color:var(--ink-soft);font-weight:900;}
+  table.rec td.n{font-family:"M PLUS Rounded 1c";font-weight:900;text-align:right;white-space:nowrap;}
+  table.rec tr:last-child td{border-bottom:none;}
+  .scorepill{display:inline-block;min-width:44px;text-align:center;border-radius:999px;padding:2px 8px;font-family:"M PLUS Rounded 1c";font-weight:900;color:#fff;font-size:12px;}
+  .sp100{background:var(--red);} .sp80{background:var(--yellow);color:#6a5000;} .sp0{background:var(--ink-soft);}
+
+  .rowbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+  .sbtn{border:none;border-radius:14px;padding:10px 16px;font-family:inherit;font-weight:900;font-size:13px;cursor:pointer;color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(55,66,74,.14);}
+  .sbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(55,66,74,.14);}
+  .sbtn.pur{background:var(--violet);color:#fff;box-shadow:0 4px 0 var(--violet-deep);}
+  .sbtn.danger{background:#FDECE9;color:var(--red);box-shadow:0 4px 0 #F3C4BC;}
+
+  /* ステッパーUIフォーム */
+  .form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;justify-content:center;}
+  .fld{display:flex;flex-direction:column;gap:4px;}
+  .fld label{font-size:11px;font-weight:900;color:var(--ink-soft);}
+  .fld input.wide{width:140px;font-size:15px;text-align:left;font-family:"Zen Maru Gothic";border:2px solid #E1E8E5;border-radius:12px;padding:8px 10px;color:var(--ink);background:#fff;}
+  .fld input.wide:focus{outline:none;border-color:var(--violet);}
+
+  .stepper-fld{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .stepper-fld label{font-size:11px;font-weight:900;color:var(--ink-soft);}
+  .stepper{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    background:#fff;
+    border:2px solid #E1E8E5;
+    border-radius:14px;
+    padding:3px;
+    box-shadow:0 3px 0 rgba(55,66,74,.08);
+  }
+  .step-val{
+    font-family:"M PLUS Rounded 1c", sans-serif;
+    font-weight:900;
+    font-size:20px;
+    width:56px;
+    text-align:center;
+    line-height:1.2;
+    padding:3px 0;
+    color:var(--ink);
+    user-select:none;
+  }
+  .step-btn{
+    border:none;
+    background:#F3F0FA;
+    color:var(--violet);
+    width:100%;
+    height:24px;
+    border-radius:8px;
+    font-size:11px;
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition:transform .06s, background .1s;
+  }
+  .step-btn:active{
+    transform:scale(0.92);
+    background:#E0D6F0;
+  }
+
+  .who-list{display:flex;flex-direction:column;gap:8px;}
+  .who-item{display:flex;align-items:center;gap:10px;background:#F7FAF9;border-radius:14px;padding:10px 12px;}
+  .who-item.on{background:#F3F0FA;box-shadow:0 0 0 2px var(--violet) inset;}
+  .who-item .nm{flex:1;font-weight:900;font-size:14px;}
+  .who-item .sm2{font-size:11px;color:var(--ink-soft);font-weight:700;}
+  .mini{border:none;background:#fff;border-radius:10px;padding:6px 10px;font-family:inherit;font-weight:900;font-size:12px;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);}
+  .mini.red{color:var(--red);}
+
+  .miss-list{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px;}
+  .miss-chip{background:#FDECE9;color:var(--red-deep);border-radius:10px;padding:5px 9px;font-size:13px;font-family:"M PLUS Rounded 1c";font-weight:900;}
+  .miss-chip.shaky{background:#FDF0CF;color:#6a5000;}
+  .miss-lead{font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:8px;}
+
+  .detail{display:none;background:#F7FAF9;border-radius:12px;padding:10px 12px;margin-top:6px;font-size:12px;}
+  .detail.show{display:block;}
+  .detail div{padding:3px 0;font-family:"M PLUS Rounded 1c";font-weight:900;}
+  .detail .ng{color:var(--red);}
+  .detail .time-meta{font-size:11px;color:var(--ink-soft);font-weight:700;margin-left:6px;}
+
+  .foot{display:flex;justify-content:center;margin-top:18px;gap:10px;flex-wrap:wrap;}
+  .foot button,.foot a{border:none;border-radius:16px;padding:12px 22px;font-size:15px;color:var(--ink);background:#fff;box-shadow:0 5px 0 rgba(55,66,74,.15);font-family:inherit;cursor:pointer;font-weight:900;text-decoration:none;}
+  .foot button:active,.foot a:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.15);}
+  .foot button.submit-btn{background:#EAF6F0;color:var(--green-deep);box-shadow:0 4px 0 rgba(39,152,98,.28);}
+  .foot button.submit-btn:active{box-shadow:0 1px 0 rgba(39,152,98,.28);}
+  .notice{background:#FDF0CF;color:#6a5000;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:700;margin-bottom:12px;}
+
+  /* 提出用モーダル */
+  .modal-overlay{position:fixed;inset:0;background:rgba(55,66,74,.45);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;}
+  .modal-overlay.active{display:flex;}
+  .modal-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 20px;max-width:440px;width:100%;text-align:center;}
+  .modal-card h3{margin:0 0 12px;font-size:19px;color:var(--violet);display:flex;align-items:center;justify-content:center;gap:6px;}
+  .modal-desc{background:#F7FAF9;border-radius:14px;padding:14px;font-size:13px;line-height:1.6;color:var(--ink);margin-bottom:18px;text-align:left;}
+  .modal-notice{font-size:12px;font-weight:900;color:var(--green-deep);margin-top:8px;}
+
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;} }
 </style>
 </head>
 <body>
 <div class="app">
   <header class="bar">
-    <div class="logo"><span class="pin">×</span><b>かけざん（九九）</b></div>
+    <div class="logo"><span class="pin">×</span><b>九九の れんしゅう</b></div>
     <div class="tools">
+      <div class="who">
+        <button class="badge" id="whoBadge" title="べんきょうする ひと">だれも いないよ</button>
+      </div>
       <a href="knmenu.html" class="icon-btn text-btn" title="はじめのメニュー">🏠 メニュー</a>
       <button class="icon-btn" id="soundBtn" title="おと">🔊</button>
     </div>
@@ -181,7 +309,7 @@
       <br>
       <button class="big-btn" id="startBtn">はじめる ▶</button>
       <div class="credit">
-        岐阜県女子大学（安藤忠展）Ver 5.00 ／ Web版
+        岐阜女子大学（安藤忠展）Ver 5.02 ／ Webばん
       </div>
     </div>
   </section>
@@ -190,6 +318,9 @@
   <section class="screen" id="menuScreen">
     <div class="menu-head"><h2>メニュー</h2><p>れんしゅうする だんを えらびましょう</p></div>
     <div class="menu-grid" id="menuGrid"></div>
+    <div class="foot">
+      <button type="button" class="submit-btn" id="openSubmitBtn">📤 がくしゅうの きろくを おくる</button>
+    </div>
   </section>
 
   <!-- CHOICE (order / random) -->
@@ -246,20 +377,130 @@
       <div class="time-line" id="resultTime"></div>
       <div class="review" id="review"></div>
       <div class="result-actions">
+        <button class="big-btn red" id="missAgainBtn" style="display:none">まちがいなおしをする</button>
         <button class="big-btn green" id="againBtn">もういちど やる</button>
         <button class="big-btn blue" id="toMenuBtn">べつの だん</button>
       </div>
     </div>
   </section>
+
+  <!-- DATA & RECORD (小学生向け表現) -->
+  <section class="screen" id="dataScreen">
+    <div class="title-card">
+      <h1>がくしゅうの きろく</h1>
+      <div class="sub">れんしゅうの がんばりを みてみよう</div>
+    </div>
+    <div id="storeNotice"></div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>じぶんの なまえ</h3>
+      <div class="who-list" id="whoList"></div>
+
+      <!-- ステッパーUIフォーム -->
+      <div style="margin-top:12px" class="form-row">
+        <!-- 学年（1〜6循環） -->
+        <div class="stepper-fld">
+          <label>がくねん</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnNenUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispNen">2</div>
+            <button type="button" class="step-btn" id="btnNenDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- 組（1〜20循環） -->
+        <div class="stepper-fld">
+          <label>くみ</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnKumiUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispKumi">01</div>
+            <button type="button" class="step-btn" id="btnKumiDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- 番号（1〜45循環） -->
+        <div class="stepper-fld">
+          <label>ばんごう</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnBanUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispBan">01</div>
+            <button type="button" class="step-btn" id="btnBanDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- お名前（任意） -->
+        <div class="fld">
+          <label>おなまえ（かかなくてもいいよ）</label>
+          <input id="fName" class="wide" maxlength="12" placeholder="なまえ" style="height:44px; margin-bottom:6px;">
+        </div>
+
+        <button class="sbtn pur" id="addWhoBtn" style="height:44px; margin-bottom:6px;">＋ とうろく</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>がんばりの まとめ</h3>
+      <div class="stat-row">
+        <div class="stat"><div class="v" id="stCount">0</div><div class="k">れんしゅうした かいすう</div></div>
+        <div class="stat"><div class="v" id="stAvg">—</div><div class="k">いつもの てんすう（へいきん）</div></div>
+        <div class="stat"><div class="v" id="stBest">—</div><div class="k">いちばん たかい てんすう</div></div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:12px;font-weight:900;color:var(--ink-soft);margin-bottom:4px">てんすうの うつりかわり（ひだり：まえ → みぎ：いま）</div>
+        <div class="spark" id="spark"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>まちがいなおし コース</h3>
+      <div class="miss-lead" id="missLead"></div>
+      <div class="miss-list" id="missList"></div>
+      <div class="rowbtns">
+        <button class="sbtn pur" id="missStartBtn">まちがいなおしを はじめる</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>だんごとの きろく</h3>
+      <div id="byKind"></div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>れんしゅうの あしあと（おすと くわしく みえるよ）</h3>
+      <div id="history"></div>
+    </div>
+
+    <div class="rowbtns">
+      <button class="sbtn" id="csvBtn">ファイルに のこす（CSV）</button>
+      <button class="sbtn danger" id="clearBtn">このひとの きろくを ぜんぶ けす</button>
+    </div>
+    <div class="foot"><button id="dataBackBtn">← メニューへ もどる</button></div>
+  </section>
+</div>
+
+<!-- ===== 学習履歴提出ダイアログ ===== -->
+<div class="modal-overlay" id="submitModal">
+  <div class="modal-card">
+    <h3>📤 がくしゅうの きろくを おくる</h3>
+    <div class="modal-desc">
+      れんしゅうした きろくを せんせいに おくって、べんきょうの けんきゅうの おてつだいを します。<br>
+      <div class="modal-notice">
+        ※ おなまえ や がくねん・くみ・ばんごう は おくられません。<br>
+        ※ もんだい・こたえ・まるばつ・かかった じかん だけが あんぜんに おくられます。
+      </div>
+    </div>
+    <div class="rowbtns">
+      <button class="sbtn pur" id="doSubmitBtn" style="font-size:15px;padding:12px 24px;">おくる</button>
+      <button class="sbtn" id="cancelSubmitBtn" style="font-size:15px;padding:12px 20px;">やめる</button>
+    </div>
+    <div id="submitStatus" style="margin-top:12px;font-size:13px;font-weight:900;"></div>
+  </div>
 </div>
 
 <script>
 /* =========================================================
-   かけざん（九九）の れんしゅう  —  Web版
-   原作: N88-BASIC "KAKE1.BAS" Ver 3.01 のロジックを移植
-   ・1回10もん ・1〜9の段は「じゅんばん / ばらばら」をえらぶ
-   ・10もんめは「にがて（一番まちがえた / 一番おそかった）」問題を ふくしゅう
-   ・「ばらばら」モードは 1〜9 の ランダムな かけざん
+   かけざん（九九）の れんしゅう  —  Web版 + 学習記録システム
+   Ver 5.02
    ========================================================= */
 
 const PROBLEMS_PER_ROUND = 10;
@@ -267,19 +508,141 @@ const MAX_TRIES = 3;
 const rnd = () => Math.random();
 const fix = (x) => Math.trunc(x);
 
-// modeIndex 0..8 → 1〜9の段 ／ modeIndex 9 → ばらばら
 const BARA_INDEX = 9;
+const REVIEW_INDEX = 10;
 
 const MSG = {
   perfect:"よくできました！", good:"あともうすこし！", more:"もっとがんばろう！",
-  miss:"もういちど かんがえよう！", miss3:"まちがってますよ！",
+  miss:"もういちど かんがえよう！", miss3:"まちがっていますよ！",
 };
 
-let state = { modeIndex:0, keisanType:1, table:1, problems:[], current:0, input:"", locked:false, startTime:0, problemStart:0, soundOn:true };
+/* =========================================================
+   学習記録ストレージ
+   ========================================================= */
+const STORE_KEY = "kakezan1.records.v1";
+const Store = (function(){
+  let mem=null, usable=false;
+  try{ const k="__t"+Date.now(); localStorage.setItem(k,"1"); localStorage.removeItem(k); usable=true; }catch(e){ usable=false; }
+  return {
+    usable: usable,
+    load: function(){
+      if(!usable) return mem||{people:[],cur:null,logs:[]};
+      try{ const s=localStorage.getItem(STORE_KEY); return s?JSON.parse(s):{people:[],cur:null,logs:[]}; }
+      catch(e){ return {people:[],cur:null,logs:[]}; }
+    },
+    save: function(d){
+      if(!usable){ mem=d; return; }
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch(e){ mem=d; }
+    }
+  };
+})();
+let DB = Store.load();
+function dbSave(){ Store.save(DB); }
+function curPerson(){
+  if(!DB.cur) return null;
+  for(let i=0;i<DB.people.length;i++) if(DB.people[i].id===DB.cur) return DB.people[i];
+  return null;
+}
+function personLabel(p){
+  if(!p) return "だれも いないよ";
+  const s = p.nen+"ねん"+p.kumi+"くみ"+p.ban+"ばん";
+  return p.name ? s+" "+p.name : s;
+}
+function updateWhoBadge(){
+  $("whoBadge").textContent = personLabel(curPerson());
+  buildMenu();
+}
+
+function modeKindName(modeIndex, keisanType){
+  if(modeIndex === REVIEW_INDEX) return "まちがいなおし コース";
+  if(modeIndex === BARA_INDEX) return "ばらばら（ぜんぶ）";
+  const t = modeIndex + 1;
+  return t + "のだん・" + (keisanType === 1 ? "じゅんばん" : "ばらばら");
+}
+
+function saveCurrentLog(score, sec){
+  const p = curPerson();
+  if(!p) return;
+  const items = state.problems.filter(it => it).map(it => {
+    return {
+      q: `${it.a}×${it.b}`,
+      ans: it.answer,
+      user: it.userAnswer || "",
+      ok: it.correct,
+      tries: it.tries,
+      times: it.times || [],
+      review: !!it.review
+    };
+  });
+  DB.logs.push({
+    pid: p.id,
+    at: Date.now(),
+    modeIndex: state.modeIndex,
+    keisanType: state.keisanType,
+    kind: modeKindName(state.modeIndex, state.keisanType),
+    ten: score,
+    sec: sec,
+    items: items
+  });
+  dbSave();
+}
+
+function missPool(){
+  const p = curPerson();
+  const out = { miss:[], shaky:[] };
+  if(!p) return out;
+  const st = {};
+  DB.logs.forEach(g => {
+    if(g.pid !== p.id) return;
+    g.items.forEach(it => {
+      const state = !it.ok ? 2 : (it.tries > 1 ? 1 : 0);
+      const parts = it.q.split("×");
+      const a = parseInt(parts[0], 10), b = parseInt(parts[1], 10);
+      st[it.q] = { a: a, b: b, ans: it.ans, state: state, at: g.at, kind: g.kind };
+    });
+  });
+  Object.keys(st).forEach(k => {
+    const v = st[k];
+    if(v.state === 2) out.miss.push(v);
+    else if(v.state === 1) out.shaky.push(v);
+  });
+  const newFirst = (a,b) => b.at - a.at;
+  out.miss.sort(newFirst);
+  out.shaky.sort(newFirst);
+  return out;
+}
+function missCount(){ const m = missPool(); return m.miss.length + m.shaky.length; }
+
+/* =========================================================
+   ゲーム状態・画面制御
+   ========================================================= */
+let state = {
+  modeIndex: 0,
+  keisanType: 1,
+  table: 1,
+  problems: [],
+  current: 0,
+  input: "",
+  locked: false,
+  startTime: 0,
+  qStartTime: 0,
+  soundOn: true
+};
 
 const $ = (id)=>document.getElementById(id);
-const screens = { title:$("titleScreen"), menu:$("menuScreen"), choice:$("choiceScreen"), play:$("playScreen"), result:$("resultScreen") };
-function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
+const screens = {
+  title: $("titleScreen"),
+  menu: $("menuScreen"),
+  choice: $("choiceScreen"),
+  play: $("playScreen"),
+  result: $("resultScreen"),
+  data: $("dataScreen")
+};
+function show(name){
+  Object.values(screens).forEach(s => s.classList.remove("active"));
+  screens[name].classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
 
 let audioCtx=null;
 function beep(type){
@@ -287,7 +650,12 @@ function beep(type){
   try{
     audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
     const now=audioCtx.currentTime;
-    const play=(f,s,d,v=0.18)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="sine";o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);g.gain.setValueAtTime(0,now+s);g.gain.linearRampToValueAtTime(v,now+s+0.02);g.gain.exponentialRampToValueAtTime(0.0001,now+s+d);o.start(now+s);o.stop(now+s+d+0.02);};
+    const play=(f,s,d,v=0.18)=>{
+      const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type="sine";o.frequency.value=f;o.connect(g);g.connect(audioCtx.destination);
+      g.gain.setValueAtTime(0,now+s);g.gain.linearRampToValueAtTime(v,now+s+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,now+s+d);o.start(now+s);o.stop(now+s+d+0.02);
+    };
     if(type==="correct"){play(660,0,.14);play(880,.12,.2);}
     else if(type==="wrong"){play(200,0,.18,.2);}
     else if(type==="tap"){play(520,0,.05,.08);}
@@ -295,179 +663,343 @@ function beep(type){
   }catch(e){}
 }
 
-// ---- menu ----
+/* ---- menu 構築 ---- */
 function buildMenu(){
-  const grid=$("menuGrid"); grid.innerHTML="";
-  for(let t=1;t<=9;t++){
-    const btn=document.createElement("button"); btn.className="mode-card";
-    btn.innerHTML=`<div class="dan num">${t}<span class="sm">の だん</span></div><div class="lbl">九九</div>`;
-    btn.addEventListener("click",()=>{ beep("tap"); pickTable(t-1); });
+  const grid = $("menuGrid");
+  grid.innerHTML = "";
+  for(let t=1; t<=9; t++){
+    const btn = document.createElement("button");
+    btn.className = "mode-card";
+    btn.innerHTML = `<div class="dan num">${t}<span class="sm">の だん</span></div><div class="lbl">九九</div>`;
+    btn.addEventListener("click", () => { beep("tap"); pickTable(t-1); });
     grid.appendChild(btn);
   }
-  const bara=document.createElement("button"); bara.className="mode-card bara";
-  bara.innerHTML=`<div class="dan num">ばらばら</div><div class="lbl">1〜9 の だんが ランダムに でるよ</div>`;
-  bara.addEventListener("click",()=>{ beep("tap"); startRound(BARA_INDEX,null); });
+
+  // ばらばら
+  const bara = document.createElement("button");
+  bara.className = "mode-card special bara";
+  bara.innerHTML = `<div class="dan num">ばらばら</div><div class="lbl">1〜9 の だんが ランダムに でるよ</div>`;
+  bara.addEventListener("click", () => { beep("tap"); startRound(BARA_INDEX, null); });
   grid.appendChild(bara);
+
+  // まちがい直し
+  const nMiss = missCount();
+  const rev = document.createElement("button");
+  rev.className = "mode-card special review";
+  const revMsg = nMiss ? `なおしたいもんだい が ${nMiss}もん あるよ` : `いまは まちがいがないよ（ランダム10もん）`;
+  rev.innerHTML = `<div class="dan num">まちがいなおし コース</div><div class="lbl">${revMsg}</div>`;
+  rev.addEventListener("click", () => { beep("tap"); startReviewCourse(); });
+  grid.appendChild(rev);
+
+  // 学習のきろく
+  const dataBtn = document.createElement("button");
+  dataBtn.className = "mode-card special data";
+  dataBtn.innerHTML = `<div class="dan num">がくしゅうの きろく</div><div class="lbl">これまでの てんすう や がんばりをみる</div>`;
+  dataBtn.addEventListener("click", () => { beep("tap"); openData(); });
+  grid.appendChild(dataBtn);
 }
 
 function pickTable(modeIndex){
-  state.modeIndex=modeIndex; state.table=modeIndex+1;
-  $("choiceDan").textContent=state.table+" の だんの 九九";
+  state.modeIndex = modeIndex;
+  state.table = modeIndex + 1;
+  $("choiceDan").textContent = state.table + " の だんの 九九";
   show("choice");
 }
 
-// ---- build round ----
-function newProblem(a,b,review){ return { a, b, answer:a*b, tries:0, correct:false, userAnswer:"", solveTime:0, review:!!review }; }
+/* ---- 問題リスト生成 ---- */
+function newProblem(a, b, review){
+  return { a, b, answer: a*b, tries: 0, correct: false, userAnswer: "", solveTime: 0, times: [], review: !!review };
+}
 
 function buildRound(modeIndex, keisanType){
-  const list=[]; const seen=new Set();
-  if(modeIndex===BARA_INDEX){
-    for(let i=0;i<PROBLEMS_PER_ROUND;i++){
-      let a,b,g=0;
-      do{ a=fix(8.9*rnd()+1); b=fix(8.9*rnd()+1); g++; }while(seen.has(a+"_"+b)&&g<300);
+  const list = [];
+  const seen = new Set();
+  if(modeIndex === BARA_INDEX){
+    for(let i=0; i<PROBLEMS_PER_ROUND; i++){
+      let a, b, g=0;
+      do{ a=fix(8.9*rnd()+1); b=fix(8.9*rnd()+1); g++; } while(seen.has(a+"_"+b) && g<300);
       seen.add(a+"_"+b);
-      list.push(newProblem(a,b,false));
+      list.push(newProblem(a, b, false));
     }
     return list;
   }
-  const t=modeIndex+1;
-  for(let i=0;i<9;i++){
+  const t = modeIndex + 1;
+  for(let i=0; i<9; i++){
     let b;
-    if(keisanType===1){ b=i+1; }               // じゅんばん ×1..×9
-    else { let g=0; do{ b=fix(8.9*rnd()+1); g++; }while(seen.has(b)&&g<99); } // ばらばら
+    if(keisanType === 1){ b = i + 1; } // じゅんばん
+    else {
+      let g = 0;
+      do{ b=fix(8.9*rnd()+1); g++; } while(seen.has(b) && g<99);
+    }
     seen.add(b);
-    list.push(newProblem(t,b,false));
+    list.push(newProblem(t, b, false));
   }
-  list.push(null); // 10もんめ（にがて復習）は 9もん おわってから きめる
+  list.push(null); // 10問目（ふくしゅう）
   return list;
 }
 
-// 10もんめ：一番まちがえた（同数なら 後ろ）問題、なければ 一番おそかった問題を ふくしゅう
 function resolveReviewProblem(){
-  const first9=state.problems.slice(0,9);
-  let target=null, maxMiss=0;
-  first9.forEach(p=>{ if(p.tries>=maxMiss){ maxMiss=p.tries; target=p; } });
-  if(maxMiss===0){
-    let maxTime=-1; target=first9[0];
-    first9.forEach(p=>{ if(p.solveTime>maxTime){ maxTime=p.solveTime; target=p; } });
+  const first9 = state.problems.slice(0, 9);
+  let target = null, maxMiss = 0;
+  first9.forEach(p => { if(p.tries >= maxMiss){ maxMiss = p.tries; target = p; } });
+  if(maxMiss === 0){
+    let maxTime = -1; target = first9[0];
+    first9.forEach(p => { if(p.solveTime > maxTime){ maxTime = p.solveTime; target = p; } });
   }
   return newProblem(target.a, target.b, true);
 }
 
 function startRound(modeIndex, keisanType){
-  state.modeIndex=modeIndex; state.keisanType=keisanType;
-  state.table=(modeIndex===BARA_INDEX)?0:modeIndex+1;
-  state.problems=buildRound(modeIndex, keisanType);
-  state.current=0; state.startTime=Date.now();
-  $("modeChip").textContent=(modeIndex===BARA_INDEX)?"ばらばら"
-     : (state.table+"の だん・"+(keisanType===1?"じゅんばん":"ばらばら"));
-  buildDots(); startTimer(); show("play"); renderProblem();
+  state.modeIndex = modeIndex;
+  state.keisanType = keisanType;
+  state.table = (modeIndex === BARA_INDEX) ? 0 : modeIndex + 1;
+  state.problems = buildRound(modeIndex, keisanType);
+  state.current = 0;
+  state.startTime = Date.now();
+  $("modeChip").textContent = (modeIndex === BARA_INDEX) ? "ばらばら"
+     : (state.table + "の だん・" + (keisanType === 1 ? "じゅんばん" : "ばらばら"));
+  buildDots();
+  startTimer();
+  show("play");
+  renderProblem();
+}
+
+function startReviewCourse(){
+  const pool = missPool();
+  const seen = new Set();
+  const list = [];
+  const shuffle = (arr) => arr.slice().sort(() => Math.random() - 0.5);
+
+  shuffle(pool.miss).forEach(x => {
+    if(list.length >= PROBLEMS_PER_ROUND || seen.has(x.a+"_"+x.b)) return;
+    seen.add(x.a+"_"+x.b);
+    list.push(newProblem(x.a, x.b, true));
+  });
+  shuffle(pool.shaky).forEach(x => {
+    if(list.length >= PROBLEMS_PER_ROUND || seen.has(x.a+"_"+x.b)) return;
+    seen.add(x.a+"_"+x.b);
+    list.push(newProblem(x.a, x.b, true));
+  });
+  let guard = 0;
+  while(list.length < PROBLEMS_PER_ROUND && guard < 300){
+    guard++;
+    const a = fix(8.9*rnd()+1), b = fix(8.9*rnd()+1);
+    if(seen.has(a+"_"+b)) continue;
+    seen.add(a+"_"+b);
+    list.push(newProblem(a, b, false));
+  }
+  state.modeIndex = REVIEW_INDEX;
+  state.keisanType = 0;
+  state.problems = list;
+  state.current = 0;
+  state.startTime = Date.now();
+  $("modeChip").textContent = "まちがいなおし コース";
+  buildDots();
+  startTimer();
+  show("play");
+  renderProblem();
 }
 
 function buildDots(){
-  const dots=$("dots"); dots.innerHTML="";
-  for(let i=0;i<PROBLEMS_PER_ROUND;i++){const d=document.createElement("div");d.className="dot";d.id="dot"+i;dots.appendChild(d);}
+  const dots = $("dots");
+  dots.innerHTML = "";
+  for(let i=0; i<PROBLEMS_PER_ROUND; i++){
+    const d = document.createElement("div");
+    d.className = "dot";
+    d.id = "dot" + i;
+    dots.appendChild(d);
+  }
   updateDots();
 }
 function updateDots(){
-  for(let i=0;i<PROBLEMS_PER_ROUND;i++){
-    const d=$("dot"+i); d.className="dot";
-    const p=state.problems[i];
-    if(i===9) d.classList.add("rev");
-    if(i<state.current){ if(p){ d.classList.add(p.correct?"ok":"ng"); d.textContent=p.correct?"○":"✕"; } }
-    else if(i===state.current){ d.classList.add("now"); d.textContent=""; }
-    else d.textContent="";
+  for(let i=0; i<PROBLEMS_PER_ROUND; i++){
+    const d = $("dot" + i);
+    if(!d) continue;
+    d.className = "dot";
+    const p = state.problems[i];
+    if(i === 9 && state.modeIndex !== REVIEW_INDEX && state.modeIndex !== BARA_INDEX) d.classList.add("rev");
+    if(i < state.current){
+      if(p){ d.classList.add(p.correct ? "ok" : "ng"); d.textContent = p.correct ? "○" : "✕"; }
+    } else if(i === state.current){
+      d.classList.add("now"); d.textContent = "";
+    } else {
+      d.textContent = "";
+    }
   }
 }
 
 function renderProblem(){
-  // 10もんめ（index 9）は ここで きめる（未確定なら）
-  if(state.current===9 && state.problems[9]===null){
-    state.problems[9]=resolveReviewProblem();
+  if(state.current === 9 && state.problems[9] === null){
+    state.problems[9] = resolveReviewProblem();
   }
-  const p=state.problems[state.current];
-  state.input=""; state.locked=false; state.problemStart=Date.now();
+  const p = state.problems[state.current];
+  state.input = "";
+  state.locked = false;
+  state.qStartTime = Date.now();
+
   $("revbadge").className = p.review ? "revbadge show" : "revbadge";
-  $("bracket").textContent = "＜"+(state.current+1)+" もんめ＞";
-  $("equation").innerHTML=`<span>${p.a}</span><span class="op">×</span><span>${p.b}</span><span class="eq">＝</span><span class="ansbox" id="ansbox"></span>`;
-  $("msg").textContent=""; $("msg").className="msg";
-  $("reveal").className="reveal"; $("reveal").innerHTML="";
-  $("stamp").innerHTML="";
-  setKeypad(true); updateDots(); updateAnsbox();
+  $("bracket").textContent = "＜" + (state.current + 1) + " もんめ＞";
+  $("equation").innerHTML = `<span>${p.a}</span><span class="op">×</span><span>${p.b}</span><span class="eq">＝</span><span class="ansbox" id="ansbox"></span>`;
+  $("msg").textContent = "";
+  $("msg").className = "msg";
+  $("reveal").className = "reveal";
+  $("reveal").innerHTML = "";
+  $("stamp").innerHTML = "";
+  setKeypad(true);
+  updateDots();
+  updateAnsbox();
 }
-function updateAnsbox(){ const box=$("ansbox"); if(box) box.textContent=state.input; }
-function setKeypad(enabled){ document.querySelectorAll("#keypad .key").forEach(k=>{ enabled?k.removeAttribute("disabled"):k.setAttribute("disabled",""); }); }
+function updateAnsbox(){
+  const box = $("ansbox");
+  if(box) box.textContent = state.input;
+}
+function setKeypad(enabled){
+  document.querySelectorAll("#keypad .key").forEach(k => {
+    enabled ? k.removeAttribute("disabled") : k.setAttribute("disabled", "");
+  });
+}
 
 function pressKey(k){
   if(state.locked) return;
-  if(k==="del"){ if(state.input.length){ state.input=state.input.slice(0,-1); updateAnsbox(); beep("tap"); } return; }
-  if(k==="enter"){ submit(); return; }
-  if(state.input.length>=3) return;
-  if(state.input==="0") state.input="";
-  state.input+=k; beep("tap"); updateAnsbox();
+  if(k === "del"){
+    if(state.input.length){
+      state.input = state.input.slice(0, -1);
+      updateAnsbox();
+      beep("tap");
+    }
+    return;
+  }
+  if(k === "enter"){ submit(); return; }
+  if(state.input.length >= 3) return;
+  if(state.input === "0") state.input = "";
+  state.input += k;
+  beep("tap");
+  updateAnsbox();
 }
+
 function submit(){
   if(state.locked) return;
-  if(state.input==="") { beep("wrong"); return; }
-  const p=state.problems[state.current];
-  state.locked=true; setKeypad(false);
-  if(parseInt(state.input,10)===p.answer) onCorrect(p); else onWrong(p);
-}
-function onCorrect(p){
-  p.correct=true; p.userAnswer=String(p.answer);
-  p.solveTime = Date.now()-state.problemStart;
-  const box=$("ansbox"); if(box){ box.style.color="var(--green)"; box.style.borderBottomColor="var(--green)"; }
-  showStamp("maru");
-  const msg=$("msg"); msg.textContent="せいかい！"; msg.className="msg good";
-  beep("correct"); setTimeout(nextProblem,1100);
-}
-function onWrong(p){
-  p.tries+=1; showStamp("batsu"); beep("wrong");
-  const msg=$("msg");
-  if(p.tries>=MAX_TRIES){
-    msg.textContent=MSG.miss3; msg.className="msg bad";
-    p.correct=false; p.userAnswer=state.input; p.solveTime=Date.now()-state.problemStart;
-    $("reveal").innerHTML=`こたえは ${p.a}×${p.b}＝ <b>${p.answer}</b>`;
-    $("reveal").classList.add("show");
-    setTimeout(nextProblem,2100);
-  }else{
-    msg.textContent=MSG.miss; msg.className="msg bad";
-    setTimeout(()=>{ $("stamp").innerHTML=""; state.input=""; state.locked=false; setKeypad(true); updateAnsbox(); },900);
+  if(state.input === "") { beep("wrong"); return; }
+  const p = state.problems[state.current];
+  state.locked = true;
+  setKeypad(false);
+
+  const spentSec = Math.max(0.1, Math.round(((Date.now() - (state.qStartTime || Date.now())) / 1000) * 10) / 10);
+  if(!p.times) p.times = [];
+  p.times.push(spentSec);
+
+  if(parseInt(state.input, 10) === p.answer) {
+    onCorrect(p);
+  } else {
+    onWrong(p);
   }
 }
-function nextProblem(){ state.current+=1; if(state.current>=PROBLEMS_PER_ROUND) finishRound(); else renderProblem(); }
 
-function showStamp(type){
-  const el=$("stamp");
-  if(type==="maru"){ el.className="stamp maru"; el.innerHTML=`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#EA5040" stroke-width="9"/><circle cx="50" cy="50" r="27" fill="none" stroke="#EA5040" stroke-width="7"/></svg>`; }
-  else{ el.className="stamp batsu"; el.innerHTML=`<svg viewBox="0 0 100 100"><line x1="22" y1="22" x2="78" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/><line x1="78" y1="22" x2="22" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/></svg>`; }
+function onCorrect(p){
+  p.correct = true;
+  p.userAnswer = String(p.answer);
+  p.solveTime = Date.now() - (state.qStartTime || Date.now());
+  const box = $("ansbox");
+  if(box){ box.style.color = "var(--green)"; box.style.borderBottomColor = "var(--green)"; }
+  showStamp("maru");
+  const msg = $("msg");
+  msg.textContent = "せいかい！";
+  msg.className = "msg good";
+  beep("correct");
+  setTimeout(nextProblem, 1100);
 }
 
-let timerId=null;
-function startTimer(){ clearInterval(timerId); timerId=setInterval(()=>{ $("timerText").textContent=fmtTime(Math.floor((Date.now()-state.startTime)/1000)); },500); }
-function fmtTime(s){ const m=Math.floor(s/60), sec=s%60; return m===0?sec+"びょう":m+"ふん"+sec+"びょう"; }
+function onWrong(p){
+  p.tries += 1;
+  showStamp("batsu");
+  beep("wrong");
+  const msg = $("msg");
+  if(p.tries >= MAX_TRIES){
+    msg.textContent = MSG.miss3;
+    msg.className = "msg bad";
+    p.correct = false;
+    p.userAnswer = state.input;
+    p.solveTime = Date.now() - (state.qStartTime || Date.now());
+    $("reveal").innerHTML = `こたえは ${p.a}×${p.b}＝ <b>${p.answer}</b>`;
+    $("reveal").classList.add("show");
+    setTimeout(nextProblem, 2100);
+  } else {
+    msg.textContent = MSG.miss;
+    msg.className = "msg bad";
+    setTimeout(() => {
+      $("stamp").innerHTML = "";
+      state.input = "";
+      state.locked = false;
+      state.qStartTime = Date.now();
+      setKeypad(true);
+      updateAnsbox();
+    }, 900);
+  }
+}
+
+function nextProblem(){
+  state.current += 1;
+  if(state.current >= PROBLEMS_PER_ROUND) finishRound();
+  else renderProblem();
+}
+
+function showStamp(type){
+  const el = $("stamp");
+  if(type === "maru"){
+    el.className = "stamp maru";
+    el.innerHTML = `<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#EA5040" stroke-width="9"/><circle cx="50" cy="50" r="27" fill="none" stroke="#EA5040" stroke-width="7"/></svg>`;
+  } else {
+    el.className = "stamp batsu";
+    el.innerHTML = `<svg viewBox="0 0 100 100"><line x1="22" y1="22" x2="78" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/><line x1="78" y1="22" x2="22" y2="78" stroke="#EA5040" stroke-width="11" stroke-linecap="round"/></svg>`;
+  }
+}
+
+let timerId = null;
+function startTimer(){
+  clearInterval(timerId);
+  timerId = setInterval(() => {
+    $("timerText").textContent = fmtTime(Math.floor((Date.now() - state.startTime) / 1000));
+  }, 500);
+}
+function fmtTime(s){
+  const m = Math.floor(s/60), sec = s%60;
+  return m === 0 ? sec + "びょう" : m + "ふん" + sec + "びょう";
+}
 
 function finishRound(){
   clearInterval(timerId);
-  const correct=state.problems.filter(p=>p&&p.correct).length;
-  const score=fix(correct/PROBLEMS_PER_ROUND*100);
-  const elapsed=Math.floor((Date.now()-state.startTime)/1000);
-  $("scoreNum").textContent=score;
-  const msgEl=$("resultMsg"), wrap=$("hanamaruWrap"); wrap.innerHTML="";
-  if(score===100){ msgEl.textContent=MSG.perfect; msgEl.style.color="var(--red)"; wrap.innerHTML=hanamaruSVG(); beep("fanfare"); }
-  else if(score>=80){ msgEl.textContent=MSG.good; msgEl.style.color="var(--yellow)"; wrap.innerHTML=starSVG(); beep("correct"); }
-  else{ msgEl.textContent=MSG.more; msgEl.style.color="var(--green)"; wrap.innerHTML=ganbaruSVG(); }
-  $("resultTime").textContent="じかん： "+fmtTime(elapsed);
-  const rv=$("review"); rv.innerHTML="";
-  state.problems.forEach((p,idx)=>{
+  const correct = state.problems.filter(p => p && p.correct).length;
+  const score = fix(correct / PROBLEMS_PER_ROUND * 100);
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+
+  saveCurrentLog(score, elapsed);
+
+  $("scoreNum").textContent = score;
+  const msgEl = $("resultMsg"), wrap = $("hanamaruWrap");
+  wrap.innerHTML = "";
+  if(score === 100){ msgEl.textContent = MSG.perfect; msgEl.style.color = "var(--red)"; wrap.innerHTML = hanamaruSVG(); beep("fanfare"); }
+  else if(score >= 80){ msgEl.textContent = MSG.good; msgEl.style.color = "var(--yellow-deep)"; wrap.innerHTML = starSVG(); beep("correct"); }
+  else{ msgEl.textContent = MSG.more; msgEl.style.color = "var(--green)"; wrap.innerHTML = ganbaruSVG(); }
+  $("resultTime").textContent = "かかった じかん： " + fmtTime(elapsed);
+
+  const rv = $("review");
+  rv.innerHTML = "";
+  state.problems.forEach(p => {
     if(!p) return;
-    const row=document.createElement("div"); row.className="review-row"+(p.review?" rev":"");
-    let ansHtml=p.correct?`<span class="rc">${p.answer}</span>`:`<span class="ra wrong">${p.userAnswer!==""?p.userAnswer:"―"}</span><span class="rc">${p.answer}</span>`;
-    row.innerHTML=`<span class="rmark ${p.correct?'ok':'ng'}">${p.correct?'○':'✕'}</span>`+
-      `<span class="rq num">${p.a}<span class="op">×</span>${p.b}<span class="op">＝</span></span>`+
-      `<span class="num">${ansHtml}</span>`+ (p.review?`<span style="font-size:11px;color:var(--violet);font-weight:900;margin-left:2px;">★</span>`:``);
+    const row = document.createElement("div");
+    row.className = "review-row" + (p.review ? " rev" : "");
+    const ansHtml = p.correct
+      ? `<span class="rc">${p.answer}</span>`
+      : `<span class="ra wrong">${p.userAnswer !== "" ? p.userAnswer : "―"}</span><span class="rc">${p.answer}</span>`;
+    row.innerHTML = `<span class="rmark ${p.correct ? 'ok' : 'ng'}">${p.correct ? '○' : '✕'}</span>` +
+      `<span class="rq num">${p.a}<span class="op">×</span>${p.b}<span class="op">＝</span></span>` +
+      `<span class="num">${ansHtml}</span>` + (p.review ? `<span style="font-size:11px;color:var(--violet);font-weight:900;margin-left:2px;">★</span>` : ``);
     rv.appendChild(row);
   });
+
+  const nm = missCount();
+  $("missAgainBtn").style.display = (nm > 0 && curPerson()) ? "inline-flex" : "none";
+
   show("result");
 }
 
@@ -483,24 +1015,384 @@ function ganbaruSVG(){
   return `<svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="42" fill="#EAF6F0" stroke="#34B37A" stroke-width="5"/><circle cx="46" cy="52" r="5" fill="#34B37A"/><circle cx="74" cy="52" r="5" fill="#34B37A"/><path d="M42 74 Q60 90 78 74" fill="none" stroke="#34B37A" stroke-width="5" stroke-linecap="round"/></svg>`;
 }
 
-// ---- events ----
-$("startBtn").addEventListener("click",()=>{ beep("tap"); buildMenu(); show("menu"); });
-$("choiceOrder").addEventListener("click",()=>{ beep("tap"); startRound(state.modeIndex,1); });
-$("choiceRandom").addEventListener("click",()=>{ beep("tap"); startRound(state.modeIndex,2); });
-$("choiceBack").addEventListener("click",()=>{ show("menu"); });
-$("menuBackBtn").addEventListener("click",()=>{ clearInterval(timerId); show("menu"); });
-$("againBtn").addEventListener("click",()=>{ beep("tap"); startRound(state.modeIndex, state.keisanType); });
-$("toMenuBtn").addEventListener("click",()=>{ beep("tap"); show("menu"); });
-$("keypad").addEventListener("click",(e)=>{ const b=e.target.closest(".key"); if(b) pressKey(b.dataset.k); });
-$("soundBtn").addEventListener("click",()=>{ state.soundOn=!state.soundOn; $("soundBtn").textContent=state.soundOn?"🔊":"🔇"; });
-document.addEventListener("keydown",(e)=>{
+/* =========================================================
+   学習記録（小学生向け表現画面）
+   ========================================================= */
+function openData(){ renderData(); show("data"); }
+function renderData(){
+  $("storeNotice").innerHTML = Store.usable ? "" :
+    '<div class="notice">※ パソコンや タブレットの せってい で、きろくを のこせない ようになっています。がめんを とじると きえるため、のこしたいときは「ファイルに のこす」をおしてね。</div>';
+  renderWhoList();
+  const p = curPerson();
+  const logs = DB.logs.filter(g => p && g.pid === p.id);
+
+  $("stCount").textContent = logs.length + " かい";
+  if(logs.length){
+    let sum = 0, best = 0;
+    logs.forEach(g => { sum += g.ten; if(g.ten > best) best = g.ten; });
+    $("stAvg").textContent = Math.round(sum / logs.length) + " てん";
+    $("stBest").textContent = best + " てん";
+  } else {
+    $("stAvg").textContent = "—"; $("stBest").textContent = "—";
+  }
+
+  const sp = $("spark"); sp.innerHTML = "";
+  if(!logs.length){
+    sp.innerHTML = '<div class="empty" style="width:100%">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    logs.slice(-24).forEach(g => {
+      const b = document.createElement("div");
+      b.className = "b" + (g.ten === 100 ? " s100" : (g.ten >= 80 ? " s80" : ""));
+      b.style.height = Math.max(6, g.ten * 0.6) + "px";
+      b.title = fmtDate(g.at) + " " + g.kind + " " + g.ten + "てん";
+      sp.appendChild(b);
+    });
+  }
+
+  renderMissCourse();
+
+  const bk = {};
+  logs.forEach(g => {
+    if(!bk[g.kind]) bk[g.kind] = { n:0, sum:0, best:0 };
+    bk[g.kind].n++;
+    bk[g.kind].sum += g.ten;
+    if(g.ten > bk[g.kind].best) bk[g.kind].best = g.ten;
+  });
+  const keys = Object.keys(bk);
+  const byk = $("byKind");
+  if(!keys.length){
+    byk.innerHTML = '<div class="empty">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    let h = '<table class="rec"><tr><th>だん・コース</th><th style="text-align:right">やった かず</th><th style="text-align:right">いつもの てん</th><th style="text-align:right">いちばんの てん</th></tr>';
+    keys.forEach(k => {
+      const v = bk[k];
+      h += `<tr><td>${k}</td><td class="n">${v.n}かい</td><td class="n">${Math.round(v.sum/v.n)}てん</td><td class="n">${v.best}てん</td></tr>`;
+    });
+    byk.innerHTML = h + '</table>';
+  }
+
+  const hs = $("history");
+  if(!logs.length){
+    hs.innerHTML = '<div class="empty">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    let h = '<table class="rec"><tr><th>いつ やったか</th><th>だん・コース</th><th style="text-align:right">てんすう</th><th style="text-align:right">じかん</th></tr>';
+    logs.slice().reverse().slice(0, 30).forEach((g, i) => {
+      const cls = g.ten === 100 ? "sp100" : (g.ten >= 80 ? "sp80" : "sp0");
+      h += `<tr class="hrow" data-i="${i}" style="cursor:pointer">` +
+        `<td>${fmtDate(g.at)}</td><td>${g.kind}</td>` +
+        `<td class="n"><span class="scorepill ${cls}">${g.ten}てん</span></td>` +
+        `<td class="n">${fmtTime(g.sec)}</td></tr>` +
+        `<tr><td colspan="4" style="padding:0"><div class="detail" id="dt${i}">${detailHTML(g)}</div></td></tr>`;
+    });
+    hs.innerHTML = h + '</table>';
+    hs.querySelectorAll('.hrow').forEach(tr => {
+      tr.addEventListener('click', () => { $("dt" + tr.dataset.i).classList.toggle('show'); });
+    });
+  }
+}
+
+function renderMissCourse(){
+  const p = curPerson(), pool = missPool();
+  const n = pool.miss.length, s = pool.shaky.length, fixed = n + s;
+  const lead = $("missLead"), box = $("missList");
+  if(!p){
+    lead.textContent = "じぶんの なまえを えらぶと、まちがえた もんだいを あつめて れんしゅう できます。（いまは ばらばらに10もん でます）";
+  } else if(fixed === 0){
+    lead.textContent = "いま なおす もんだいは ないよ！ ぜんぶ せいかい していて すごいね！";
+  } else {
+    lead.textContent = "まちがえた もんだいや、かんがえるのに じかんがかかった もんだい だよ。" + (fixed < PROBLEMS_PER_ROUND ? "（たりないぶんは ばらばらに でます）" : "");
+  }
+  box.innerHTML = "";
+  pool.miss.slice(0, 15).concat(pool.shaky.slice(0, 15 - Math.min(15, pool.miss.length))).forEach(x => {
+    const d = document.createElement("span");
+    d.className = "miss-chip" + (x.state === 1 ? " shaky" : "");
+    d.textContent = `${x.a}×${x.b}`;
+    d.title = (x.state === 2 ? "まちがえたもんだい" : "2かい いじょう かかったもんだい") + `（せいかい: ${x.ans}）`;
+    box.appendChild(d);
+  });
+  if(fixed > 15) box.appendChild(Object.assign(document.createElement("span"), { className: "miss-chip shaky", textContent: "ほか" }));
+  $("missStartBtn").textContent = fixed === 0 ? "ばらばらに 10もん れんしゅう" : "まちがいなおしを はじめる";
+}
+$("missStartBtn").addEventListener("click", () => { beep("tap"); startReviewCourse(); });
+
+function detailHTML(g){
+  let h = '';
+  g.items.forEach(it => {
+    const timeStrs = (it.times || []).map((t, idx) => (idx + 1) + 'かいめ:' + t + 'びょう').join(' / ');
+    h += `<div class="${it.ok ? '' : 'ng'}">${it.ok ? '○' : '✕'} ${it.q} ＝ ${it.user || '―'}` +
+      (it.ok ? '' : ` （せいかい＝${it.ans}）`) +
+      ` <span class="time-meta">[${it.tries}かいで せいかい${timeStrs ? ' : ' + timeStrs : ''}]</span>` +
+      `</div>`;
+  });
+  return h;
+}
+function fmtDate(t){
+  const d = new Date(t);
+  return (d.getMonth() + 1) + "がつ" + d.getDate() + "にち " + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+
+function renderWhoList(){
+  const l = $("whoList"); l.innerHTML = "";
+  if(!DB.people.length){
+    l.innerHTML = '<div class="empty">なまえを とうろくすると、じぶんの がんばりが のこせるよ！</div>';
+    return;
+  }
+  DB.people.forEach(p => {
+    const d = document.createElement("div");
+    d.className = "who-item" + (p.id === DB.cur ? " on" : "");
+    const n = DB.logs.filter(g => g.pid === p.id).length;
+    d.innerHTML = `<span class="nm">${personLabel(p)}<span class="sm2">（${n}かい やったよ）</span></span>`;
+    const b1 = document.createElement("button");
+    b1.className = "mini";
+    b1.textContent = (p.id === DB.cur ? "えらび中" : "これにする");
+    b1.addEventListener("click", () => { DB.cur = p.id; dbSave(); updateWhoBadge(); renderData(); });
+    const b2 = document.createElement("button");
+    b2.className = "mini red";
+    b2.textContent = "けす";
+    b2.addEventListener("click", () => {
+      if(!confirm(personLabel(p) + " の データを けしても いいですか？")) return;
+      DB.people = DB.people.filter(x => x.id !== p.id);
+      DB.logs = DB.logs.filter(g => g.pid !== p.id);
+      if(DB.cur === p.id) DB.cur = DB.people.length ? DB.people[0].id : null;
+      dbSave(); updateWhoBadge(); renderData();
+    });
+    d.appendChild(b1); d.appendChild(b2);
+    l.appendChild(d);
+  });
+}
+
+/* =========================================================
+   学年・組・番号 ステッパー制御
+   ========================================================= */
+const formPicker = {
+  nen: 2,   // 1〜6（6で+1したら1、1で-1したら6）
+  kumi: 1,  // 1〜20（20で+1したら1、1で-1したら20）
+  ban: 1    // 1〜45（45で+1したら1、1で-1したら45）
+};
+
+const padZero = (n) => ("0" + n).slice(-2);
+
+function updateStepperUI(){
+  $("dispNen").textContent = formPicker.nen;
+  $("dispKumi").textContent = padZero(formPicker.kumi);
+  $("dispBan").textContent = padZero(formPicker.ban);
+}
+
+// 学年: 1〜6（循環）
+$("btnNenUp").addEventListener("click", () => {
+  formPicker.nen = formPicker.nen >= 6 ? 1 : formPicker.nen + 1;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnNenDown").addEventListener("click", () => {
+  formPicker.nen = formPicker.nen <= 1 ? 6 : formPicker.nen - 1;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 組: 1〜20（循環）
+$("btnKumiUp").addEventListener("click", () => {
+  formPicker.kumi = formPicker.kumi >= 20 ? 1 : formPicker.kumi + 1;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnKumiDown").addEventListener("click", () => {
+  formPicker.kumi = formPicker.kumi <= 1 ? 20 : formPicker.kumi - 1;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 番号: 1〜45（循環）
+$("btnBanUp").addEventListener("click", () => {
+  formPicker.ban = formPicker.ban >= 45 ? 1 : formPicker.ban + 1;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnBanDown").addEventListener("click", () => {
+  formPicker.ban = formPicker.ban <= 1 ? 45 : formPicker.ban - 1;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 登録ボタン
+$("addWhoBtn").addEventListener("click", () => {
+  const nen = String(formPicker.nen);
+  const kumi = padZero(formPicker.kumi);
+  const ban = padZero(formPicker.ban);
+  const name = $("fName").value.trim();
+  const id = nen + kumi + ban + "-" + Date.now().toString(36);
+
+  DB.people.push({ id: id, nen: nen, kumi: kumi, ban: ban, name: name });
+  DB.cur = id;
+  dbSave();
+
+  $("fName").value = "";
+  updateWhoBadge();
+  renderData();
+  beep("tap");
+});
+
+/* CSV書き出し */
+$("csvBtn").addEventListener("click", () => {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => p && g.pid === p.id);
+  if(!p || !logs.length){ alert("のこす きろくが ありません。"); return; }
+  const rows = [["なまえ", "ひづけ", "だん・コース", "てんすう", "かかったじかん(びょう)", "もんだい", "こたえ", "まるばつ", "かかったかいすう", "1かいめ(びょう)", "2かいめ(びょう)", "3かいめ(びょう)"]];
+  logs.forEach(g => {
+    g.items.forEach(it => {
+      const t1 = (it.times && it.times[0] != null) ? it.times[0] : "";
+      const t2 = (it.times && it.times[1] != null) ? it.times[1] : "";
+      const t3 = (it.times && it.times[2] != null) ? it.times[2] : "";
+      rows.push([
+        personLabel(p),
+        new Date(g.at).toLocaleString("ja-JP"),
+        g.kind,
+        g.ten,
+        g.sec,
+        it.q,
+        it.user,
+        it.ok ? "○" : "×",
+        it.tries,
+        t1,
+        t2,
+        t3
+      ]);
+    });
+  });
+  const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(",")).join("\r\n");
+  const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "九九れんしゅうきろく_" + p.nen + p.kumi + p.ban + ".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+
+$("clearBtn").addEventListener("click", () => {
+  const p = curPerson();
+  if(!p){ alert("なまえが えらばれて いません。"); return; }
+  if(!confirm(personLabel(p) + " の これまでの きろくを ぜんぶ けしても いいですか？")) return;
+  DB.logs = DB.logs.filter(g => g.pid !== p.id);
+  dbSave(); renderData();
+});
+$("dataBackBtn").addEventListener("click", () => { beep("tap"); show("menu"); });
+$("whoBadge").addEventListener("click", () => { beep("tap"); openData(); });
+
+/* =========================================================
+   学習履歴の匿名送信（Google Drive自動連携）
+   ========================================================= */
+const GAS_SUBMIT_URL = "https://script.google.com/macros/s/AKfycbwZZRqR-XWNFGKkvaAfu_1Pbx1W_mg9O7AuKo3bv45yNOYdCwG7hE03S556tuesNtWX/exec";
+const UNIT_TITLE = "九九のれんしゅう";
+
+const submitModal = $("submitModal");
+const submitStatus = $("submitStatus");
+
+$("openSubmitBtn").addEventListener("click", function() {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => !p || g.pid === p.id);
+  if (!logs.length) {
+    alert("まだ れんしゅうの きろくが ないよ。すこし れんしゅうしてから おくってね。");
+    return;
+  }
+  submitStatus.textContent = "";
+  $("doSubmitBtn").disabled = false;
+  submitModal.classList.add("active");
+});
+
+$("cancelSubmitBtn").addEventListener("click", function() {
+  submitModal.classList.remove("active");
+});
+
+$("doSubmitBtn").addEventListener("click", async function() {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => !p || g.pid === p.id);
+
+  if (!logs.length) {
+    alert("おくる きろくが ありません。");
+    return;
+  }
+
+  // 個人名・学年・組・番号は完全に除外してCSVデータを生成
+  const rows = [["たんげんめい", "ひづけ", "だん・コース", "てんすう", "かかったじかん(びょう)", "もんだい", "こたえ", "まるばつ", "かかったかいすう", "1かいめ(びょう)", "2かいめ(びょう)", "3かいめ(びょう)"]];
+  logs.forEach(g => {
+    g.items.forEach(it => {
+      const t1 = (it.times && it.times[0] != null) ? it.times[0] : "";
+      const t2 = (it.times && it.times[1] != null) ? it.times[1] : "";
+      const t3 = (it.times && it.times[2] != null) ? it.times[2] : "";
+      rows.push([
+        UNIT_TITLE,
+        new Date(g.at).toLocaleString("ja-JP"),
+        g.kind,
+        g.ten,
+        g.sec,
+        it.q,
+        it.user,
+        it.ok ? "○" : "×",
+        it.tries,
+        t1,
+        t2,
+        t3
+      ]);
+    });
+  });
+
+  const csvText = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(",")).join("\r\n");
+
+  $("doSubmitBtn").disabled = true;
+  submitStatus.style.color = "var(--blue-deep)";
+  submitStatus.textContent = "おくっているよ... そのまま まってね";
+
+  try {
+    await fetch(GAS_SUBMIT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        unit: UNIT_TITLE,
+        csvContent: csvText
+      })
+    });
+
+    submitStatus.style.color = "var(--green-deep)";
+    submitStatus.textContent = "✅ せんせいに おくれたよ！ありがとう！";
+    setTimeout(() => {
+      submitModal.classList.remove("active");
+    }, 2000);
+
+  } catch (err) {
+    submitStatus.style.color = "var(--red)";
+    submitStatus.textContent = "うまく おくれませんでした。でんぱを たしかめてね。";
+    $("doSubmitBtn").disabled = false;
+  }
+});
+
+/* =========================================================
+   イベントリスナー登録
+   ========================================================= */
+$("startBtn").addEventListener("click", () => { beep("tap"); buildMenu(); show("menu"); });
+$("choiceOrder").addEventListener("click", () => { beep("tap"); startRound(state.modeIndex, 1); });
+$("choiceRandom").addEventListener("click", () => { beep("tap"); startRound(state.modeIndex, 2); });
+$("choiceBack").addEventListener("click", () => { show("menu"); });
+$("menuBackBtn").addEventListener("click", () => { clearInterval(timerId); show("menu"); });
+$("againBtn").addEventListener("click", () => {
+  beep("tap");
+  if(state.modeIndex === REVIEW_INDEX) startReviewCourse();
+  else startRound(state.modeIndex, state.keisanType);
+});
+$("missAgainBtn").addEventListener("click", () => { beep("tap"); startReviewCourse(); });
+$("toMenuBtn").addEventListener("click", () => { beep("tap"); show("menu"); });
+$("keypad").addEventListener("click", (e) => { const b = e.target.closest(".key"); if(b) pressKey(b.dataset.k); });
+$("soundBtn").addEventListener("click", () => { state.soundOn = !state.soundOn; $("soundBtn").textContent = state.soundOn ? "🔊" : "🔇"; });
+
+document.addEventListener("keydown", (e) => {
   if(!screens.play.classList.contains("active")) return;
-  if(e.key>="0"&&e.key<="9"){ pressKey(e.key); e.preventDefault(); }
-  else if(e.key==="Backspace"){ pressKey("del"); e.preventDefault(); }
-  else if(e.key==="Enter"){ pressKey("enter"); e.preventDefault(); }
+  if(e.key >= "0" && e.key <= "9"){ pressKey(e.key); e.preventDefault(); }
+  else if(e.key === "Backspace"){ pressKey("del"); e.preventDefault(); }
+  else if(e.key === "Enter"){ pressKey("enter"); e.preventDefault(); }
 });
 
 buildMenu();
+updateWhoBadge();
+updateStepperUI();
 </script>
 </body>
 </html>

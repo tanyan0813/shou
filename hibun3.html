@@ -11,8 +11,12 @@
   :root{
     --paper:#FCFBF4; --grid:#DDE7E3; --grid2:#EDF2EF;
     --ink:#37424A; --ink-soft:#6A757C;
-    --red:#EA5040; --blue:#2E9BD6; --yellow:#F6B93B; --green:#34B37A;
+    --red:#EA5040; --red-deep:#D33B2E;
+    --blue:#2E9BD6; --blue-deep:#1F7CAE;
+    --yellow:#F6B93B; --yellow-deep:#D89A2C;
+    --green:#34B37A; --green-deep:#279862;
     --indigo:#4C6EF5; --indigo-deep:#3B5BDB;
+    --teal:#0EA5B0; --teal-deep:#0A8390;
     --card:#FFFFFF; --shadow:0 6px 0 rgba(55,66,74,.10), 0 12px 28px rgba(55,66,74,.12);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -36,16 +40,27 @@
   .logo b{font-size:18px;font-weight:900;letter-spacing:.02em;}
   .logo .step{font-size:12px;font-weight:700;color:var(--ink-soft);}
   .tools{display:flex;gap:8px;align-items:center;}
-  .icon-btn{border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;}
+  .icon-btn{
+    border:none;background:var(--card);border-radius:12px;width:44px;height:38px;font-size:16px;cursor:pointer;
+    color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);font-family:inherit;transition:transform .08s;
+    display:inline-flex;align-items:center;justify-content:center;text-decoration:none;
+  }
+  .icon-btn.text-btn{width:auto;padding:0 12px;font-size:13px;font-weight:700;}
   .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
-  .top-menu-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--card);border-radius:12px;height:38px;padding:0 12px;font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;box-shadow:0 3px 0 rgba(55,66,74,.12);transition:transform .08s;}
-  .top-menu-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.12);}
+
+  .who{display:flex;align-items:center;gap:6px;}
+  .who .badge{
+    background:var(--card);border-radius:999px;padding:6px 12px;font-weight:900;font-size:12px;
+    box-shadow:0 3px 0 rgba(55,66,74,.10);color:var(--indigo);cursor:pointer;border:none;font-family:inherit;
+    max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .who .badge:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(55,66,74,.10);}
 
   .screen{display:none;animation:pop .3s ease;}
   .screen.active{display:block;}
   @keyframes pop{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-  .title-card{background:var(--card);border-radius:26px;padding:30px 24px 26px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;}
+  .title-card{background:var(--card);border-radius:26px;padding:30px 24px 26px;box-shadow:var(--shadow);text-align:center;position:relative;overflow:hidden;margin-bottom:14px;}
   .title-card::before{content:"";position:absolute;inset:8px;border:3px dashed #C3CDF9;border-radius:20px;pointer-events:none;}
   .title-card h1{margin:6px 0 2px;font-size:clamp(24px,6.5vw,40px);font-weight:900;color:var(--indigo);letter-spacing:.03em;position:relative;text-shadow:2px 3px 0 #CBD4F8;}
   .title-card .sub{color:var(--ink-soft);font-weight:700;font-size:15px;margin-bottom:6px;position:relative;}
@@ -62,15 +77,12 @@
   .frac.ans{color:var(--indigo);}
   .mixed{display:inline-flex;align-items:center;gap:.12em;}
 
-  .btn-group{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:10px;position:relative;}
   .big-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;font-family:inherit;font-weight:900;border-radius:18px;color:#fff;padding:16px 30px;font-size:20px;background:var(--indigo);box-shadow:0 5px 0 var(--indigo-deep);transition:transform .08s, box-shadow .08s;text-decoration:none;}
   .big-btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--indigo-deep);}
   .big-btn.blue{background:var(--blue);box-shadow:0 5px 0 #1F7CAE;}
   .big-btn.blue:active{box-shadow:0 1px 0 #1F7CAE;}
   .big-btn.green{background:var(--green);box-shadow:0 5px 0 #279862;}
   .big-btn.green:active{box-shadow:0 1px 0 #279862;}
-  .sub-link-btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 20px;font-size:15px;font-weight:700;color:var(--ink-soft);background:var(--paper);border:2px solid var(--grid);border-radius:12px;text-decoration:none;transition:transform .08s, background .08s;}
-  .sub-link-btn:active{transform:translateY(2px);background:#F0F4F2;}
 
   .menu-head{display:flex;align-items:baseline;gap:10px;margin:4px 2px 14px;}
   .menu-head h2{font-size:20px;font-weight:900;margin:0;}
@@ -87,6 +99,9 @@
   .mode-card .tagh.ks{background:var(--red);box-shadow:0 2px 0 #C23A2C;}
   .mode-card .ttl{font-size:14px;font-weight:900;color:var(--indigo-deep);line-height:1.25;margin-bottom:4px;}
   .mode-card .lbl{font-size:11.5px;color:var(--ink-soft);font-weight:700;line-height:1.35;}
+
+  .mode-card.special-data{grid-column: 1 / -1; background:linear-gradient(135deg,#E6F7F8,#FFFFFF);}
+  .mode-card.special-data .ttl{font-size:20px;color:var(--teal-deep);}
 
   .play-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
   .chip{background:var(--card);border-radius:999px;padding:7px 14px;font-weight:700;font-size:12.5px;box-shadow:0 3px 0 rgba(55,66,74,.10);display:inline-flex;align-items:center;gap:6px;}
@@ -157,6 +172,113 @@
   .review-row .wrongans{color:var(--red);display:flex;align-items:center;gap:.2em;margin-right:.4em;opacity:.75;}
   .review-row .rightans{color:var(--green);display:flex;align-items:center;gap:.2em;}
   .result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+  /* 提出・フッター用 */
+  .foot{display:flex;justify-content:center;margin-top:18px;gap:10px;flex-wrap:wrap;}
+  .foot button,.foot a{border:none;border-radius:16px;padding:12px 22px;font-size:15px;color:var(--ink);background:#fff;box-shadow:0 5px 0 rgba(55,66,74,.15);font-family:inherit;cursor:pointer;font-weight:900;text-decoration:none;}
+  .foot button:active,.foot a:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(55,66,74,.15);}
+  .foot button.submit-btn{background:#EAF6F0;color:var(--green-deep);box-shadow:0 4px 0 rgba(39,152,98,.28);}
+  .foot button.submit-btn:active{box-shadow:0 1px 0 rgba(39,152,98,.28);}
+
+  /* DATA PANEL */
+  .panel{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:18px 16px;margin-bottom:14px;text-align:left;}
+  .panel h3{margin:0 0 10px;font-size:16px;font-weight:900;display:flex;align-items:center;gap:8px;}
+  .panel h3 .bar2{width:6px;height:18px;border-radius:3px;background:var(--teal);}
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  @media(max-width:480px){.stat-row{grid-template-columns:1fr 1fr;}}
+  .stat{background:#F7FAF9;border-radius:14px;padding:12px 8px;text-align:center;}
+  .stat .v{font-family:"M PLUS Rounded 1c";font-weight:900;font-size:26px;color:var(--teal);}
+  .stat .k{font-size:11px;color:var(--ink-soft);font-weight:700;margin-top:2px;}
+
+  .spark{display:flex;align-items:flex-end;gap:3px;height:70px;padding-top:4px;}
+  .spark .b{flex:1;min-width:5px;background:var(--teal);border-radius:3px 3px 0 0;position:relative;}
+  .spark .b.s100{background:var(--red);} .spark .b.s80{background:var(--yellow);}
+  .empty{color:var(--ink-soft);font-weight:700;font-size:13px;text-align:center;padding:14px 0;}
+
+  table.rec{width:100%;border-collapse:collapse;font-size:13px;}
+  table.rec th,table.rec td{padding:8px 6px;border-bottom:1px solid #EDF2EF;text-align:left;}
+  table.rec th{font-size:11px;color:var(--ink-soft);font-weight:900;}
+  table.rec td.n{font-family:"M PLUS Rounded 1c";font-weight:900;text-align:right;white-space:nowrap;}
+  table.rec tr:last-child td{border-bottom:none;}
+  .scorepill{display:inline-block;min-width:44px;text-align:center;border-radius:999px;padding:2px 8px;font-family:"M PLUS Rounded 1c";font-weight:900;color:#fff;font-size:12px;}
+  .sp100{background:var(--red);} .sp80{background:var(--yellow);color:#6a5000;} .sp0{background:var(--ink-soft);}
+
+  .rowbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+  .sbtn{border:none;border-radius:14px;padding:10px 16px;font-family:inherit;font-weight:900;font-size:13px;cursor:pointer;color:var(--ink);background:#fff;box-shadow:0 4px 0 rgba(55,66,74,.14);}
+  .sbtn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(55,66,74,.14);}
+  .sbtn.pur{background:var(--teal);color:#fff;box-shadow:0 4px 0 var(--teal-deep);}
+  .sbtn.danger{background:#FDECE9;color:var(--red);box-shadow:0 4px 0 #F3C4BC;}
+
+  /* ステッパーUIフォーム */
+  .form-row{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;justify-content:center;}
+  .fld{display:flex;flex-direction:column;gap:4px;}
+  .fld label{font-size:11px;font-weight:900;color:var(--ink-soft);}
+  .fld input.wide{width:140px;font-size:15px;text-align:left;font-family:"Zen Maru Gothic";border:2px solid #E1E8E5;border-radius:12px;padding:8px 10px;color:var(--ink);background:#fff;}
+  .fld input.wide:focus{outline:none;border-color:var(--teal);}
+
+  .stepper-fld{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .stepper-fld label{font-size:11px;font-weight:900;color:var(--ink-soft);}
+  .stepper{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    background:#fff;
+    border:2px solid #E1E8E5;
+    border-radius:14px;
+    padding:3px;
+    box-shadow:0 3px 0 rgba(55,66,74,.08);
+  }
+  .step-val{
+    font-family:"M PLUS Rounded 1c", sans-serif;
+    font-weight:900;
+    font-size:20px;
+    width:56px;
+    text-align:center;
+    line-height:1.2;
+    padding:3px 0;
+    color:var(--ink);
+    user-select:none;
+  }
+  .step-btn{
+    border:none;
+    background:#E6F7F8;
+    color:var(--teal);
+    width:100%;
+    height:24px;
+    border-radius:8px;
+    font-size:11px;
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition:transform .06s, background .1s;
+  }
+  .step-btn:active{
+    transform:scale(0.92);
+    background:#CDEEF0;
+  }
+
+  .who-list{display:flex;flex-direction:column;gap:8px;}
+  .who-item{display:flex;align-items:center;gap:10px;background:#F7FAF9;border-radius:14px;padding:10px 12px;}
+  .who-item.on{background:#E6F7F8;box-shadow:0 0 0 2px var(--teal) inset;}
+  .who-item .nm{flex:1;font-weight:900;font-size:14px;}
+  .who-item .sm2{font-size:11px;color:var(--ink-soft);font-weight:700;}
+  .mini{border:none;background:#fff;border-radius:10px;padding:6px 10px;font-family:inherit;font-weight:900;font-size:12px;cursor:pointer;color:var(--ink);box-shadow:0 3px 0 rgba(55,66,74,.12);}
+  .mini.red{color:var(--red);}
+
+  .detail{display:none;background:#F7FAF9;border-radius:12px;padding:10px 12px;margin-top:6px;font-size:12px;}
+  .detail.show{display:block;}
+  .detail div{padding:3px 0;font-family:"M PLUS Rounded 1c";font-weight:900;}
+  .detail .ng{color:var(--red);}
+  .detail .time-meta{font-size:11px;color:var(--ink-soft);font-weight:700;margin-left:6px;}
+
+  /* 提出用モーダル */
+  .modal-overlay{position:fixed;inset:0;background:rgba(55,66,74,.45);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;}
+  .modal-overlay.active{display:flex;}
+  .modal-card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:24px 20px;max-width:440px;width:100%;text-align:center;}
+  .modal-card h3{margin:0 0 12px;font-size:19px;color:var(--teal);display:flex;align-items:center;justify-content:center;gap:6px;}
+  .modal-desc{background:#F7FAF9;border-radius:14px;padding:14px;font-size:13px;line-height:1.6;color:var(--ink);margin-bottom:18px;text-align:left;}
+  .modal-notice{font-size:12px;font-weight:900;color:var(--green-deep);margin-top:8px;}
+
   @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important;} }
 </style>
 </head>
@@ -165,7 +287,10 @@
   <header class="bar">
     <div class="logo"><span class="pin">½</span><div><b>分数の ひきざん</b><br><span class="step">ステップ３・通分と約分</span></div></div>
     <div class="tools">
-      <a href="hbmenu.html" class="top-menu-btn">🏠 はじめのメニューに戻る</a>
+      <div class="who">
+        <button class="badge" id="whoBadge" title="べんきょうする ひと">だれも いないよ</button>
+      </div>
+      <a href="hbmenu.html" class="icon-btn text-btn" title="はじめのメニュー">🏠 メニュー</a>
       <button class="icon-btn" id="soundBtn" title="おと">🔊</button>
     </div>
   </header>
@@ -186,10 +311,9 @@
       <br>
       <div class="btn-group">
         <button class="big-btn" id="startBtn">はじめる ▶</button>
-        <a href="hbmenu.html" class="sub-link-btn">🏠 はじめのメニューに戻る</a>
       </div>
       <div class="credit">
-        岐阜女子大学（安藤忠展）　Ver 5.02 ／ Web版
+        岐阜女子大学（安藤忠展） Ver 5.03 ／ Web版
       </div>
     </div>
   </section>
@@ -198,6 +322,9 @@
   <section class="screen" id="menuScreen">
     <div class="menu-head"><h2>メニュー</h2><p>べんきょうすることを えらびましょう</p></div>
     <div class="menu-grid" id="menuGrid"></div>
+    <div class="foot">
+      <button type="button" class="submit-btn" id="openSubmitBtn">📤 がくしゅうの きろくを おくる</button>
+    </div>
   </section>
 
   <!-- PLAY -->
@@ -247,14 +374,116 @@
       </div>
     </div>
   </section>
+
+  <!-- DATA & RECORD -->
+  <section class="screen" id="dataScreen">
+    <div class="title-card">
+      <h1>がくしゅうの きろく</h1>
+      <div class="sub">れんしゅうの がんばりを みてみよう</div>
+    </div>
+    <div id="storeNotice"></div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>じぶんの なまえ</h3>
+      <div class="who-list" id="whoList"></div>
+
+      <!-- ステッパーUIフォーム（矢印による学年・組・番号の増減、学年は1〜6/9の循環） -->
+      <div style="margin-top:12px" class="form-row">
+        <!-- 学年（1〜6範囲、9まで来て+1で1、1から-1で9） -->
+        <div class="stepper-fld">
+          <label>がくねん</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnNenUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispNen">2</div>
+            <button type="button" class="step-btn" id="btnNenDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- 組（1〜20循環） -->
+        <div class="stepper-fld">
+          <label>くみ</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnKumiUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispKumi">01</div>
+            <button type="button" class="step-btn" id="btnKumiDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- 番号（1〜45循環） -->
+        <div class="stepper-fld">
+          <label>ばんごう</label>
+          <div class="stepper">
+            <button type="button" class="step-btn" id="btnBanUp" title="ふやす">▲</button>
+            <div class="step-val" id="dispBan">01</div>
+            <button type="button" class="step-btn" id="btnBanDown" title="へらす">▼</button>
+          </div>
+        </div>
+
+        <!-- お名前（任意） -->
+        <div class="fld">
+          <label>おなまえ（かかなくてもいいよ）</label>
+          <input id="fName" class="wide" maxlength="12" placeholder="なまえ" style="height:44px; margin-bottom:6px;">
+        </div>
+
+        <button class="sbtn pur" id="addWhoBtn" style="height:44px; margin-bottom:6px;">＋ とうろく</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>がんばりの まとめ</h3>
+      <div class="stat-row">
+        <div class="stat"><div class="v" id="stCount">0</div><div class="k">れんしゅうした かいすう</div></div>
+        <div class="stat"><div class="v" id="stAvg">—</div><div class="k">いつもの てんすう（へいきん）</div></div>
+        <div class="stat"><div class="v" id="stBest">—</div><div class="k">いちばん たかい てんすう</div></div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-size:12px;font-weight:900;color:var(--ink-soft);margin-bottom:4px">てんすうの うつりかわり（ひだり：まえ → みぎ：いま）</div>
+        <div class="spark" id="spark"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>もんだいごとの きろく</h3>
+      <div id="byKind"></div>
+    </div>
+
+    <div class="panel">
+      <h3><span class="bar2"></span>れんしゅうの あしあと（おすと くわしく みえるよ）</h3>
+      <div id="history"></div>
+    </div>
+
+    <div class="rowbtns">
+      <button class="sbtn" id="csvBtn">ファイルに のこす（CSV）</button>
+      <button class="sbtn danger" id="clearBtn">このひとの きろくを ぜんぶ けす</button>
+    </div>
+    <div class="foot"><button id="dataBackBtn">← メニューへ もどる</button></div>
+  </section>
+</div>
+
+<!-- ===== 学習履歴提出ダイアログ ===== -->
+<div class="modal-overlay" id="submitModal">
+  <div class="modal-card">
+    <h3>📤 がくしゅうの きろくを おくる</h3>
+    <div class="modal-desc">
+      れんしゅうした きろくを せんせいに おくって、べんきょうの けんきゅうの おてつだいを します。<br>
+      <div class="modal-notice">
+        ※ おなまえ や がくねん・くみ・ばんごう は おくられません。<br>
+        ※ もんだい・こたえ・まるばつ・かかった じかん だけが あんぜんに おくられます。
+      </div>
+    </div>
+    <div class="rowbtns">
+      <button class="sbtn pur" id="doSubmitBtn" style="font-size:15px;padding:12px 24px;">おくる</button>
+      <button class="sbtn" id="cancelSubmitBtn" style="font-size:15px;padding:12px 20px;">やめる</button>
+    </div>
+    <div id="submitStatus" style="margin-top:12px;font-size:13px;font-weight:900;"></div>
+  </div>
 </div>
 
 <script>
 /* =========================================================
-   分数の ひきざん の れんしゅう ③（通分）  —  Web版
+   分数の ひきざん の れんしゅう ③（通分）  —  Web版 + 学習記録システム
+   Ver 5.03
    原作: N88-BASIC "HIBUN3.BAS" Ver 3.01 のデータを移植
-   データ： [型, 整数1,分子1,分母1, 整数2,分子2,分母2, 整数3,分子3,分母3]
-   型 1＝せいすう ／ 2＝分数 ／ 3＝帯分数
    ========================================================= */
 
 const MODES = [
@@ -279,65 +508,127 @@ const lcm = (a,b) => a/gcd(a,b)*b;
 const ri  = (lo,hi) => lo + fix((hi-lo+1)*rnd());
 const fr  = (w,n,den) => ({ w, n, den });
 function prob(type,a,b,ans){
-  return { type, a:{...a}, b:{...b}, ans:{...ans}, tries:0, correct:false, userInt:"", userNum:"", userDen:"" };
+  return { type, a:{...a}, b:{...b}, ans:{...ans}, tries:0, correct:false, userInt:"", userNum:"", userDen:"", times:[], qStartTime:0 };
 }
 
-// 分母の候補（この中から 2つ、ちがう 分母を えらぶ → 通分が ひつよう）
+/* =========================================================
+   学習記録ストレージ
+   ========================================================= */
+const STORE_KEY = "hibun3.records.v1";
+const Store = (function(){
+  let mem=null, usable=false;
+  try{ const k="__t"+Date.now(); localStorage.setItem(k,"1"); localStorage.removeItem(k); usable=true; }catch(e){ usable=false; }
+  return {
+    usable: usable,
+    load: function(){
+      if(!usable) return mem||{people:[],cur:null,logs:[]};
+      try{ const s=localStorage.getItem(STORE_KEY); return s?JSON.parse(s):{people:[],cur:null,logs:[]}; }
+      catch(e){ return {people:[],cur:null,logs:[]}; }
+    },
+    save: function(d){
+      if(!usable){ mem=d; return; }
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(d)); }catch(e){ mem=d; }
+    }
+  };
+})();
+
+let DB = Store.load();
+function dbSave(){ Store.save(DB); }
+function curPerson(){
+  if(!DB.cur) return null;
+  for(let i=0;i<DB.people.length;i++) if(DB.people[i].id===DB.cur) return DB.people[i];
+  return null;
+}
+function personLabel(p){
+  if(!p) return "だれも いないよ";
+  const s = p.nen+"ねん"+p.kumi+"くみ"+p.ban+"ばん";
+  return p.name ? s+" "+p.name : s;
+}
+function updateWhoBadge(){
+  $("whoBadge").textContent = personLabel(curPerson());
+  buildMenu();
+}
+
+function modeKindName(modeIndex){
+  const m = MODES[modeIndex];
+  return (modeIndex + 1) + ". " + m.ttl + " (" + m.lbl + ")";
+}
+
+function saveCurrentLog(score, sec){
+  const p = curPerson();
+  if(!p) return;
+  const items = state.problems.map(it => {
+    let ansStr = (it.type===1 || it.type===3) ? (it.ans.w > 0 ? (it.ans.den > 0 ? `${it.ans.w} ${it.ans.n}/${it.ans.den}` : `${it.ans.w}`) : `${it.ans.n}/${it.ans.den}`) : `${it.ans.n}/${it.ans.den}`;
+    let userStr = it.userInt !== "" ? (it.userNum !== "" || it.userDen !== "" ? `${it.userInt} ${it.userNum}/${it.userDen}` : it.userInt) : ((it.userNum !== "" || it.userDen !== "") ? `${it.userNum}/${it.userDen}` : "―");
+    return {
+      q: `${it.a.w>0?it.a.w+' ':''}${it.a.den>0?it.a.n+'/'+it.a.den:it.a.w}－${it.b.w>0?it.b.w+' ':''}${it.b.den>0?it.b.n+'/'+it.b.den:it.b.w}`,
+      ans: ansStr,
+      user: userStr,
+      ok: it.correct,
+      tries: it.tries,
+      times: it.times || []
+    };
+  });
+  DB.logs.push({
+    pid: p.id,
+    at: Date.now(),
+    modeIndex: state.modeIndex,
+    kind: modeKindName(state.modeIndex),
+    ten: score,
+    sec: sec,
+    items: items
+  });
+  dbSave();
+}
+
 const DENS = [2,3,4,5,6,7,8,9,10,12];
-// 約分ずみの 真分数（それ以上 約分できない）を 1つ 作る
 function pickPR(){
   while(true){
     const d = DENS[ri(0, DENS.length-1)];
     const n = ri(1, d-1);
-    if(gcd(n,d)===1) return { n, d };   // ★問題に 出す 分数は 約分ずみ に かぎる
+    if(gcd(n,d)===1) return { n, d };
   }
 }
 
-// メニュー（0〜9）ごとの きまり
-//   op    : 'pp'=真−真 / 'mp'=帯−真 / 'mm'=帯−帯
-//   reduce: true=約分あり（通分・ひきざんの あと 約分できる）/ false=約分なし
-//   borrow: true=くりさがりあり / false=くりさがりなし
 const MENUINFO = [
-  { op:'pp', reduce:false, borrow:false }, //  1
-  { op:'pp', reduce:true,  borrow:false }, //  2
-  { op:'mp', reduce:false, borrow:false }, //  3
-  { op:'mp', reduce:false, borrow:true  }, //  4
-  { op:'mp', reduce:true,  borrow:false }, //  5
-  { op:'mp', reduce:true,  borrow:true  }, //  6
-  { op:'mm', reduce:false, borrow:false }, //  7
-  { op:'mm', reduce:false, borrow:true  }, //  8
-  { op:'mm', reduce:true,  borrow:false }, //  9
-  { op:'mm', reduce:true,  borrow:true  }, // 10
+  { op:'pp', reduce:false, borrow:false },
+  { op:'pp', reduce:true,  borrow:false },
+  { op:'mp', reduce:false, borrow:false },
+  { op:'mp', reduce:false, borrow:true  },
+  { op:'mp', reduce:true,  borrow:false },
+  { op:'mp', reduce:true,  borrow:true  },
+  { op:'mm', reduce:false, borrow:false },
+  { op:'mm', reduce:false, borrow:true  },
+  { op:'mm', reduce:true,  borrow:false },
+  { op:'mm', reduce:true,  borrow:true  },
 ];
 
-// メニューに あった ひきざん（通分）の 問題を ランダムに 1問 作る。
-// 問題に 出す 分数は すべて 約分ずみ。こたえは 約分した 形（それ以上 約分できない）。
 function makeProblem(mode){
   const info = MENUINFO[mode];
   let guard=0;
   while(guard++ < 4000){
     const f1=pickPR(), f2=pickPR();
-    if(f1.d===f2.d) continue;                     // 分母が ちがう＝通分が ひつよう
+    if(f1.d===f2.d) continue;
     const d1=f1.d, n1=f1.n, d2=f2.d, n2=f2.n;
-    const L=lcm(d1,d2), FA=n1*(L/d1), FB=n2*(L/d2);  // 分数部（/L）
-    const borrow = FA < FB;                        // くりさがりが 要るか
+    const L=lcm(d1,d2), FA=n1*(L/d1), FB=n2*(L/d2);
+    const borrow = FA < FB;
     if(borrow !== info.borrow) continue;
-    const RF = borrow ? (FA + L - FB) : (FA - FB);  // ひいた あとの 分数部（/L, 1〜L-1）
-    if(RF===0) continue;                           // 整数に なるのは 除く
+    const RF = borrow ? (FA + L - FB) : (FA - FB);
+    if(RF===0) continue;
     const g = gcd(RF, L);
-    if(info.reduce && g===1) continue;             // 約分ありなのに 約分できない
-    if(!info.reduce && g!==1) continue;            // 約分なしなのに 約分できる
+    if(info.reduce && g===1) continue;
+    if(!info.reduce && g!==1) continue;
 
     let W1=0, W2=0;
-    if(info.op==='mp'){        W1 = borrow ? ri(2,9) : ri(1,9); }        // 帯分数 − 真分数
+    if(info.op==='mp'){        W1 = borrow ? ri(2,9) : ri(1,9); }
     else if(info.op==='mm'){   W2 = ri(1,6); W1 = borrow ? ri(W2+2, W2+8) : ri(W2+1, W2+7); }
-    const WR = W1 - W2 - (borrow?1:0);             // こたえの 整数部
-    const rn = RF/g, rd = L/g;                     // 約分した 分数部
+    const WR = W1 - W2 - (borrow?1:0);
+    const rn = RF/g, rd = L/g;
 
     if(info.op==='pp') return prob(2, fr(0,n1,d1), fr(0,n2,d2), fr(0,rn,rd));
     return                    prob(3, fr(W1,n1,d1), fr(W2,n2,d2), fr(WR,rn,rd));
   }
-  return prob(2, fr(0,1,2), fr(0,1,4), fr(0,1,4));  // 予備（通常ここには来ない）
+  return prob(2, fr(0,1,2), fr(0,1,4), fr(0,1,4));
 }
 
 function buildRound(modeIndex){
@@ -366,16 +657,13 @@ const MSG = {
 
 let state = { modeIndex:0, problems:[], current:0, boxes:"all", order:["int","den","num"], field:"int", inInt:"", inNum:"", inDen:"", locked:false, startTime:0, soundOn:true };
 
-/* こたえの型で 入力ますと じゅんばんを きめる
-   type 2（真分数・仮分数）… 整数ますなし・分母→分子
-   type 1（整数）/ type 3（帯分数）… 整数→分母→分子 */
 const FIELD_ORDER = { all:["int","den","num"], frac:["den","num"] };
 function layoutFor(p){
   return (p.type===2) ? { boxes:"frac", order:FIELD_ORDER.frac }
                       : { boxes:"all",  order:FIELD_ORDER.all };
 }
 const $ = (id)=>document.getElementById(id);
-const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen") };
+const screens = { title:$("titleScreen"), menu:$("menuScreen"), play:$("playScreen"), result:$("resultScreen"), data:$("dataScreen") };
 function show(name){ Object.values(screens).forEach(s=>s.classList.remove("active")); screens[name].classList.add("active"); window.scrollTo({top:0,behavior:"smooth"}); }
 
 let audioCtx=null;
@@ -414,6 +702,12 @@ function buildMenu(){
     btn.addEventListener("click",()=>{ beep("tap"); startRound(i); });
     grid.appendChild(btn);
   });
+
+  const dataBtn = document.createElement("button");
+  dataBtn.className = "mode-card special-data";
+  dataBtn.innerHTML = `<div class="ttl num">📊 がくしゅうの きろく</div><div class="lbl">これまでの てんすう や がんばりをみる</div>`;
+  dataBtn.addEventListener("click", () => { beep("tap"); openData(); });
+  grid.appendChild(dataBtn);
 }
 
 function startRound(modeIndex){
@@ -444,6 +738,7 @@ function renderProblem(){
   state.inInt=""; state.inNum=""; state.inDen="";
   state.boxes=lay.boxes; state.order=lay.order; state.field=lay.order[0];
   state.locked=false;
+  p.qStartTime = Date.now();
   $("bracket").textContent="［"+m.ttl+"・"+m.lbl+"］";
   $("prompt").textContent=MSG.prompt;
   $("msg").textContent=""; $("msg").className="msg";
@@ -470,7 +765,7 @@ function renderEquation(revealAll){
       `<span class="fbox ${act('den')}" data-f="den">${dv}</span>`+
     `</span>`;
   html+=`<span class="ansarea ${revealAll?'reveal':''}">`;
-  html+= (state.boxes==="frac") ? fracBox : (intBox+fracBox);  // frac=分数だけ ／ all=整数＋分数
+  html+= (state.boxes==="frac") ? fracBox : (intBox+fracBox);
   html+=`</span>`;
   $("equation").innerHTML=html;
   $("equation").querySelectorAll("[data-f]").forEach(el=>{
@@ -498,6 +793,11 @@ function submit(){
   if(state.inInt==="" && state.inNum==="" && state.inDen===""){ beep("wrong"); return; }
   const p=state.problems[state.current];
   state.locked=true; setKeypad(false);
+
+  const spentSec = Math.max(0.1, Math.round(((Date.now() - (p.qStartTime || Date.now())) / 1000) * 10) / 10);
+  if(!p.times) p.times = [];
+  p.times.push(spentSec);
+
   const res=judge(p);
   if(res===0) onCorrect(p); else onWrong(p,res);
 }
@@ -579,6 +879,9 @@ function finishRound(){
   const correct=state.problems.filter(p=>p.correct).length;
   const score=fix(correct/PROBLEMS_PER_ROUND*100);
   const elapsed=Math.floor((Date.now()-state.startTime)/1000);
+
+  saveCurrentLog(score, elapsed);
+
   $("scoreNum").textContent=score;
   const msgEl=$("resultMsg"), wrap=$("hanamaruWrap"); wrap.innerHTML="";
   if(score===100){ msgEl.textContent=MSG.perfect; msgEl.style.color="var(--red)"; wrap.innerHTML=hanamaruSVG(); beep("fanfare"); }
@@ -619,6 +922,333 @@ function ganbaruSVG(){
   return `<svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="42" fill="#EAF6F0" stroke="#34B37A" stroke-width="5"/><circle cx="46" cy="52" r="5" fill="#34B37A"/><circle cx="74" cy="52" r="5" fill="#34B37A"/><path d="M42 74 Q60 90 78 74" fill="none" stroke="#34B37A" stroke-width="5" stroke-linecap="round"/></svg>`;
 }
 
+/* =========================================================
+   学習記録（小学生向け表現画面）
+   ========================================================= */
+function openData(){ renderData(); show("data"); }
+function renderData(){
+  $("storeNotice").innerHTML = Store.usable ? "" :
+    '<div class="notice">※ パソコンや タブレットの せってい で、きろくを のこせない ようになっています。がめんを とじると きえるため、のこしたいときは「ファイルに のこす」をおしてね。</div>';
+  renderWhoList();
+  const p = curPerson();
+  const logs = DB.logs.filter(g => p && g.pid === p.id);
+
+  $("stCount").textContent = logs.length + " かい";
+  if(logs.length){
+    let sum = 0, best = 0;
+    logs.forEach(g => { sum += g.ten; if(g.ten > best) best = g.ten; });
+    $("stAvg").textContent = Math.round(sum / logs.length) + " てん";
+    $("stBest").textContent = best + " てん";
+  } else {
+    $("stAvg").textContent = "—"; $("stBest").textContent = "—";
+  }
+
+  const sp = $("spark"); sp.innerHTML = "";
+  if(!logs.length){
+    sp.innerHTML = '<div class="empty" style="width:100%">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    logs.slice(-24).forEach(g => {
+      const b = document.createElement("div");
+      b.className = "b" + (g.ten === 100 ? " s100" : (g.ten >= 80 ? " s80" : ""));
+      b.style.height = Math.max(6, g.ten * 0.6) + "px";
+      b.title = fmtDate(g.at) + " " + g.kind + " " + g.ten + "てん";
+      sp.appendChild(b);
+    });
+  }
+
+  const bk = {};
+  logs.forEach(g => {
+    if(!bk[g.kind]) bk[g.kind] = { n:0, sum:0, best:0 };
+    bk[g.kind].n++;
+    bk[g.kind].sum += g.ten;
+    if(g.ten > bk[g.kind].best) bk[g.kind].best = g.ten;
+  });
+  const keys = Object.keys(bk);
+  const byk = $("byKind");
+  if(!keys.length){
+    byk.innerHTML = '<div class="empty">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    let h = '<table class="rec"><tr><th>もんだい</th><th style="text-align:right">やった かず</th><th style="text-align:right">いつもの てん</th><th style="text-align:right">いちばんの てん</th></tr>';
+    keys.forEach(k => {
+      const v = bk[k];
+      h += `<tr><td>${k}</td><td class="n">${v.n}かい</td><td class="n">${Math.round(v.sum/v.n)}てん</td><td class="n">${v.best}てん</td></tr>`;
+    });
+    byk.innerHTML = h + '</table>';
+  }
+
+  const hs = $("history");
+  if(!logs.length){
+    hs.innerHTML = '<div class="empty">まだ れんしゅうの きろくが ないよ</div>';
+  } else {
+    let h = '<table class="rec"><tr><th>いつ やったか</th><th>もんだい</th><th style="text-align:right">てんすう</th><th style="text-align:right">じかん</th></tr>';
+    logs.slice().reverse().slice(0, 30).forEach((g, i) => {
+      const cls = g.ten === 100 ? "sp100" : (g.ten >= 80 ? "sp80" : "sp0");
+      h += `<tr class="hrow" data-i="${i}" style="cursor:pointer">` +
+        `<td>${fmtDate(g.at)}</td><td>${g.kind}</td>` +
+        `<td class="n"><span class="scorepill ${cls}">${g.ten}てん</span></td>` +
+        `<td class="n">${fmtTime(g.sec)}</td></tr>` +
+        `<tr><td colspan="4" style="padding:0"><div class="detail" id="dt${i}">${detailHTML(g)}</div></td></tr>`;
+    });
+    hs.innerHTML = h + '</table>';
+    hs.querySelectorAll('.hrow').forEach(tr => {
+      tr.addEventListener('click', () => { $("dt" + tr.dataset.i).classList.toggle('show'); });
+    });
+  }
+}
+
+function detailHTML(g){
+  let h = '';
+  g.items.forEach(it => {
+    const timeStrs = (it.times || []).map((t, idx) => (idx + 1) + 'かいめ:' + t + 'びょう').join(' / ');
+    h += `<div class="${it.ok ? '' : 'ng'}">${it.ok ? '○' : '✕'} ${it.q} ＝ ${it.user || '―'}` +
+      (it.ok ? '' : ` （せいかい＝${it.ans}）`) +
+      ` <span class="time-meta">[${it.tries}かいで せいかい${timeStrs ? ' : ' + timeStrs : ''}]</span>` +
+      `</div>`;
+  });
+  return h;
+}
+function fmtDate(t){
+  const d = new Date(t);
+  return (d.getMonth() + 1) + "がつ" + d.getDate() + "にち " + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+
+function renderWhoList(){
+  const l = $("whoList"); l.innerHTML = "";
+  if(!DB.people.length){
+    l.innerHTML = '<div class="empty">なまえを とうろくすると、じぶんの がんばりが のこせるよ！</div>';
+    return;
+  }
+  DB.people.forEach(p => {
+    const d = document.createElement("div");
+    d.className = "who-item" + (p.id === DB.cur ? " on" : "");
+    const n = DB.logs.filter(g => g.pid === p.id).length;
+    d.innerHTML = `<span class="nm">${personLabel(p)}<span class="sm2">（${n}かい やったよ）</span></span>`;
+    const b1 = document.createElement("button");
+    b1.className = "mini";
+    b1.textContent = (p.id === DB.cur ? "えらび中" : "これにする");
+    b1.addEventListener("click", () => { DB.cur = p.id; dbSave(); updateWhoBadge(); renderData(); });
+    const b2 = document.createElement("button");
+    b2.className = "mini red";
+    b2.textContent = "けす";
+    b2.addEventListener("click", () => {
+      if(!confirm(personLabel(p) + " の データを けしても いいですか？")) return;
+      DB.people = DB.people.filter(x => x.id !== p.id);
+      DB.logs = DB.logs.filter(g => g.pid !== p.id);
+      if(DB.cur === p.id) DB.cur = DB.people.length ? DB.people[0].id : null;
+      dbSave(); updateWhoBadge(); renderData();
+    });
+    d.appendChild(b1); d.appendChild(b2);
+    l.appendChild(d);
+  });
+}
+
+/* =========================================================
+   学年・組・番号 ステッパー制御
+   学年は1〜6範囲、9まで来て+1になったら1、1から-1したら9
+   ========================================================= */
+const formPicker = {
+  nen: 2,
+  kumi: 1,
+  ban: 1
+};
+
+const padZero = (n) => ("0" + n).slice(-2);
+
+function updateStepperUI(){
+  $("dispNen").textContent = formPicker.nen;
+  $("dispKumi").textContent = padZero(formPicker.kumi);
+  $("dispBan").textContent = padZero(formPicker.ban);
+}
+
+// 学年: 1〜6範囲、9まで来て+1になったら1、1から-1したら9
+$("btnNenUp").addEventListener("click", () => {
+  if(formPicker.nen >= 9) formPicker.nen = 1;
+  else if(formPicker.nen >= 6) formPicker.nen = 1;
+  else formPicker.nen++;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnNenDown").addEventListener("click", () => {
+  if(formPicker.nen <= 1) formPicker.nen = 9;
+  else formPicker.nen--;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 組: 1〜20（順番に上下）
+$("btnKumiUp").addEventListener("click", () => {
+  formPicker.kumi = formPicker.kumi >= 20 ? 1 : formPicker.kumi + 1;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnKumiDown").addEventListener("click", () => {
+  formPicker.kumi = formPicker.kumi <= 1 ? 20 : formPicker.kumi - 1;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 番号: 1〜45（順番に上下）
+$("btnBanUp").addEventListener("click", () => {
+  formPicker.ban = formPicker.ban >= 45 ? 1 : formPicker.ban + 1;
+  beep("tap");
+  updateStepperUI();
+});
+$("btnBanDown").addEventListener("click", () => {
+  formPicker.ban = formPicker.ban <= 1 ? 45 : formPicker.ban - 1;
+  beep("tap");
+  updateStepperUI();
+});
+
+// 登録ボタン
+$("addWhoBtn").addEventListener("click", () => {
+  const nen = String(formPicker.nen);
+  const kumi = padZero(formPicker.kumi);
+  const ban = padZero(formPicker.ban);
+  const name = $("fName").value.trim();
+  const id = nen + kumi + ban + "-" + Date.now().toString(36);
+
+  DB.people.push({ id: id, nen: nen, kumi: kumi, ban: ban, name: name });
+  DB.cur = id;
+  dbSave();
+
+  $("fName").value = "";
+  updateWhoBadge();
+  renderData();
+  beep("tap");
+});
+
+/* CSV書き出し */
+$("csvBtn").addEventListener("click", () => {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => p && g.pid === p.id);
+  if(!p || !logs.length){ alert("のこす きろくが ありません。"); return; }
+  const rows = [["なまえ", "ひづけ", "もんだい", "てんすう", "かかったじかん(びょう)", "しき", "こたえ", "まるばつ", "かかったかいすう", "1かいめ(びょう)", "2かいめ(びょう)", "3かいめ(びょう)"]];
+  logs.forEach(g => {
+    g.items.forEach(it => {
+      const t1 = (it.times && it.times[0] != null) ? it.times[0] : "";
+      const t2 = (it.times && it.times[1] != null) ? it.times[1] : "";
+      const t3 = (it.times && it.times[2] != null) ? it.times[2] : "";
+      rows.push([
+        personLabel(p),
+        new Date(g.at).toLocaleString("ja-JP"),
+        g.kind,
+        g.ten,
+        g.sec,
+        it.q,
+        it.user,
+        it.ok ? "○" : "×",
+        it.tries,
+        t1,
+        t2,
+        t3
+      ]);
+    });
+  });
+  const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(",")).join("\r\n");
+  const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "分数のひき算3_れんしゅうきろく_" + p.nen + p.kumi + p.ban + ".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+});
+
+$("clearBtn").addEventListener("click", () => {
+  const p = curPerson();
+  if(!p){ alert("なまえが えらばれて いません。"); return; }
+  if(!confirm(personLabel(p) + " の これまでの きろくを ぜんぶ けしても いいですか？")) return;
+  DB.logs = DB.logs.filter(g => g.pid !== p.id);
+  dbSave(); renderData();
+});
+$("dataBackBtn").addEventListener("click", () => { beep("tap"); show("menu"); });
+$("whoBadge").addEventListener("click", () => { beep("tap"); openData(); });
+
+/* =========================================================
+   学習履歴の匿名送信（Google Drive自動連携）
+   ========================================================= */
+const GAS_SUBMIT_URL = "https://script.google.com/macros/s/AKfycbwZZRqR-XWNFGKkvaAfu_1Pbx1W_mg9O7AuKo3bv45yNOYdCwG7hE03S556tuesNtWX/exec";
+const UNIT_TITLE = "分数のひきざん3";
+
+const submitModal = $("submitModal");
+const submitStatus = $("submitStatus");
+
+$("openSubmitBtn").addEventListener("click", function() {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => !p || g.pid === p.id);
+  if (!logs.length) {
+    alert("まだ れんしゅうの きろくが ないよ。すこし れんしゅうしてから おくってね。");
+    return;
+  }
+  submitStatus.textContent = "";
+  $("doSubmitBtn").disabled = false;
+  submitModal.classList.add("active");
+});
+
+$("cancelSubmitBtn").addEventListener("click", function() {
+  submitModal.classList.remove("active");
+});
+
+$("doSubmitBtn").addEventListener("click", async function() {
+  const p = curPerson();
+  const logs = DB.logs.filter(g => !p || g.pid === p.id);
+
+  if (!logs.length) {
+    alert("おくる きろくが ありません。");
+    return;
+  }
+
+  const rows = [["たんげんめい", "ひづけ", "もんだい", "てんすう", "かかったじかん(びょう)", "しき", "こたえ", "まるばつ", "かかったかいすう", "1かいめ(びょう)", "2かいめ(びょう)", "3かいめ(びょう)"]];
+  logs.forEach(g => {
+    g.items.forEach(it => {
+      const t1 = (it.times && it.times[0] != null) ? it.times[0] : "";
+      const t2 = (it.times && it.times[1] != null) ? it.times[1] : "";
+      const t3 = (it.times && it.times[2] != null) ? it.times[2] : "";
+      rows.push([
+        UNIT_TITLE,
+        new Date(g.at).toLocaleString("ja-JP"),
+        g.kind,
+        g.ten,
+        g.sec,
+        it.q,
+        it.user,
+        it.ok ? "○" : "×",
+        it.tries,
+        t1,
+        t2,
+        t3
+      ]);
+    });
+  });
+
+  const csvText = rows.map(r => r.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(",")).join("\r\n");
+
+  $("doSubmitBtn").disabled = true;
+  submitStatus.style.color = "var(--blue-deep)";
+  submitStatus.textContent = "おくっているよ... そのまま まってね";
+
+  try {
+    await fetch(GAS_SUBMIT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        unit: UNIT_TITLE,
+        csvContent: csvText
+      })
+    });
+
+    submitStatus.style.color = "var(--green-def, var(--green-deep))";
+    submitStatus.textContent = "✅ せんせいに おくれたよ！ありがとう！";
+    setTimeout(() => {
+      submitModal.classList.remove("active");
+    }, 2000);
+
+  } catch (err) {
+    submitStatus.style.color = "var(--red)";
+    submitStatus.textContent = "うまく おくれませんでした。でんぱを たしかめてね。";
+    $("doSubmitBtn").disabled = false;
+  }
+});
+
 $("startBtn").addEventListener("click",()=>{ beep("tap"); buildMenu(); show("menu"); });
 $("menuBackBtn").addEventListener("click",()=>{ clearInterval(timerId); show("menu"); });
 $("againBtn").addEventListener("click",()=>{ beep("tap"); startRound(state.modeIndex); });
@@ -634,6 +1264,8 @@ document.addEventListener("keydown",(e)=>{
 });
 
 buildMenu();
+updateWhoBadge();
+updateStepperUI();
 </script>
 </body>
 </html>
